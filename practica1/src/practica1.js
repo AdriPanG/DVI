@@ -20,8 +20,6 @@ MemoryGame = function(gs) {
  * La carta puede guardar la posición que ocupa dentro del tablero para luego poder dibujarse
  * @param {string} id Nombre del sprite que representa la carta
  */
-MemoryGame.Card = function(id) {
+MemoryGameCard = function(id) {
 
 };
-
-
