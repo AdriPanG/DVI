@@ -18,6 +18,8 @@ MemoryGame = function(gs) {
 		// Aqui hay que desordenar las cartas, de momento las insertamos dos veces en orden
 		tablero = ["8-ball", "potato", "dinosaur", "kronos", "rocket", "unicorn", "guy", "zeppelin", 
 					"8-ball", "potato", "dinosaur", "kronos", "rocket", "unicorn", "guy", "zeppelin"]
+
+		this.loop();
 	}
 
 	this.draw = function(){
@@ -29,6 +31,14 @@ MemoryGame = function(gs) {
 			gs.draw(tablero[i], i);
 		}
 	}	
+
+	this.loop = function(){
+		setInterval(this.draw(), 16);
+	}
+
+	this.onClick = function(cardId){
+		
+	}
 
 }
 
