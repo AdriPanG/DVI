@@ -18,8 +18,8 @@ MemoryGame = function(gs) {
 
 	this.initGame = function(){		
 		// Aqui hay que desordenar las cartas, de momento las insertamos dos veces en orden
-		tablero = [{id: "8-ball", estado: 0}, {id: "potato", estado: 0} , {id: "dinosaur", estado: 0}, {id: "kronos", estado:0}, {id: "rocket", estado:0}, {id: "unicorn",estado:0}, {id: "guy", estado:0}, {id: "zeppelin", estado:0}, 
-					{id: "8-ball", estado: 0}, {id: "potato", estado: 0} , {id: "dinosaur", estado: 0}, {id: "kronos", estado:0}, {id: "rocket", estado:0}, {id: "unicorn",estado:0}, {id: "guy", estado:0}, {id: "zeppelin", estado:0}]
+		tablero = [ new MemoryGameCard("8-ball"), new MemoryGameCard("potato"), new MemoryGameCard("dinosaur"), new MemoryGameCard("kronos"),new MemoryGameCard("rocket"), new MemoryGameCard("unicorn"), new MemoryGameCard("guy"), new MemoryGameCard("zeppelin"),
+					new MemoryGameCard("8-ball"), new MemoryGameCard("potato"), new MemoryGameCard("dinosaur"), new MemoryGameCard("kronos"),new MemoryGameCard("rocket"), new MemoryGameCard("unicorn"), new MemoryGameCard("guy"), new MemoryGameCard("zeppelin")];
 
 		this.loop();
 	}
@@ -30,17 +30,7 @@ MemoryGame = function(gs) {
 
 		// Mostramos las cartas
 		for(var i = 0; i < tablero.length ; i++){
-			switch(tablero[i].estado){
-				case 0:
-					gs.draw("back", i);
-					break;
-				case 1:
-					gs.draw(tablero[i].id, i);
-					break;
-				case 2:
-					gs.draw(tablero[i].id, i);
-					break;
-			}
+			tablero[i].draw(gs, i);
 		}
 	}	
 
@@ -49,23 +39,26 @@ MemoryGame = function(gs) {
 	}
 
 	this.onClick = function(cardId){
-		var cardGame = new MemoryGameCard(tablero[cardId]);
-		cardGame.flip();
+		tablero[cardId].flip();
 		if(cartaVolteadaActual === undefined){			
-			cartaVolteadaActual = cardId;
+			cartaVolteadaActual = tablero[cardId];
 		}
 		else{
-			if(cardGame.compareTo(tablero[cartaVolteadaActual])){
-				tablero[cardId].estado = 2;
-				tablero[cartaVolteadaActual].estado = 2;
+			if(tablero[cardId].compareTo(cartaVolteadaActual)){
+				cartaVolteadaActual.flip();
+				tablero[cardId].found();
+				cartaVolteadaActual.found();
+				cartaVolteadaActual = undefined;
 			}
 			else{
+				textoEstado = "Try Again";
 				setTimeout(function(){ 					
-					tablero[cardId].estado = 0;
-					tablero[cartaVolteadaActual].estado = 0;
-				}, 2000);
+					tablero[cardId].flip();
+					cartaVolteadaActual.flip();
+					cartaVolteadaActual = undefined;
+				}, 1000);
 			}
-			cartaVolteadaActual = undefined;
+			
 		}	
 
 	}
@@ -80,32 +73,37 @@ MemoryGame = function(gs) {
  * @param {string} id Nombre del sprite que representa la carta
  */
 MemoryGameCard = function(id) {
+	var estado = 0;
 
 	this.flip = function(){
-		id.estado = 1;
+		if(estado === 0){
+			estado = 1;
+		} else {
+			estado = 0;
+		}
 	}
 
 	this.found = function(){
-		id.estado = 2;
+		estado = 2;
 	}
 
 	this.compareTo = function(otherCard){
-		if(otherCard.id === id.id){
+		if(otherCard === id){
 			return true;
 		}
 		return false;
 	}
 
 	this.draw = function(gs, pos){
-		switch(tablero[i].estado){
+		switch(estado){
 				case 0:
-					gs.draw("back", i);
+					gs.draw("back", pos);
 					break;
 				case 1:
-					gs.draw(tablero[i].id, i);
+					gs.draw(id, pos);
 					break;
 				case 2:
-					gs.draw(tablero[i].id, i);
+					gs.draw(id, pos);
 					break;
 			}
 	}
