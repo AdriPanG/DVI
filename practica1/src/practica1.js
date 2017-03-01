@@ -14,6 +14,7 @@ MemoryGame = function(gs) {
 	var nCartasEncontradas = 0;
 	var textoEstado = "Memory Game";	
 	var cartaVolteadaActual = undefined;
+	var timeoutActivo = false;
 	
 
 	this.initGame = function(){		
@@ -59,7 +60,7 @@ MemoryGame = function(gs) {
 
 	this.onClick = function(cardId){
 		// Para comprobar que se ha pulsado una carta y que no ha sido encontrada anteriormente
-		if(tablero[cardId] !== undefined && tablero[cardId].estado !== 2){
+		if(tablero[cardId] !== undefined && tablero[cardId].estado !== 2 && !timeoutActivo){
 			tablero[cardId].flip();
 			// Si no hay ninguna carta levantada
 			if(cartaVolteadaActual === undefined){			
@@ -79,10 +80,12 @@ MemoryGame = function(gs) {
 					}
 					else{
 						textoEstado = "Try Again";
+						timeoutActivo = true;
 						setTimeout(function(){ 					
 							tablero[cardId].estado = 0;
 							tablero[cartaVolteadaActual].estado = 0;
 							cartaVolteadaActual = undefined;
+							timeoutActivo = false;
 						}, 1000);
 					}
 				}
