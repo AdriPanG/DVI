@@ -39,28 +39,30 @@ MemoryGame = function(gs) {
 	}
 
 	this.onClick = function(cardId){
-		tablero[cardId].flip();
-		if(cartaVolteadaActual === undefined){			
-			cartaVolteadaActual = tablero[cardId];
-		}
-		else{
-			if(tablero[cardId].compareTo(cartaVolteadaActual)){
-				cartaVolteadaActual.flip();
-				tablero[cardId].found();
-				cartaVolteadaActual.found();
-				cartaVolteadaActual = undefined;
+		if(tablero[cardId].estado !== 2){
+			tablero[cardId].flip();
+			if(cartaVolteadaActual === undefined){			
+				cartaVolteadaActual = cardId;
 			}
 			else{
-				textoEstado = "Try Again";
-				setTimeout(function(){ 					
-					tablero[cardId].flip();
-					cartaVolteadaActual.flip();
+				if(tablero[cardId].compareTo(tablero[cartaVolteadaActual])){
+					textoEstado = "Match found!";
+					tablero[cardId].found();
+					tablero[cartaVolteadaActual].found();
+					nCartasEncontradas++;
 					cartaVolteadaActual = undefined;
-				}, 1000);
-			}
-			
-		}	
-
+				}
+				else{
+					textoEstado = "Try Again";
+					setTimeout(function(){ 					
+						tablero[cardId].estado = 0;
+						tablero[cartaVolteadaActual].estado = 0;
+						cartaVolteadaActual = undefined;
+					}, 1000);
+				}
+				
+			}	
+		}
 	}
 
 }
@@ -72,30 +74,27 @@ MemoryGame = function(gs) {
  * La carta puede guardar la posición que ocupa dentro del tablero para luego poder dibujarse
  * @param {string} id Nombre del sprite que representa la carta
  */
-MemoryGameCard = function(id) {
-	var estado = 0;
+MemoryGameCard = function(id) {		
+	this.id = id;
+	this.estado = 0;
 
 	this.flip = function(){
-		if(estado === 0){
-			estado = 1;
-		} else {
-			estado = 0;
-		}
+		this.estado = 1;		
 	}
 
 	this.found = function(){
-		estado = 2;
+		this.estado = 2;
 	}
 
 	this.compareTo = function(otherCard){
-		if(otherCard === id){
+		if(otherCard.id === this.id){
 			return true;
 		}
 		return false;
 	}
 
 	this.draw = function(gs, pos){
-		switch(estado){
+		switch(this.estado){
 				case 0:
 					gs.draw("back", pos);
 					break;
