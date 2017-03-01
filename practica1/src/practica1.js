@@ -13,11 +13,12 @@ MemoryGame = function(gs) {
 	var nCartasEncontradas = 0;
 	var textoEstado = "Memory Game";
 	var tablero = [];
+	
 
 	this.initGame = function(){		
 		// Aqui hay que desordenar las cartas, de momento las insertamos dos veces en orden
-		tablero = ["8-ball", "potato", "dinosaur", "kronos", "rocket", "unicorn", "guy", "zeppelin", 
-					"8-ball", "potato", "dinosaur", "kronos", "rocket", "unicorn", "guy", "zeppelin"]
+		tablero = [{id: "8-ball", estado: 0}, {id: "potato", estado: 0} , {id: "dinosaur", estado: 0}, {id: "kronos", estado:0}, {id: "rocket", estado:0}, {id: "unicorn",estado:0}, {id: "guy", estado:0}, {id: "zeppelin", estado:0}, 
+					{id: "8-ball", estado: 0}, {id: "potato", estado: 0} , {id: "dinosaur", estado: 0}, {id: "kronos", estado:0}, {id: "rocket", estado:0}, {id: "unicorn",estado:0}, {id: "guy", estado:0}, {id: "zeppelin", estado:0}]
 
 		this.loop();
 	}
@@ -28,16 +29,25 @@ MemoryGame = function(gs) {
 
 		// Mostramos las cartas
 		for(var i = 0; i < tablero.length ; i++){
-			gs.draw(tablero[i], i);
+			switch(tablero[i].estado){
+				case 0:
+					gs.draw("back", i);
+					break;
+				case 1:
+					gs.draw(tablero[i].id, i);
+					break;
+				case 2:
+					break;
+			}
 		}
 	}	
 
 	this.loop = function(){
-		setInterval(this.draw(), 16);
+		setInterval( this.draw , 16);
 	}
 
 	this.onClick = function(cardId){
-		
+		tablero[cardId].estado = 1;
 	}
 
 }
@@ -51,4 +61,7 @@ MemoryGame = function(gs) {
  */
 MemoryGameCard = function(id) {
 
+	this.flip = function(){
+		
+	}
 };
