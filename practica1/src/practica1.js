@@ -9,10 +9,9 @@ var MemoryGame = MemoryGame || {};
  * Constructora de MemoryGame
  */
 MemoryGame = function(gs) {
-	var cartas = ["8-ball", "potato", "dinosaur", "kronos", "rocket", "unicorn", "guy", "zeppelin"];
-	var nCartasEncontradas = 0;
-	var textoEstado = "Memory Game";
 	var tablero = [];
+	var nCartasEncontradas = 0;
+	var textoEstado = "Memory Game";	
 	var cartaVolteadaActual = undefined;
 	
 
@@ -39,18 +38,23 @@ MemoryGame = function(gs) {
 	}
 
 	this.onClick = function(cardId){
-		if(tablero[cardId].estado !== 2){
+		// Para comprobar que se ha pulsado una carta y que no ha sido encontrada
+		// anteriormente 
+		if(tablero[cardId] !== undefined && tablero[cardId].estado !== 2){
 			tablero[cardId].flip();
+			// Si solo hay una carta levantada
 			if(cartaVolteadaActual === undefined){			
 				cartaVolteadaActual = cardId;
 			}
-			else{
+			else{ // Si es la segunda carta levantada
 				if(tablero[cardId].compareTo(tablero[cartaVolteadaActual])){
-					textoEstado = "Match found!";
+					textoEstado = "Match found!!";
 					tablero[cardId].found();
 					tablero[cartaVolteadaActual].found();
 					nCartasEncontradas++;
 					cartaVolteadaActual = undefined;
+					if(nCartasEncontradas === tablero.length/2)
+						textoEstado = "You win!!";
 				}
 				else{
 					textoEstado = "Try Again";
