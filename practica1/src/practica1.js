@@ -13,6 +13,7 @@ MemoryGame = function(gs) {
 	var nCartasEncontradas = 0;
 	var textoEstado = "Memory Game";
 	var tablero = [];
+	var cartaVolteadaActual = undefined;
 	
 
 	this.initGame = function(){		
@@ -37,6 +38,7 @@ MemoryGame = function(gs) {
 					gs.draw(tablero[i].id, i);
 					break;
 				case 2:
+					gs.draw(tablero[i].id, i);
 					break;
 			}
 		}
@@ -47,7 +49,25 @@ MemoryGame = function(gs) {
 	}
 
 	this.onClick = function(cardId){
-		tablero[cardId].estado = 1;
+		var cardGame = new MemoryGameCard(tablero[cardId]);
+		cardGame.flip();
+		if(cartaVolteadaActual === undefined){			
+			cartaVolteadaActual = cardId;
+		}
+		else{
+			if(cardGame.compareTo(tablero[cartaVolteadaActual])){
+				tablero[cardId].estado = 2;
+				tablero[cartaVolteadaActual].estado = 2;
+			}
+			else{
+				setTimeout(function(){ 					
+					tablero[cardId].estado = 0;
+					tablero[cartaVolteadaActual].estado = 0;
+				}, 2000);
+			}
+			cartaVolteadaActual = undefined;
+		}	
+
 	}
 
 }
@@ -62,6 +82,31 @@ MemoryGame = function(gs) {
 MemoryGameCard = function(id) {
 
 	this.flip = function(){
-		
+		id.estado = 1;
+	}
+
+	this.found = function(){
+		id.estado = 2;
+	}
+
+	this.compareTo = function(otherCard){
+		if(otherCard.id === id.id){
+			return true;
+		}
+		return false;
+	}
+
+	this.draw = function(gs, pos){
+		switch(tablero[i].estado){
+				case 0:
+					gs.draw("back", i);
+					break;
+				case 1:
+					gs.draw(tablero[i].id, i);
+					break;
+				case 2:
+					gs.draw(tablero[i].id, i);
+					break;
+			}
 	}
 };
