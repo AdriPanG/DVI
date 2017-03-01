@@ -9,16 +9,36 @@ var MemoryGame = MemoryGame || {};
  * Constructora de MemoryGame
  */
 MemoryGame = function(gs) {
-	var tablero = [];
+	var cartas = ["8-ball", "potato", "dinosaur", "kronos", "rocket", "unicorn", "guy", "zeppelin"];
+	var tablero = new Array(16);
 	var nCartasEncontradas = 0;
 	var textoEstado = "Memory Game";	
 	var cartaVolteadaActual = undefined;
 	
 
 	this.initGame = function(){		
-		// Aqui hay que desordenar las cartas, de momento las insertamos dos veces en orden
-		tablero = [ new MemoryGameCard("8-ball"), new MemoryGameCard("potato"), new MemoryGameCard("dinosaur"), new MemoryGameCard("kronos"),new MemoryGameCard("rocket"), new MemoryGameCard("unicorn"), new MemoryGameCard("guy"), new MemoryGameCard("zeppelin"),
-					new MemoryGameCard("8-ball"), new MemoryGameCard("potato"), new MemoryGameCard("dinosaur"), new MemoryGameCard("kronos"),new MemoryGameCard("rocket"), new MemoryGameCard("unicorn"), new MemoryGameCard("guy"), new MemoryGameCard("zeppelin")];
+		// Creamos un array con las posiciones del tablero
+		var posiciones = new Array();
+		for(var i = 0; i < tablero.length; i++){
+			posiciones.push(i);
+		}
+
+		// Rellenamos el tablero aleatoriamente, asignando dos veces cada tipo de carta
+		// en una posición aleatoria.
+		for(var i = 0; i < tablero.length/2; i++){
+			// Primera asignación
+			var pos = Math.floor(Math.random() * posiciones.length);
+			var rand = posiciones[pos];
+			posiciones.splice(pos, 1);
+			tablero[rand] = new MemoryGameCard(cartas[i]);
+
+			// Segunda asignación
+			var pos = Math.floor(Math.random() * posiciones.length);
+			var rand = posiciones[pos];
+			posiciones.splice(pos, 1);
+			tablero[rand] = new MemoryGameCard(cartas[i]);
+		}
+		
 
 		this.loop();
 	}
@@ -38,33 +58,34 @@ MemoryGame = function(gs) {
 	}
 
 	this.onClick = function(cardId){
-		// Para comprobar que se ha pulsado una carta y que no ha sido encontrada
-		// anteriormente 
+		// Para comprobar que se ha pulsado una carta y que no ha sido encontrada anteriormente
 		if(tablero[cardId] !== undefined && tablero[cardId].estado !== 2){
 			tablero[cardId].flip();
-			// Si solo hay una carta levantada
+			// Si no hay ninguna carta levantada
 			if(cartaVolteadaActual === undefined){			
 				cartaVolteadaActual = cardId;
 			}
-			else{ // Si es la segunda carta levantada
-				if(tablero[cardId].compareTo(tablero[cartaVolteadaActual])){
-					textoEstado = "Match found!!";
-					tablero[cardId].found();
-					tablero[cartaVolteadaActual].found();
-					nCartasEncontradas++;
-					cartaVolteadaActual = undefined;
-					if(nCartasEncontradas === tablero.length/2)
-						textoEstado = "You win!!";
-				}
-				else{
-					textoEstado = "Try Again";
-					setTimeout(function(){ 					
-						tablero[cardId].estado = 0;
-						tablero[cartaVolteadaActual].estado = 0;
+			else{ // Si ya habia una carta levantada
+				// Comprobamos que no es la misma carta que ya estaba levantada
+				if(tablero[cardId].pos !== tablero[cartaVolteadaActual].pos){
+					if(tablero[cardId].compareTo(tablero[cartaVolteadaActual]) && tablero[cardId].pos !== tablero[cartaVolteadaActual].pos){
+						textoEstado = "Match found!!";
+						tablero[cardId].found();
+						tablero[cartaVolteadaActual].found();
+						nCartasEncontradas++;
 						cartaVolteadaActual = undefined;
-					}, 1000);
+						if(nCartasEncontradas === tablero.length/2)
+							textoEstado = "You win!!";
+					}
+					else{
+						textoEstado = "Try Again";
+						setTimeout(function(){ 					
+							tablero[cardId].estado = 0;
+							tablero[cartaVolteadaActual].estado = 0;
+							cartaVolteadaActual = undefined;
+						}, 1000);
+					}
 				}
-				
 			}	
 		}
 	}
@@ -81,6 +102,7 @@ MemoryGame = function(gs) {
 MemoryGameCard = function(id) {		
 	this.id = id;
 	this.estado = 0;
+	this.pos = undefined;
 
 	this.flip = function(){
 		this.estado = 1;		
@@ -101,6 +123,7 @@ MemoryGameCard = function(id) {
 		switch(this.estado){
 				case 0:
 					gs.draw("back", pos);
+					this.pos = pos;
 					break;
 				case 1:
 					gs.draw(id, pos);
