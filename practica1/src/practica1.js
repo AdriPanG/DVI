@@ -15,6 +15,7 @@ MemoryGame = function(gs) {
 	var textoEstado = "Memory Game";	
 	var cartaVolteadaActual = undefined;
 	var timeoutActivo = false;
+	var nMovimientos = 0;
 	
 
 	this.initGame = function(){		
@@ -69,6 +70,7 @@ MemoryGame = function(gs) {
 			else{ // Si ya habia una carta levantada
 				// Comprobamos que no es la misma carta que ya estaba levantada
 				if(tablero[cardId].pos !== tablero[cartaVolteadaActual].pos){
+					nMovimientos++;
 					if(tablero[cardId].compareTo(tablero[cartaVolteadaActual]) && tablero[cardId].pos !== tablero[cartaVolteadaActual].pos){
 						textoEstado = "Match found!!";
 						tablero[cardId].found();
@@ -76,7 +78,7 @@ MemoryGame = function(gs) {
 						nCartasEncontradas++;
 						cartaVolteadaActual = undefined;
 						if(nCartasEncontradas === tablero.length/2)
-							textoEstado = "You win!!";
+							textoEstado = "You win in " + nMovimientos + " moves!!";
 					}
 					else{
 						textoEstado = "Try Again";
@@ -86,7 +88,7 @@ MemoryGame = function(gs) {
 							tablero[cartaVolteadaActual].estado = 0;
 							cartaVolteadaActual = undefined;
 							timeoutActivo = false;
-						}, 1000);
+						}, 2000);
 					}
 				}
 			}	
