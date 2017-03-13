@@ -1,4 +1,4 @@
-## Puiedes probar los juegos en:
+## Puedes probar los juegos en:
 
  - [Nuestra web de GitHub](https://adripang.github.io/DVI/)
 
