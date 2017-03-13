@@ -1,6 +1,6 @@
 ## Puiedes probar los juegos en:
 
-[Esta página web](https://adripang.github.io/DVI/MemoryGame/index.html)
+ - [Nuestra web de GitHub](https://adripang.github.io/DVI/)
 
 ### Jekyll Themes
 
