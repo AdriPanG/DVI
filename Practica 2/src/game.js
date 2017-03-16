@@ -1,12 +1,45 @@
-var sprites = {
- ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
- missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
- enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
- enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
- enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
- enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
- explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
- enemy_missile: { sx: 9, sy: 42, w: 3, h: 20, frame: 1, }
+var sprites = {Beer: {
+    sx: 512,
+    sy: 99,
+    w: 23,
+    h: 32,
+    frames: 1
+  },
+  Glass: {
+    sx: 512,
+    sy: 131,
+    w: 23,
+    h: 32,
+    frames: 1
+  },
+  NPC: {
+    sx: 512,
+    sy: 66,
+    w: 33,
+    h: 33,
+    frames: 1
+  },
+  ParedIzda: {
+    sx: 0,
+    sy: 0,
+    w: 512,
+    h: 480,
+    frames: 1
+  },
+  Player: {
+    sx: 512,
+    sy: 0,
+    w: 56,
+    h: 66,
+    frames: 1
+  },
+  TapperGameplay: {
+    sx: 0,
+    sy: 480,
+    w: 512,
+    h: 480,
+    frames: 1
+  }
 };
 
 var enemies = {
@@ -57,13 +90,9 @@ var level1 = [
 ];
 
 
-
 var playGame = function() {
   var board = new GameBoard();
-  board.add(new PlayerShip());
-  board.add(new Level(level1,winGame));
-  Game.setBoard(3,board);
-  Game.setBoard(5,new GamePoints(0));
+  board.setBoard(3, new Sprite(level1));
 };
 
 var winGame = function() {
@@ -297,7 +326,7 @@ Explosion.prototype.step = function(dt) {
 };
 
 window.addEventListener("load", function() {
-  Game.initialize("game",sprites,startGame);
+  Game.initialize("game",sprites,playGame);
 });
 
 
