@@ -56,24 +56,20 @@ var enemies = {
 };
 
 var OBJECT_PLAYER = 1,
-    OBJECT_PLAYER_PROJECTILE = 2,
+    OBJECT_PLAYER_BEER = 2,
     OBJECT_ENEMY = 4,
     OBJECT_ENEMY_PROJECTILE = 8,
     OBJECT_POWERUP = 16;
 
 var startGame = function() {
   var ua = navigator.userAgent.toLowerCase();
+  var fondo = new GameBoard();
+  fondo.add(new TapField(), 1);
 
-  // Only 1 row of stars
-  if(ua.match(/android/)) {
-    Game.setBoard(0,new Starfield(50,0.6,100,true));
-  } else {
-    Game.setBoard(0,new Starfield(20,0.4,100,true));
-    Game.setBoard(1,new Starfield(50,0.6,100));
-    Game.setBoard(2,new Starfield(100,1.0,50));
-  }  
-  Game.setBoard(3,new TitleScreen("Alien Invasion", 
-                                  "Press fire to start playing",
+  Game.setBoard(0, fondo);
+   
+  Game.setBoard(3,new TitleScreen("Tapper", 
+                                  "Press 'space' to start playing",
                                   playGame));
 };
 
@@ -92,108 +88,64 @@ var level1 = [
 
 var playGame = function() {
   var board = new GameBoard();
-  board.setBoard(3, new Sprite(level1));
+  board.add(new TapField(), 0);
+  board.add(new PlayerShip(), 1);
+  Game.setBoard(0, board);
+
 };
 
 var winGame = function() {
   Game.setBoard(3,new TitleScreen("You win!", 
-                                  "Press fire to play again",
+                                  "Press 'space' to play again",
                                   playGame));
 };
 
 var loseGame = function() {
   Game.setBoard(3,new TitleScreen("You lose!", 
-                                  "Press fire to play again",
+                                  "Press 'space' to play again",
                                   playGame));
 };
 
-var Starfield = function(speed,opacity,numStars,clear) {
+var TapField = function() {
 
   // Set up the offscreen canvas
-  var stars = document.createElement("canvas");
-  stars.width = Game.width; 
-  stars.height = Game.height;
-  var starCtx = stars.getContext("2d");
+  this.setup('TapperGameplay',{x:0, y:0});
+  this.w = Game.width; 
+  this.h = Game.height;
 
-  var offset = 0;
-
-  // If the clear option is set, 
-  // make the background black instead of transparent
-  if(clear) {
-    starCtx.fillStyle = "#000";
-    starCtx.fillRect(0,0,stars.width,stars.height);
-  }
-
-  // Now draw a bunch of random 2 pixel
-  // rectangles onto the offscreen canvas
-  starCtx.fillStyle = "#FFF";
-  starCtx.globalAlpha = opacity;
-  for(var i=0;i<numStars;i++) {
-    starCtx.fillRect(Math.floor(Math.random()*stars.width),
-                     Math.floor(Math.random()*stars.height),
-                     2,
-                     2);
-  }
-
-  // This method is called every frame
-  // to draw the starfield onto the canvas
-  this.draw = function(ctx) {
-    var intOffset = Math.floor(offset);
-    var remaining = stars.height - intOffset;
-
-    // Draw the top half of the starfield
-    if(intOffset > 0) {
-      ctx.drawImage(stars,
-                0, remaining,
-                stars.width, intOffset,
-                0, 0,
-                stars.width, intOffset);
-    }
-
-    // Draw the bottom half of the starfield
-    if(remaining > 0) {
-      ctx.drawImage(stars,
-              0, 0,
-              stars.width, remaining,
-              0, intOffset,
-              stars.width, remaining);
-    }
-  };
-
-  // This method is called to update
-  // the starfield
   this.step = function(dt) {
-    offset += dt * speed;
-    offset = offset % stars.height;
+
   };
 };
 
+TapField.prototype = new Sprite();
+
+
 var PlayerShip = function() { 
-  this.setup('ship', { vx: 0, reloadTime: 0.25, maxVel: 200 });
+  this.setup('Player', { vy: 0, reloadTime: 0.25, maxVel: 200 });
 
   this.reload = this.reloadTime;
-  this.x = Game.width/2 - this.w / 2;
-  this.y = Game.height - Game.playerOffset - this.h;
+  this.x = Game.width/2 - Game.playerOffset -this.w / 2;
+  this.y = Game.height - this.h;
 
   this.step = function(dt) {
-    if(Game.keys['left']) { this.vx = -this.maxVel; }
-    else if(Game.keys['right']) { this.vx = this.maxVel; }
-    else { this.vx = 0; }
+    if(Game.keys['up']) { this.vy = -this.maxVel; }
+    else if(Game.keys['down']) { this.vy = this.maxVel; }
+    else { this.vy = 0; }
 
-    this.x += this.vx * dt;
+    this.y += this.vy * dt;
 
-    if(this.x < 0) { this.x = 0; }
-    else if(this.x > Game.width - this.w) { 
-      this.x = Game.width - this.w;
+    if(this.y < 0) { this.y = 0; }
+    else if(this.y > Game.height - this.h) { 
+      this.y = Game.height - this.h;
     }
 
     this.reload-=dt;
-    if(Game.keys['fire'] && this.reload < 0) {
-      Game.keys['fire'] = false;
+    if(Game.keys['beer'] && this.reload < 0) {
+      Game.keys['beer'] = false;
       this.reload = this.reloadTime;
 
-      this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
-      this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
+      this.board.add(new PlayerBeer(this.y,this.x+this.w));
     }
   };
 };
@@ -208,22 +160,22 @@ PlayerShip.prototype.hit = function(damage) {
 };
 
 
-var PlayerMissile = function(x,y) {
-  this.setup('missile',{ vy: -700, damage: 10 });
-  this.x = x - this.w/2;
-  this.y = y - this.h; 
+var PlayerBeer = function(x,y) {
+  this.setup('Beer',{ vx: -700, damage: 10 });
+  this.x = x - this.w;
+  this.y = y - this.h/2; 
 };
 
-PlayerMissile.prototype = new Sprite();
-PlayerMissile.prototype.type = OBJECT_PLAYER_PROJECTILE;
+PlayerBeer.prototype = new Sprite();
+PlayerBeer.prototype.type = OBJECT_PLAYER_BEER;
 
-PlayerMissile.prototype.step = function(dt)  {
-  this.y += this.vy * dt;
+PlayerBeer.prototype.step = function(dt)  {
+  this.x += this.vx * dt;
   var collision = this.board.collide(this,OBJECT_ENEMY);
   if(collision) {
     collision.hit(this.damage);
     this.board.remove(this);
-  } else if(this.y < -this.h) { 
+  } else if(this.x < -this.w) { 
       this.board.remove(this); 
   }
 };

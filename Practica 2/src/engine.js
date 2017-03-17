@@ -54,7 +54,7 @@ var Game = new function() {
   
 
   // Handle Input
-  var KEY_CODES = { 37:'left', 39:'right', 32 :'fire' };
+  var KEY_CODES = { 38:'up', 40:'down', 32 :'beer' };
   this.keys = {};
 
   this.setupInput = function() {
@@ -145,7 +145,7 @@ var SpriteSheet = new function() {
     this.map = spriteData;
     this.image = new Image();
     this.image.onload = callback;
-    this.image.src = 'img/sprites.png';
+    this.image.src = 'img/spritesTapper.png';
   };
 
   this.draw = function(ctx,sprite,x,y,frame) {
@@ -165,8 +165,8 @@ var SpriteSheet = new function() {
 var TitleScreen = function TitleScreen(title,subtitle,callback) {
   var up = false;
   this.step = function(dt) {
-    if(!Game.keys['fire']) up = true;
-    if(up && Game.keys['fire'] && callback) callback();
+    if(!Game.keys['beer']) up = true;
+    if(up && Game.keys['beer'] && callback) callback();
   };
 
   this.draw = function(ctx) {
@@ -386,9 +386,9 @@ var TouchControls = function() {
     ctx.save();
 
     var yLoc = Game.height - unitWidth;
-    this.drawSquare(ctx,gutterWidth,yLoc,"\u25C0", Game.keys['left']);
-    this.drawSquare(ctx,unitWidth + gutterWidth,yLoc,"\u25B6", Game.keys['right']);
-    this.drawSquare(ctx,4*unitWidth,yLoc,"A",Game.keys['fire']);
+    this.drawSquare(ctx,gutterWidth,yLoc,"\u25C0", Game.keys['up']);
+    this.drawSquare(ctx,unitWidth + gutterWidth,yLoc,"\u25B6", Game.keys['down']);
+    this.drawSquare(ctx,4*unitWidth,yLoc,"A",Game.keys['beer']);
 
     ctx.restore();
   };
@@ -399,16 +399,16 @@ var TouchControls = function() {
     var touch, x;
 
     e.preventDefault();
-    Game.keys['left'] = false;
-    Game.keys['right'] = false;
+    Game.keys['up'] = false;
+    Game.keys['down'] = false;
     for(var i=0;i<e.targetTouches.length;i++) {
       touch = e.targetTouches[i];
-      x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetLeft;
+      x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetup;
       if(x < unitWidth) {
-        Game.keys['left'] = true;
+        Game.keys['up'] = true;
       } 
       if(x > unitWidth && x < 2*unitWidth) {
-        Game.keys['right'] = true;
+        Game.keys['down'] = true;
       } 
     }
 
@@ -417,7 +417,7 @@ var TouchControls = function() {
         touch = e.changedTouches[i];
         x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetLeft;
         if(x > 4 * unitWidth) {
-          Game.keys['fire'] = (e.type == 'touchstart');
+          Game.keys['beer'] = (e.type == 'touchstart');
         }
       }
     }
