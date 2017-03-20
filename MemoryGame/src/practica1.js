@@ -88,7 +88,7 @@ MemoryGame = function(gs) {
 							tablero[cartaVolteadaActual].estado = 0;
 							cartaVolteadaActual = undefined;
 							timeoutActivo = false;
-						}, 2000);
+						}, 1000);
 					}
 				}
 			}	
