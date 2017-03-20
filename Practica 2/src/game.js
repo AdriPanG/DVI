@@ -89,7 +89,7 @@ var level1 = [
 var playGame = function() {
   var board = new GameBoard();
   board.add(new TapField(), 0);
-  board.add(new PlayerShip(), 1);
+  board.add(new PayerBarMan(), 1);
   Game.setBoard(0, board);
 
 };
@@ -121,39 +121,38 @@ var TapField = function() {
 TapField.prototype = new Sprite();
 
 
-var PlayerShip = function() { 
-  this.setup('Player', { vy: 0, reloadTime: 0.25, maxVel: 200 });
-
-  this.reload = this.reloadTime;
-  this.x = Game.width/2 - Game.playerOffset -this.w / 2;
-  this.y = Game.height - this.h;
+var PayerBarMan = function() { 
+  this.setup('Player');
+  this.posiciones = [
+	{x:325, y:90},
+	{x:357, y:185},
+	{x:389, y:281},
+	{x:421, y:377}];
+  this.x = this.posiciones[0].x;
+  this.y = this.posiciones[0].y;
+  this.t = 1000;
+  this.pos = 0;
 
   this.step = function(dt) {
-    if(Game.keys['up']) { this.vy = -this.maxVel; }
-    else if(Game.keys['down']) { this.vy = this.maxVel; }
-    else { this.vy = 0; }
-
-    this.y += this.vy * dt;
-
-    if(this.y < 0) { this.y = 0; }
-    else if(this.y > Game.height - this.h) { 
-      this.y = Game.height - this.h;
-    }
-
-    this.reload-=dt;
-    if(Game.keys['beer'] && this.reload < 0) {
-      Game.keys['beer'] = false;
-      this.reload = this.reloadTime;
-
-      this.board.add(new PlayerBeer(this.y,this.x+this.w));
-    }
+    if(Game.keys['up']) { 
+    	this.pos++;
+    	if(this.pos > 3)
+    		this.pos = 0;
+    	this.x = this.posiciones[this.pos].x;
+  		this.y = this.posiciones[this.pos].y; 
+  	} else if(Game.keys['down']) { 
+  		this.pos--;
+  		if (this.pos < 0)
+  			this.pos = 3;
+    	this.x = this.posiciones[this.pos].x;
+  		this.y = this.posiciones[this.pos].y; 
+  	}    
   };
 };
 
-PlayerShip.prototype = new Sprite();
-PlayerShip.prototype.type = OBJECT_PLAYER;
+PayerBarMan.prototype = new Sprite();
 
-PlayerShip.prototype.hit = function(damage) {
+PayerBarMan.prototype.hit = function(damage) {
   if(this.board.remove(this)) {
     loseGame();
   }
