@@ -151,7 +151,9 @@ var PayerBarMan = function() {
 	    		this.pos = 0;
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
-	  	}    
+	  	} else if(Game.keys['beer']){
+	  		this.board.add(Object.create(new PlayerBeer(this.x, this.y, -300)), 2);
+	  	}
     }
     
   };
@@ -159,32 +161,19 @@ var PayerBarMan = function() {
 
 PayerBarMan.prototype = new Sprite();
 
-PayerBarMan.prototype.hit = function(damage) {
-  if(this.board.remove(this)) {
-    loseGame();
-  }
-};
+var PlayerBeer = function(posX, posY, velocidad) {
+  this.setup('Beer');
+  this.x = posX;
+  this.y = posY; 
+  this.vx = velocidad;
 
-
-var PlayerBeer = function(x,y) {
-  this.setup('Beer',{ vx: -700, damage: 10 });
-  this.x = x - this.w;
-  this.y = y - this.h/2; 
+  this.step = function(dt)  {
+  	if(this.x < sprites.TapperGameplay.w)
+	  this.x += this.vx * dt;	  
+	};
 };
 
 PlayerBeer.prototype = new Sprite();
-PlayerBeer.prototype.type = OBJECT_PLAYER_BEER;
-
-PlayerBeer.prototype.step = function(dt)  {
-  this.x += this.vx * dt;
-  var collision = this.board.collide(this,OBJECT_ENEMY);
-  if(collision) {
-    collision.hit(this.damage);
-    this.board.remove(this);
-  } else if(this.x < -this.w) { 
-      this.board.remove(this); 
-  }
-};
 
 
 var Enemy = function(blueprint,override) {
