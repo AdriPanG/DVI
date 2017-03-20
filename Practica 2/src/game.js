@@ -57,9 +57,7 @@ var enemies = {
 
 var OBJECT_PLAYER = 1,
     OBJECT_PLAYER_BEER = 2,
-    OBJECT_ENEMY = 4,
-    OBJECT_ENEMY_PROJECTILE = 8,
-    OBJECT_POWERUP = 16;
+    OBJECT_NPC = 4;
 
 var startGame = function() {
   var ua = navigator.userAgent.toLowerCase();
@@ -153,13 +151,18 @@ var PayerBarMan = function() {
 	  		this.y = this.posiciones[this.pos].y; 
 	  	} else if(Game.keys['beer']){
 	  		this.board.add(Object.create(new PlayerBeer(this.x, this.y, -300)), 2);
+	  		this.board.add(Object.create(new Customer(this.x, this.y, 50)), 3);
 	  	}
-    }
+    }  
+
     
+
   };
 };
 
 PayerBarMan.prototype = new Sprite();
+PayerBarMan.prototype.type = OBJECT_PLAYER;
+
 
 var PlayerBeer = function(posX, posY, velocidad) {
   this.setup('Beer');
@@ -169,108 +172,42 @@ var PlayerBeer = function(posX, posY, velocidad) {
 
   this.step = function(dt)  {
   	if(this.x < sprites.TapperGameplay.w)
-	  this.x += this.vx * dt;	  
+	  this.x += this.vx * dt;		
 	};
 };
 
 PlayerBeer.prototype = new Sprite();
+PlayerBeer.prototype.type = OBJECT_PLAYER_BEER;
 
+var Customer = function(posX, posY, velocidad) {
+  this.setup('NPC');
+  this.x = 30;
+  this.y = 367; 
+  this.vx = velocidad;
+  this.posiciones = [
+	{x:120, y:79},
+	{x:90, y:175},
+	{x:60, y:271},
+	{x:30, y:367}];
 
-var Enemy = function(blueprint,override) {
-  this.merge(this.baseParameters);
-  this.setup(blueprint.sprite,blueprint);
-  this.merge(override);
+  this.step = function(dt)  {
+  	if(this.x < sprites.TapperGameplay.w)
+	  this.x += this.vx * dt;
+
+	  if(this.board.collide(this, OBJECT_PLAYER_BEER))
+	  	  this.hit();
+	};
+
+	
+
 };
 
-Enemy.prototype = new Sprite();
-Enemy.prototype.type = OBJECT_ENEMY;
-
-Enemy.prototype.baseParameters = { A: 0, B: 0, C: 0, D: 0, 
-                                   E: 0, F: 0, G: 0, H: 0,
-                                   t: 0, reloadTime: 0.75, 
-                                   reload: 0 };
-
-Enemy.prototype.step = function(dt) {
-  this.t += dt;
-
-  this.vx = this.A + this.B * Math.sin(this.C * this.t + this.D);
-  this.vy = this.E + this.F * Math.sin(this.G * this.t + this.H);
-
-  this.x += this.vx * dt;
-  this.y += this.vy * dt;
-
-  var collision = this.board.collide(this,OBJECT_PLAYER);
-  if(collision) {
-    collision.hit(this.damage);
-    this.board.remove(this);
-  }
-
-  if(Math.random() < 0.01 && this.reload <= 0) {
-    this.reload = this.reloadTime;
-    if(this.missiles == 2) {
-      this.board.add(new EnemyMissile(this.x+this.w-2,this.y+this.h));
-      this.board.add(new EnemyMissile(this.x+2,this.y+this.h));
-    } else {
-      this.board.add(new EnemyMissile(this.x+this.w/2,this.y+this.h));
-    }
-
-  }
-  this.reload-=dt;
-
-  if(this.y > Game.height ||
-     this.x < -this.w ||
-     this.x > Game.width) {
-       this.board.remove(this);
-  }
-};
-
-Enemy.prototype.hit = function(damage) {
-  this.health -= damage;
-  if(this.health <=0) {
-    if(this.board.remove(this)) {
-      Game.points += this.points || 100;
-      this.board.add(new Explosion(this.x + this.w/2, 
-                                   this.y + this.h/2));
-    }
-  }
-};
-
-var EnemyMissile = function(x,y) {
-  this.setup('enemy_missile',{ vy: 200, damage: 10 });
-  this.x = x - this.w/2;
-  this.y = y;
-};
-
-EnemyMissile.prototype = new Sprite();
-EnemyMissile.prototype.type = OBJECT_ENEMY_PROJECTILE;
-
-EnemyMissile.prototype.step = function(dt)  {
-  this.y += this.vy * dt;
-  var collision = this.board.collide(this,OBJECT_PLAYER)
-  if(collision) {
-    collision.hit(this.damage);
-    this.board.remove(this);
-  } else if(this.y > Game.height) {
-      this.board.remove(this); 
-  }
-};
+Customer.prototype = new Sprite();
+Customer.prototype.type = OBJECT_NPC;
 
 
 
-var Explosion = function(centerX,centerY) {
-  this.setup('explosion', { frame: 0 });
-  this.x = centerX - this.w/2;
-  this.y = centerY - this.h/2;
-};
 
-Explosion.prototype = new Sprite();
-
-Explosion.prototype.step = function(dt) {
-  this.frame++;
-  if(this.frame >= 12) {
-    this.board.remove(this);
-  }
-};
 
 window.addEventListener("load", function() {
   Game.initialize("game",sprites,playGame);
