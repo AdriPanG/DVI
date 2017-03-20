@@ -140,15 +140,15 @@ var PayerBarMan = function() {
     if(this.time > this.timeMove){
     	this.time = 0;
     	if(Game.keys['up']) { 
-	    	this.pos++;
-	    	if(this.pos > 3)
-	    		this.pos = 0;
+	    	this.pos--;
+	  		if (this.pos < 0)
+	  			this.pos = 3;
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
 	  	} else if(Game.keys['down']) { 
-	  		this.pos--;
-	  		if (this.pos < 0)
-	  			this.pos = 3;
+	  		this.pos++;
+	    	if(this.pos > 3)
+	    		this.pos = 0;
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
 	  	}    
