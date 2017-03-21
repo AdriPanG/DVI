@@ -57,7 +57,9 @@ var enemies = {
 
 var OBJECT_PLAYER = 1,
     OBJECT_PLAYER_BEER = 2,
-    OBJECT_NPC = 4;
+    OBJECT_NPC = 4,
+    OBJECT_WALL = 8,
+    OBJECT_PLAYER_GLASS = 16;
 
 var startGame = function() {
   var ua = navigator.userAgent.toLowerCase();
@@ -87,7 +89,8 @@ var level1 = [
 var playGame = function() {
   var board = new GameBoard();
   board.add(new TapField(), 0);
-  board.add(new PayerBarMan(), 1);
+  //board.add(new Wall(), 1);
+  board.add(new PlayerBarMan(), 2);
   Game.setBoard(0, board);
 
 };
@@ -118,8 +121,23 @@ var TapField = function() {
 
 TapField.prototype = new Sprite();
 
+var Wall = function() {
 
-var PayerBarMan = function() { 
+  // Set up the offscreen canvas
+  this.setup('ParedIzda',{x:0, y:0});
+  this.w = Game.width; 
+  this.h = Game.height;
+
+  this.step = function(dt) {
+
+  };
+}
+
+Wall.prototype = new Sprite();
+Wall.prototype.type = OBJECT_WALL;
+
+
+var PlayerBarMan = function() { 
   this.setup('Player');
   this.posiciones = [
 	{x:325, y:90},
@@ -150,8 +168,8 @@ var PayerBarMan = function() {
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
 	  	} else if(Game.keys['beer']){
-	  		this.board.add(Object.create(new PlayerBeer(this.x, this.y, -300)), 2);
-	  		this.board.add(Object.create(new Customer(this.x, this.y, 50)), 3);
+	  		this.board.add(Object.create(new PlayerBeer(this.x, this.y, -50)), 3);
+	  		this.board.add(Object.create(new Customer(this.x, this.y, 50)), 4);
 	  	}
     }  
 
@@ -160,8 +178,8 @@ var PayerBarMan = function() {
   };
 };
 
-PayerBarMan.prototype = new Sprite();
-PayerBarMan.prototype.type = OBJECT_PLAYER;
+PlayerBarMan.prototype = new Sprite();
+PlayerBarMan.prototype.type = OBJECT_PLAYER;
 
 
 var PlayerBeer = function(posX, posY, velocidad) {
@@ -172,7 +190,14 @@ var PlayerBeer = function(posX, posY, velocidad) {
 
   this.step = function(dt)  {
   	if(this.x < sprites.TapperGameplay.w)
-	  this.x += this.vx * dt;		
+	  this.x += this.vx * dt;	
+
+	  if(this.board.collide(this, OBJECT_NPC)) {
+	  	  this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)), 3);
+	  	  this.hit();
+	  }
+	  /*else if(this.board.collide(this, OBJECT_WALL))
+	  	  this.hit();*/	
 	};
 };
 
@@ -190,6 +215,8 @@ var Customer = function(posX, posY, velocidad) {
 	{x:60, y:271},
 	{x:30, y:367}];
 
+  //this.pos = Math.floor((Math.random() * 4));
+
   this.step = function(dt)  {
   	if(this.x < sprites.TapperGameplay.w)
 	  this.x += this.vx * dt;
@@ -205,8 +232,23 @@ var Customer = function(posX, posY, velocidad) {
 Customer.prototype = new Sprite();
 Customer.prototype.type = OBJECT_NPC;
 
+var PlayerGlass = function(posX, posY, velocidad) {
+  this.setup('Glass');
+  this.x = posX;
+  this.y = posY; 
+  this.vx = velocidad;
 
+  this.step = function(dt)  {
+  	if(this.x < sprites.TapperGameplay.w)
+	  this.x += this.vx * dt;	
 
+	  if(this.board.collide(this, OBJECT_PLAYER))
+	  	  this.hit();	
+	};
+};
+
+PlayerGlass.prototype = new Sprite();
+PlayerGlass.prototype.type = OBJECT_PLAYER_GLASS;
 
 
 window.addEventListener("load", function() {
