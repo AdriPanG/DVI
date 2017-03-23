@@ -55,6 +55,17 @@ var enemies = {
               B: 150, C: 1.2, E: 75 }
 };
 
+var posDead = [
+    {x:335, y:100},
+    {x:367, y:195},
+    {x:399, y:291},
+    {x:431, y:387},
+    {x:105, y:89},
+    {x:75, y:180},
+    {x:45, y:281},
+    {x:15, y:377}
+    ];
+
 var OBJECT_PLAYER = 1,
     OBJECT_PLAYER_BEER = 2,
     OBJECT_NPC = 4,
@@ -92,7 +103,9 @@ var playGame = function() {
   board.add(new TapField());
   board.add(new Wall());
   board.add(new PlayerBarMan());
-  board.add(new DeadZone());
+  for (var i = posDead.length - 1; i >= 0; i--) {
+    board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
+  }
   Game.setBoard(0, board);
 
 };
@@ -139,7 +152,7 @@ Wall.prototype = new Sprite();
 Wall.prototype.type = OBJECT_WALL;
 
 
-var PlayerBarMan = function() { 
+var PlayerBarMan = function() {
   this.setup('Player');
   this.posiciones = [
   	{x:325, y:90},
@@ -229,8 +242,6 @@ var Customer = function(velocidad, pos) {
     
 	};
 
-	
-
 };
 
 Customer.prototype = new Sprite();
@@ -259,13 +270,12 @@ PlayerGlass.prototype = new Sprite();
 PlayerGlass.prototype.type = OBJECT_PLAYER_GLASS;
 
 
-var DeadZone = function() {
+var DeadZone = function(posX, posY) {
   
   this.draw = function (ctx) {
     
-    // Inicio de barra
-    this.x =  335;
-    this.sy = 100;
+    this.x = posX;
+    this.y = posY;
     this.w = 10;
     this.h = 60;
     this.frames = 1;
@@ -294,14 +304,14 @@ var DeadZone = function() {
 
 
     // Fina de barra
-    this.x =  105;
+    /*this.x =  105;
     this.sy = 89;
     this.w = 10;
     this.h = 60;
     this.frames = 1;
     ctx.fillRect(this.x, this.sy, this.w, this.h);
 
-    /*this.x =  75;
+    this.x =  75;
     this.sy = 180;
     this.w = 10;
     this.h = 60;
