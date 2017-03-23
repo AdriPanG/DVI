@@ -89,9 +89,10 @@ var level1 = [
 
 var playGame = function() {
   var board = new GameBoard();
-  board.add(new TapField(), 0);
-  board.add(new Wall(), 1);
-  board.add(new PlayerBarMan(), 2);
+  board.add(new TapField());
+  board.add(new Wall());
+  board.add(new PlayerBarMan());
+  board.add(new DeadZone());
   Game.setBoard(0, board);
 
 };
@@ -169,9 +170,8 @@ var PlayerBarMan = function() {
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
 	  	} else if(Game.keys['beer']){
-	  		this.board.add(Object.create(new PlayerBeer(this.x, this.y, -50)), 3);
+	  		this.board.add(Object.create(new Beer(this.x, this.y, -50)), 3);
 	  		this.board.add(Object.create(new Customer(50, this.pos)), 3);
-        this.board.add(Object.create(new DeadZone()), 4);
 	  	}
     }   
 
@@ -182,29 +182,29 @@ PlayerBarMan.prototype = new Sprite();
 PlayerBarMan.prototype.type = OBJECT_PLAYER;
 
 
-var PlayerBeer = function(posX, posY, velocidad) {
-  this.setup('Beer');
-  this.x = posX;
-  this.y = posY; 
-  this.vx = velocidad;
+var Beer = function(posX, posY, velocidad) {
+	this.setup('Beer');
+	this.x = posX - 12;
+	this.y = posY; 
+	this.vx = velocidad;
 
-  this.step = function(dt)  {
-  	if(this.x < sprites.TapperGameplay.w)
-	  this.x += this.vx * dt;	
+	this.step = function(dt)  {
+  		this.x += this.vx * dt;	
 
-	  if(this.board.collide(this, OBJECT_NPC)) {
-	  	  this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)), 3);
-	  	  this.hit();
-	  }
-    if(this.x < 325 && this.board.collide(this, OBJECT_DEADZONE))
-        this.hit();
-	  /*else if(this.board.collide(this, OBJECT_WALL))
-	  	  this.hit();*/
+	    if(this.board.collide(this, OBJECT_NPC)) {
+	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)), 3);
+	  	    this.hit();
+	    }
+    	if(this.board.collide(this, OBJECT_DEADZONE))
+        	this.hit();
+
+	    /*else if(this.board.collide(this, OBJECT_WALL))
+	  	    this.hit();*/
 	};
 };
 
-PlayerBeer.prototype = new Sprite();
-PlayerBeer.prototype.type = OBJECT_PLAYER_BEER;
+Beer.prototype = new Sprite();
+Beer.prototype.type = OBJECT_PLAYER_BEER;
 
 var Customer = function(velocidad, pos) {
   this.setup('NPC');
@@ -220,13 +220,13 @@ var Customer = function(velocidad, pos) {
   //this.pos = Math.floor((Math.random() * 4));
 
   this.step = function(dt)  {
-  	if(this.x < sprites.TapperGameplay.w)
-	     this.x += this.vx * dt;
+  	this.x += this.vx * dt;
 
-	  if(this.board.collide(this, OBJECT_PLAYER_BEER))
-	  	  this.hit();
-    if (this.x > 120 && this.board.collide(this, OBJECT_DEADZONE))
-        this.hit();
+  if(this.board.collide(this, OBJECT_PLAYER_BEER))
+  	  this.hit();
+  	if(this.board.collide(this, OBJECT_DEADZONE))
+	  	this.hit();
+    
 	};
 
 	
@@ -246,10 +246,12 @@ var PlayerGlass = function(posX, posY, velocidad) {
   	if(this.x < sprites.TapperGameplay.w)
 	  this.x += this.vx * dt;	
 
-	  if(this.board.collide(this, OBJECT_PLAYER))
-	  	  this.hit();	
-    else if(this.board.collide(this, OBJECT_DEADZONE))
-        this.hit();
+	if(this.board.collide(this, OBJECT_PLAYER))
+	   this.hit();
+
+	if(this.board.collide(this, OBJECT_DEADZONE))
+	  	this.hit();
+
 	};
 };
 
@@ -259,29 +261,67 @@ PlayerGlass.prototype.type = OBJECT_PLAYER_GLASS;
 
 var DeadZone = function() {
   
-  this.draw = function () {
-    var canvas = document.getElementById('game');
-    /*this.x = posX;
-    this.y = posY;*/
+  this.draw = function (ctx) {
+    
+    // Inicio de barra
+    this.x =  335;
+    this.sy = 100;
+    this.w = 10;
+    this.h = 60;
+    this.frames = 1;
+    ctx.fillRect(this.x, this.sy, this.w, this.h);
 
-    if (canvas.getContext) {
-      var ctx = canvas.getContext('2d');
+    /*this.x =  367;
+    this.sy = 195;
+    this.w = 10;
+    this.h = 60;
+    this.frames = 1;
+    ctx.fillRect(this.x, this.sy, this.w, this.h);
 
-      ctx.clearRect(340, 90, 1, 1);
-      //ctx.clearRect(0, 367, 25, 25);
-      ctx.clearRect(372, 185, 1, 1);
-      ctx.clearRect(404, 281, 1, 1);
-      ctx.clearRect(436, 377, 1, 1);
+    this.x =  399;
+    this.sy = 291;
+    this.w = 10;
+    this.h = 60;
+    this.frames = 1;
+    ctx.fillRect(this.x, this.sy, this.w, this.h);
+
+	this.x =  431;
+    this.sy = 387;
+    this.w = 10;
+    this.h = 60;
+    this.frames = 1;
+    ctx.fillRect(this.x, this.sy, this.w, this.h);*/
 
 
-      ctx.clearRect(110, 89, 1, 1);
-      ctx.clearRect(80, 180, 1, 1);
-      ctx.clearRect(50, 281, 1, 1);
-      ctx.clearRect(20, 377, 1, 1);
+    // Fina de barra
+    this.x =  105;
+    this.sy = 89;
+    this.w = 10;
+    this.h = 60;
+    this.frames = 1;
+    ctx.fillRect(this.x, this.sy, this.w, this.h);
 
-      //ctx.clearRect(45, 45, 60, 60);
-      //ctx.strokeRect(50, 50, 50, 50);
-    }
+    /*this.x =  75;
+    this.sy = 180;
+    this.w = 10;
+    this.h = 60;
+    this.frames = 1;
+    ctx.fillRect(this.x, this.sy, this.w, this.h);
+
+    this.x =  45;
+    this.sy = 281;
+    this.w = 10;
+    this.h = 60;
+    this.frames = 1;
+    ctx.fillRect(this.x, this.sy, this.w, this.h);
+
+	this.x =  15;
+    this.sy = 377;
+    this.w = 10;
+    this.h = 60;
+    this.frames = 1;
+    ctx.fillRect(this.x, this.sy, this.w, this.h);*/
+
   };
 
   this.step = function(dt) {
@@ -289,6 +329,7 @@ var DeadZone = function() {
   };
 };
 
+DeadZone.prototype = new Sprite();
 DeadZone.prototype.type = OBJECT_DEADZONE;
 
 window.addEventListener("load", function() {
@@ -296,3 +337,9 @@ window.addEventListener("load", function() {
 });
 
 
+/* Spawner (crear 4)
+	Spawner(y, delay, nCust, tiempo, cliente);
+	y es para diferenciar entre barras, nCient es individual para
+	cada barra.
+	No hacer new, creaer un cliente y hacer object.create(cliente)
+	*/
