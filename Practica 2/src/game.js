@@ -111,7 +111,7 @@ var playGame = function() {
   		return new Customer(velocidad, posicion);
   	}
 
-  	board.add(new Spawner(50, 1, 1, 1, Cliente));
+  	board.add(new Spawner(50, 1, 3, 1, Cliente));
   }
   Game.setBoard(0, board);
 
@@ -168,12 +168,15 @@ var PlayerBarMan = function() {
   	{x:421, y:377}];
   this.x = this.posiciones[3].x;
   this.y = this.posiciones[3].y;
-  this.timeMove = 0.095;
+  this.timeMove = 0.095;  
   this.time = 0;
+  this.timeBeer = 1;
+  this.timeBeerFixed = 1;
   this.pos = 0;
 
   this.step = function(dt) {
     this.time += dt;
+    this.timeBeer += dt;
 
     if(this.time > this.timeMove){
     	this.time = 0;
@@ -190,7 +193,10 @@ var PlayerBarMan = function() {
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
 	  	} else if(Game.keys['beer']){
-	  		this.board.add(Object.create(new Beer(this.x, this.y, -50)), 3);
+	  		if(this.timeBeer > this.timeBeerFixed){
+	  			this.timeBeer = 0;
+	  			this.board.add(Object.create(new Beer(this.x, this.y, -50)), 3);
+	  		}
 	  	}
     }   
 
@@ -235,8 +241,6 @@ var Customer = function(velocidad, pos) {
   this.x = 30; //this.posiciones[pos].x;
   this.y = 367; //this.posiciones[pos].y;
   this.vx = velocidad;
-
-  //this.pos = Math.floor((Math.random() * 4));
 
   this.step = function(dt)  {
   	this.x += this.vx * dt;
