@@ -169,12 +169,14 @@ var PlayerBarMan = function() {
 	  			this.pos = 3;
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
+	  		this.timeBeer = 1;
 	  	} else if(Game.keys['down']) { 
 	  		this.pos++;
 	    	if(this.pos > 3)
 	    		this.pos = 0;
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
+	  		this.timeBeer = 1;
 	  	} else if(Game.keys['beer']){
 	  		if(this.timeBeer > this.timeBeerFixed){
 	  			this.timeBeer = 0;
