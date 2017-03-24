@@ -106,6 +106,13 @@ var playGame = function() {
   for (var i = posDead.length - 1; i >= 0; i--) {
     board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
   }
+  for(var i = 0; i < 4; i++){
+  	var Cliente = function(velocidad, posicion){
+  		return new Customer(velocidad, posicion);
+  	}
+
+  	board.add(new Spawner(50, 1, 1, 1, Cliente));
+  }
   Game.setBoard(0, board);
 
 };
@@ -184,7 +191,6 @@ var PlayerBarMan = function() {
 	  		this.y = this.posiciones[this.pos].y; 
 	  	} else if(Game.keys['beer']){
 	  		this.board.add(Object.create(new Beer(this.x, this.y, -50)), 3);
-	  		this.board.add(Object.create(new Customer(50, this.pos)), 3);
 	  	}
     }   
 
@@ -281,58 +287,7 @@ var DeadZone = function(posX, posY) {
     this.frames = 1;
     ctx.fillRect(this.x, this.sy, this.w, this.h);
 
-    /*this.x =  367;
-    this.sy = 195;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-    this.x =  399;
-    this.sy = 291;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-	this.x =  431;
-    this.sy = 387;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);*/
-
-
-    // Fina de barra
-    /*this.x =  105;
-    this.sy = 89;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-    this.x =  75;
-    this.sy = 180;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-    this.x =  45;
-    this.sy = 281;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-	this.x =  15;
-    this.sy = 377;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);*/
-
-  };
+};
 
   this.step = function(dt) {
 
@@ -341,6 +296,36 @@ var DeadZone = function(posX, posY) {
 
 DeadZone.prototype = new Sprite();
 DeadZone.prototype.type = OBJECT_DEADZONE;
+
+
+var Spawner = function(y, delay, nCust, tiempo, cliente){
+
+	//this.board.add(Object.create(new Customer(50, this.pos)), 3);
+	this.tiempoDelay = 0;
+	this.tiempoTranscurrido = 0;
+	this.generados = 0;
+	this.cliente = cliente;
+
+	this.draw = function(){};
+
+	this.step = function(dt){
+		this.tiempoDelay += dt;
+		if(this.tiempoDelay > delay){
+			this.tiempoTranscurrido += dt;
+			if(this.tiempoTranscurrido > tiempo && this.generados < nCust){
+				this.tiempoTranscurrido = 0;
+				this.board.add(Object.create(this.cliente(50, 50)));
+				this.generados++;
+			}
+		}
+	}
+}
+
+Spawner.prototype = new Sprite();
+
+var aleatorio = function aleatorio(min, max) {
+    return Math.round(Math.random()*(max-min)+parseInt(min));
+}
 
 window.addEventListener("load", function() {
   Game.initialize("game",sprites,playGame);
