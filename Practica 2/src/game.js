@@ -42,19 +42,6 @@ var sprites = {Beer: {
   }
 };
 
-var enemies = {
-  straight: { x: 0,   y: -50, sprite: 'enemy_ship', health: 10, 
-              E: 100 },
-  ltr:      { x: 0,   y: -100, sprite: 'enemy_purple', health: 10, 
-              B: 75, C: 1, E: 100, missiles: 2  },
-  circle:   { x: 250,   y: -50, sprite: 'enemy_circle', health: 10, 
-              A: 0,  B: -100, C: 1, E: 20, F: 100, G: 1, H: Math.PI/2 },
-  wiggle:   { x: 100, y: -50, sprite: 'enemy_bee', health: 20, 
-              B: 50, C: 4, E: 100, firePercentage: 0.001, missiles: 2 },
-  step:     { x: 0,   y: -50, sprite: 'enemy_circle', health: 10,
-              B: 150, C: 1.2, E: 75 }
-};
-
 var posDead = [
     {x:335, y:100},
     {x:367, y:195},
@@ -72,18 +59,6 @@ var OBJECT_PLAYER = 1,
     OBJECT_WALL = 8,
     OBJECT_PLAYER_GLASS = 16,
     OBJECT_DEADZONE = 32;
-
-var startGame = function() {
-  var ua = navigator.userAgent.toLowerCase();
-  var fondo = new GameBoard();
-  fondo.add(new TapField(), 0);
-
-  Game.setBoard(1, fondo);
-   
-  Game.setBoard(3,new TitleScreen("Tapper", 
-                                  "Press 'space' to start playing",
-                                  playGame));
-};
 
 // Generador del nivel
 var level1 = [
@@ -108,6 +83,7 @@ var playGame = function() {
   board.add(new TapField());
   board.add(new Wall());
   board.add(new PlayerBarMan());
+  
   for (var i = posDead.length - 1; i >= 0; i--) {
     board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
   }
@@ -117,9 +93,9 @@ var playGame = function() {
   }
 
   for(var i = 0; i < 4; i++){
-
   	board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));
   }
+
   Game.setBoard(0, board);
 
 };
@@ -229,9 +205,6 @@ var Beer = function(posX, posY, velocidad) {
 	    }
     	if(this.board.collide(this, OBJECT_DEADZONE))
         	this.hit();
-
-	    /*else if(this.board.collide(this, OBJECT_WALL))
-	  	    this.hit();*/
 	};
 };
 
@@ -252,7 +225,8 @@ var Customer = function(velocidad, pos) {
   this.step = function(dt)  {
   	this.x += this.vx * dt;
 
-  if(this.board.collide(this, OBJECT_PLAYER_BEER))
+
+    if(this.board.collide(this, OBJECT_PLAYER_BEER))
   	  this.hit();
   	if(this.board.collide(this, OBJECT_DEADZONE))
 	  	this.hit();
