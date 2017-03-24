@@ -85,16 +85,21 @@ var startGame = function() {
                                   playGame));
 };
 
+// Generador del nivel
 var level1 = [
- // Start,   End, Gap,  Type,   Override
-  [ 0,      4000,  500, 'step' ],
-  [ 6000,   13000, 800, 'ltr' ],
-  [ 10000,  16000, 400, 'circle' ],
-  [ 17800,  20000, 500, 'straight', { x: 50 } ],
-  [ 18200,  20000, 500, 'straight', { x: 90 } ],
-  [ 18200,  20000, 500, 'straight', { x: 10 } ],
-  [ 22000,  25000, 400, 'wiggle', { x: 150 }],
-  [ 22000,  25000, 400, 'wiggle', { x: 100 }]
+ // delay, nCust, tiempo
+  { delay: 5, 
+  	nCust: 4,
+  	tiempo: 5},
+  { delay: 1, 
+  	nCust: 3,
+  	tiempo: 3},
+  { delay: 7, 
+  	nCust: 2,
+  	tiempo: 4},
+  { delay: 4, 
+  	nCust: 1,
+  	tiempo: 1}
 ];
 
 
@@ -106,12 +111,14 @@ var playGame = function() {
   for (var i = posDead.length - 1; i >= 0; i--) {
     board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
   }
-  for(var i = 0; i < 4; i++){
-  	var Cliente = function(velocidad, posicion){
-  		return new Customer(velocidad, posicion);
-  	}
 
-  	board.add(new Spawner(50, 1, 3, 1, Cliente));
+  var Cliente = function(velocidad, posicion){
+  	return new Customer(velocidad, posicion);
+  }
+
+  for(var i = 0; i < 4; i++){
+
+  	board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));
   }
   Game.setBoard(0, board);
 
@@ -195,7 +202,7 @@ var PlayerBarMan = function() {
 	  	} else if(Game.keys['beer']){
 	  		if(this.timeBeer > this.timeBeerFixed){
 	  			this.timeBeer = 0;
-	  			this.board.add(Object.create(new Beer(this.x, this.y, -50)), 3);
+	  			this.board.add(Object.create(new Beer(this.x, this.y, -50)));
 	  		}
 	  	}
     }   
@@ -216,9 +223,9 @@ var Beer = function(posX, posY, velocidad) {
 	this.step = function(dt)  {
   		this.x += this.vx * dt;	
 
-	    if(this.board.collide(this, OBJECT_NPC)) {
-	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)), 3);
+	    if(this.board.collide(this, OBJECT_NPC)) {	  	    
 	  	    this.hit();
+	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));
 	    }
     	if(this.board.collide(this, OBJECT_DEADZONE))
         	this.hit();
@@ -238,8 +245,8 @@ var Customer = function(velocidad, pos) {
     {x:90, y:175},
     {x:60, y:271},
     {x:30, y:367}];
-  this.x = 30; //this.posiciones[pos].x;
-  this.y = 367; //this.posiciones[pos].y;
+  this.x = this.posiciones[pos].x;
+  this.y = this.posiciones[pos].y;
   this.vx = velocidad;
 
   this.step = function(dt)  {
@@ -302,9 +309,8 @@ DeadZone.prototype = new Sprite();
 DeadZone.prototype.type = OBJECT_DEADZONE;
 
 
-var Spawner = function(y, delay, nCust, tiempo, cliente){
+var Spawner = function(posicion, delay, nCust, tiempo, cliente){
 
-	//this.board.add(Object.create(new Customer(50, this.pos)), 3);
 	this.tiempoDelay = 0;
 	this.tiempoTranscurrido = 0;
 	this.generados = 0;
@@ -318,7 +324,7 @@ var Spawner = function(y, delay, nCust, tiempo, cliente){
 			this.tiempoTranscurrido += dt;
 			if(this.tiempoTranscurrido > tiempo && this.generados < nCust){
 				this.tiempoTranscurrido = 0;
-				this.board.add(Object.create(this.cliente(50, 50)));
+				this.board.add(Object.create(this.cliente(50, posicion)));
 				this.generados++;
 			}
 		}
@@ -326,10 +332,6 @@ var Spawner = function(y, delay, nCust, tiempo, cliente){
 }
 
 Spawner.prototype = new Sprite();
-
-var aleatorio = function aleatorio(min, max) {
-    return Math.round(Math.random()*(max-min)+parseInt(min));
-}
 
 window.addEventListener("load", function() {
   Game.initialize("game",sprites,playGame);
