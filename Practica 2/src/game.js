@@ -149,8 +149,8 @@ var PlayerBarMan = function() {
   	{x:357, y:185},
   	{x:389, y:281},
   	{x:421, y:377}];
-  this.x = this.posiciones[3].x;
-  this.y = this.posiciones[3].y;
+  this.x = this.posiciones[0].x;
+  this.y = this.posiciones[0].y;
   this.timeMove = 0.095;  
   this.time = 0;
   this.timeBeer = 1;
@@ -178,7 +178,7 @@ var PlayerBarMan = function() {
 	  	} else if(Game.keys['beer']){
 	  		if(this.timeBeer > this.timeBeerFixed){
 	  			this.timeBeer = 0;
-	  			this.board.add(Object.create(new Beer(this.x, this.y, -50)));
+	  			this.board.add(new Beer(this.x, this.y, -50));
 	  		}
 	  	}
     }   
@@ -200,11 +200,11 @@ var Beer = function(posX, posY, velocidad) {
   		this.x += this.vx * dt;	
 
 	    if(this.board.collide(this, OBJECT_NPC)) {	  	    
-	  	    this.hit();
+	  	    this.board.remove(this);
 	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));
 	    }
     	if(this.board.collide(this, OBJECT_DEADZONE))
-        	this.hit();
+        	this.board.remove(this);
 	};
 };
 
@@ -226,10 +226,10 @@ var Customer = function(velocidad, pos) {
   	this.x += this.vx * dt;
 
 
-    if(this.board.collide(this, OBJECT_PLAYER_BEER))
-  	  this.hit();
+    if(this.board.collide(this, OBJECT_PLAYER_GLASS))
+  	  this.board.remove(this);
   	if(this.board.collide(this, OBJECT_DEADZONE))
-	  	this.hit();
+	  	this.board.remove(this);
     
 	};
 
@@ -245,14 +245,13 @@ var PlayerGlass = function(posX, posY, velocidad) {
   this.vx = velocidad;
 
   this.step = function(dt) {
-  	if(this.x < sprites.TapperGameplay.w)
-	  this.x += this.vx * dt;	
+  	this.x += this.vx * dt;	
 
 	if(this.board.collide(this, OBJECT_PLAYER))
-	   this.hit();
+	   this.board.remove(this);
 
 	if(this.board.collide(this, OBJECT_DEADZONE))
-	  	this.hit();
+	  	this.board.remove(this);
 
 	};
 };
