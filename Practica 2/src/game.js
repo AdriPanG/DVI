@@ -42,19 +42,6 @@ var sprites = {Beer: {
   }
 };
 
-var enemies = {
-  straight: { x: 0,   y: -50, sprite: 'enemy_ship', health: 10, 
-              E: 100 },
-  ltr:      { x: 0,   y: -100, sprite: 'enemy_purple', health: 10, 
-              B: 75, C: 1, E: 100, missiles: 2  },
-  circle:   { x: 250,   y: -50, sprite: 'enemy_circle', health: 10, 
-              A: 0,  B: -100, C: 1, E: 20, F: 100, G: 1, H: Math.PI/2 },
-  wiggle:   { x: 100, y: -50, sprite: 'enemy_bee', health: 20, 
-              B: 50, C: 4, E: 100, firePercentage: 0.001, missiles: 2 },
-  step:     { x: 0,   y: -50, sprite: 'enemy_circle', health: 10,
-              B: 150, C: 1.2, E: 75 }
-};
-
 var posDead = [
     {x:335, y:100},
     {x:367, y:195},
@@ -73,28 +60,21 @@ var OBJECT_PLAYER = 1,
     OBJECT_PLAYER_GLASS = 16,
     OBJECT_DEADZONE = 32;
 
-var startGame = function() {
-  var ua = navigator.userAgent.toLowerCase();
-  var fondo = new GameBoard();
-  fondo.add(new TapField(), 0);
-
-  Game.setBoard(1, fondo);
-   
-  Game.setBoard(3,new TitleScreen("Tapper", 
-                                  "Press 'space' to start playing",
-                                  playGame));
-};
-
+// Generador del nivel
 var level1 = [
- // Start,   End, Gap,  Type,   Override
-  [ 0,      4000,  500, 'step' ],
-  [ 6000,   13000, 800, 'ltr' ],
-  [ 10000,  16000, 400, 'circle' ],
-  [ 17800,  20000, 500, 'straight', { x: 50 } ],
-  [ 18200,  20000, 500, 'straight', { x: 90 } ],
-  [ 18200,  20000, 500, 'straight', { x: 10 } ],
-  [ 22000,  25000, 400, 'wiggle', { x: 150 }],
-  [ 22000,  25000, 400, 'wiggle', { x: 100 }]
+ // delay, nCust, tiempo
+  { delay: 5, 
+  	nCust: 4,
+  	tiempo: 5},
+  { delay: 1, 
+  	nCust: 3,
+  	tiempo: 3},
+  { delay: 7, 
+  	nCust: 2,
+  	tiempo: 4},
+  { delay: 4, 
+  	nCust: 1,
+  	tiempo: 1}
 ];
 
 
@@ -103,9 +83,19 @@ var playGame = function() {
   board.add(new TapField());
   board.add(new Wall());
   board.add(new PlayerBarMan());
+  
   for (var i = posDead.length - 1; i >= 0; i--) {
     board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
   }
+
+  var Cliente = function(velocidad, posicion){
+  	return new Customer(velocidad, posicion);
+  }
+
+  for(var i = 0; i < 4; i++){
+  	board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));
+  }
+
   Game.setBoard(0, board);
 
 };
@@ -159,14 +149,17 @@ var PlayerBarMan = function() {
   	{x:357, y:185},
   	{x:389, y:281},
   	{x:421, y:377}];
-  this.x = this.posiciones[3].x;
-  this.y = this.posiciones[3].y;
-  this.timeMove = 0.095;
+  this.x = this.posiciones[0].x;
+  this.y = this.posiciones[0].y;
+  this.timeMove = 0.095;  
   this.time = 0;
+  this.timeBeer = 1;
+  this.timeBeerFixed = 1;
   this.pos = 0;
 
   this.step = function(dt) {
     this.time += dt;
+    this.timeBeer += dt;
 
     if(this.time > this.timeMove){
     	this.time = 0;
@@ -176,15 +169,19 @@ var PlayerBarMan = function() {
 	  			this.pos = 3;
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
+	  		this.timeBeer = 1;
 	  	} else if(Game.keys['down']) { 
 	  		this.pos++;
 	    	if(this.pos > 3)
 	    		this.pos = 0;
 	    	this.x = this.posiciones[this.pos].x;
 	  		this.y = this.posiciones[this.pos].y; 
+	  		this.timeBeer = 1;
 	  	} else if(Game.keys['beer']){
-	  		this.board.add(Object.create(new Beer(this.x, this.y, -50)), 3);
-	  		this.board.add(Object.create(new Customer(50, this.pos)), 3);
+	  		if(this.timeBeer > this.timeBeerFixed){
+	  			this.timeBeer = 0;
+	  			this.board.add(new Beer(this.x, this.y, -50));
+	  		}
 	  	}
     }   
 
@@ -204,15 +201,12 @@ var Beer = function(posX, posY, velocidad) {
 	this.step = function(dt)  {
   		this.x += this.vx * dt;	
 
-	    if(this.board.collide(this, OBJECT_NPC)) {
-	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)), 3);
-	  	    this.hit();
+	    if(this.board.collide(this, OBJECT_NPC)) {	  	    
+	  	    this.board.remove(this);
+	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));
 	    }
     	if(this.board.collide(this, OBJECT_DEADZONE))
-        	this.hit();
-
-	    /*else if(this.board.collide(this, OBJECT_WALL))
-	  	    this.hit();*/
+        	this.board.remove(this);
 	};
 };
 
@@ -226,19 +220,18 @@ var Customer = function(velocidad, pos) {
     {x:90, y:175},
     {x:60, y:271},
     {x:30, y:367}];
-  this.x = 30; //this.posiciones[pos].x;
-  this.y = 367; //this.posiciones[pos].y;
+  this.x = this.posiciones[pos].x;
+  this.y = this.posiciones[pos].y;
   this.vx = velocidad;
-
-  //this.pos = Math.floor((Math.random() * 4));
 
   this.step = function(dt)  {
   	this.x += this.vx * dt;
 
-  if(this.board.collide(this, OBJECT_PLAYER_BEER))
-  	  this.hit();
+
+    if(this.board.collide(this, OBJECT_PLAYER_GLASS))
+  	  this.board.remove(this);
   	if(this.board.collide(this, OBJECT_DEADZONE))
-	  	this.hit();
+	  	this.board.remove(this);
     
 	};
 
@@ -254,14 +247,13 @@ var PlayerGlass = function(posX, posY, velocidad) {
   this.vx = velocidad;
 
   this.step = function(dt) {
-  	if(this.x < sprites.TapperGameplay.w)
-	  this.x += this.vx * dt;	
+  	this.x += this.vx * dt;	
 
 	if(this.board.collide(this, OBJECT_PLAYER))
-	   this.hit();
+	   this.board.remove(this);
 
 	if(this.board.collide(this, OBJECT_DEADZONE))
-	  	this.hit();
+	  	this.board.remove(this);
 
 	};
 };
@@ -281,58 +273,7 @@ var DeadZone = function(posX, posY) {
     this.frames = 1;
     ctx.fillRect(this.x, this.sy, this.w, this.h);
 
-    /*this.x =  367;
-    this.sy = 195;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-    this.x =  399;
-    this.sy = 291;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-	this.x =  431;
-    this.sy = 387;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);*/
-
-
-    // Fina de barra
-    /*this.x =  105;
-    this.sy = 89;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-    this.x =  75;
-    this.sy = 180;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-    this.x =  45;
-    this.sy = 281;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);
-
-	this.x =  15;
-    this.sy = 377;
-    this.w = 10;
-    this.h = 60;
-    this.frames = 1;
-    ctx.fillRect(this.x, this.sy, this.w, this.h);*/
-
-  };
+};
 
   this.step = function(dt) {
 
@@ -341,6 +282,31 @@ var DeadZone = function(posX, posY) {
 
 DeadZone.prototype = new Sprite();
 DeadZone.prototype.type = OBJECT_DEADZONE;
+
+
+var Spawner = function(posicion, delay, nCust, tiempo, cliente){
+
+	this.tiempoDelay = 0;
+	this.tiempoTranscurrido = 0;
+	this.generados = 0;
+	this.cliente = cliente;
+
+	this.draw = function(){};
+
+	this.step = function(dt){
+		this.tiempoDelay += dt;
+		if(this.tiempoDelay > delay){
+			this.tiempoTranscurrido += dt;
+			if(this.tiempoTranscurrido > tiempo && this.generados < nCust){
+				this.tiempoTranscurrido = 0;
+				this.board.add(Object.create(this.cliente(50, posicion)));
+				this.generados++;
+			}
+		}
+	}
+}
+
+Spawner.prototype = new Sprite();
 
 window.addEventListener("load", function() {
   Game.initialize("game",sprites,playGame);
