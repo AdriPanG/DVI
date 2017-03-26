@@ -83,7 +83,7 @@ var startGame = function() {
  
   var board = new GameBoard();
 
-  Game.setBoard(3,new TitleScreen("Tapper Beer", 
+  Game.setBoard(0,new TitleScreen("Tapper Beer", 
                                   "Press 'space' to start playing",
                                   playGame));
 };
@@ -112,18 +112,20 @@ var playGame = function() {
   GameManager.setNumCliente(numCustomers);
 
   Game.setBoard(0, board);
-  Game.setBoard(5,new GamePoints(0));
+  Game.setBoard(1,new GamePoints(0));
 
 };
 
 var winGame = function() {
-  Game.setBoard(3,new TitleScreen("You win!", 
+  var board = new GameBoard();
+  Game.setBoard(0,new TitleScreen("You win!", 
                                   "Press 'space' to play again",
                                   playGame));
 };
 
 var loseGame = function() {
-  Game.setBoard(3,new TitleScreen("You lose!", 
+  var board = new GameBoard();
+  Game.setBoard(0,new TitleScreen("You lose!", 
                                   "Press 'space' to play again",
                                   playGame));
 };
@@ -366,7 +368,7 @@ var GameManager = new function() {
 };
 
 window.addEventListener("load", function() {
-  Game.initialize("game",sprites,playGame);
+  Game.initialize("game",sprites,startGame);
 });
 
 
