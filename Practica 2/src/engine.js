@@ -479,3 +479,5 @@ var GamePoints = function() {
 
   this.step = function(dt) { };
 };
+
+GamePoints.prototype = new Sprite();

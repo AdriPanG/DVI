@@ -92,6 +92,7 @@ var playGame = function() {
   board.add(new Wall());
   board.add(new PlayerBarMan());
   board.add(new Level(level1,winGame));
+  board.add(new GamePoints());
 
   for (var i = posDead.length - 1; i >= 0; i--) {
     board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
@@ -110,20 +111,19 @@ var playGame = function() {
   GameManager.setNumCliente(numCustomers);
 
   Game.setBoard(0, board);
-  Game.setBoard(1,new GamePoints(0));
 
 };
 
 var winGame = function() {
   var board = new GameBoard();
-  Game.setBoard(0,new TitleScreen("You win!", 
+  Game.setBoard(0,new TitleScreen("You win with " + Game.points + " points!", 
                                   "Press 'space' to play again",
                                   playGame));
 };
 
 var loseGame = function() {
   var board = new GameBoard();
-  Game.setBoard(0,new TitleScreen("You lose!", 
+  Game.setBoard(0,new TitleScreen("You lose with " + Game.points + " points!", 
                                   "Press 'space' to play again",
                                   playGame));
 };
@@ -291,6 +291,7 @@ var Customer = function(velocidad, pos) {
 
     if(this.board.collide(this, OBJECT_GLASS)) {
   	  this.board.remove(this);
+  	  Game.points += 50;
       GameManager.subCliente();
     }
   	if(this.board.collide(this, OBJECT_DEADZONE)) {
@@ -379,7 +380,7 @@ Spawner.prototype = new Sprite();
 var GameManager = new function() {
   this.numClientes = 0;
   this.numJarras = 0;
-
+  
   this.setNumCliente = function(nClientes){
       this.numClientes = nClientes;
   }
@@ -390,6 +391,7 @@ var GameManager = new function() {
 
   this.jarrasCogidas = function(){
       this.numJarras--;
+      Game.points += 100;
       if(this.numClientes === 0 && this.numJarras === 0){
           winGame();
       }
