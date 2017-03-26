@@ -83,9 +83,7 @@ var startGame = function() {
  
   var board = new GameBoard();
 
-  Game.setBoard(0,new TitleScreen("Tapper Beer", 
-                                  "Press 'space' to start playing",
-                                  playGame));
+  Game.setBoard(0,new Portada(playGame));
 };
 
 var playGame = function() {
@@ -279,9 +277,6 @@ var Customer = function(velocidad, pos) {
   	this.image = new Image();
     this.image.src = 'img/customers.png';
 
-    
-    console.log(this.s.sx);
-
     ctx.drawImage(this.image,
                      this.s.sx + this.s.frames * this.s.w, 
                      this.s.sy, 
@@ -387,7 +382,6 @@ var GameManager = new function() {
 
   this.setNumCliente = function(nClientes){
       this.numClientes = nClientes;
-      console.log(nClientes);
   }
 
   this.subCliente = function(){
@@ -396,7 +390,6 @@ var GameManager = new function() {
 
   this.jarrasCogidas = function(){
       this.numJarras--;
-      console.log(this.numClientes);
       if(this.numClientes === 0 && this.numJarras === 0){
           winGame();
       }

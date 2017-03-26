@@ -162,6 +162,30 @@ var SpriteSheet = new function() {
   return this;
 };
 
+var Portada = function(callback) {
+  
+  this.step = function(dt) {
+    if(!Game.keys['beer']) up = true;
+    if(up && Game.keys['beer'] && callback) callback();
+  };
+
+  this.draw = function(ctx) {
+    
+    // Background
+    this.image = new Image();
+    this.image.src = 'img/pregame.png';
+    ctx.drawImage(this.image, 0, 0);
+
+
+    // Foreground
+    ctx.fillStyle = "#FFFFFF";
+
+    ctx.font = "bold 20px bangers";
+    var measure2 = ctx.measureText("Press 'space' to play");
+    ctx.fillText("Press 'space' to play",Game.width/2 - measure2.width/2,Game.height - 50);
+  };
+};
+
 var TitleScreen = function TitleScreen(title,subtitle,callback) {
   var up = false;
   this.step = function(dt) {
