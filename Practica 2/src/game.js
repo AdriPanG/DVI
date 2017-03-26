@@ -64,13 +64,13 @@ var OBJECT_PLAYER = 1,
 var level1 = [
  // delay, nCust, tiempo
   { delay: 5, 
-  	nCust: 4,
+  	nCust: 1,
   	tiempo: 5},
   { delay: 2, 
-  	nCust: 3,
-  	tiempo: 3},
+  	nCust: 1,
+  	tiempo: 2},
   { delay: 7, 
-  	nCust: 2,
+  	nCust: 1,
   	tiempo: 4},
   { delay: 4, 
   	nCust: 1,
@@ -196,6 +196,7 @@ var PlayerBarMan = function() {
 	  	} else if(Game.keys['beer']){
 	  		if(this.timeBeer > this.timeBeerFixed){
 	  			this.timeBeer = 0;
+          GameManager.addJarra();
 	  			this.board.add(new Beer(this.x, this.y, -50));
 	  		}
 	  	}
@@ -216,13 +217,14 @@ var Beer = function(posX, posY, velocidad) {
 
 	this.step = function(dt)  {
   		this.x += this.vx * dt;	
-
 	    if(this.board.collide(this, OBJECT_NPC)) {	  	    
 	  	    this.board.remove(this);
 	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));
 	    }
-    	if(this.board.collide(this, OBJECT_DEADZONE))
+    	if(this.board.collide(this, OBJECT_DEADZONE)) {
         	this.board.remove(this);
+          GameManager.youLose();
+      }
 	};
 };
 
@@ -245,10 +247,13 @@ var Customer = function(velocidad, pos) {
   	this.x += this.vx * dt;
 
 
-    if(this.board.collide(this, OBJECT_GLASS))
+    if(this.board.collide(this, OBJECT_GLASS)) {
   	  this.board.remove(this);
+      GameManager.subCliente();
+    }
   	if(this.board.collide(this, OBJECT_DEADZONE)) {
 	  	this.board.remove(this);
+      GameManager.youLose();
     }
 	};
 
@@ -267,12 +272,14 @@ var PlayerGlass = function(posX, posY, velocidad) {
   this.step = function(dt) {
   	this.x += this.vx * dt;	
 
-	if(this.board.collide(this, OBJECT_PLAYER))
-	   this.board.remove(this);
-
-	if(this.board.collide(this, OBJECT_DEADZONE))
-	  	this.board.remove(this);
-
+  	if(this.board.collide(this, OBJECT_PLAYER)) {
+  	  this.board.remove(this);
+      GameManager.jarrasCogidas();
+    }
+  	if(this.board.collide(this, OBJECT_DEADZONE)) {
+  	  this.board.remove(this);
+      GameManager.youLose();
+    }
 	};
 };
 
@@ -327,12 +334,33 @@ var Spawner = function(posicion, delay, nCust, tiempo, cliente){
 Spawner.prototype = new Sprite();
 
 
- var GameManager = new function() {
+var GameManager = new function() {
   this.numClientes = 0;
+  this.numJarras = 0;
 
   this.setNumCliente = function(nClientes){
-  	this.numClientes = nClientes;
-  	console.log(nClientes);
+      this.numClientes = nClientes;
+      console.log(nClientes);
+  }
+
+  this.subCliente = function(){
+      this.numClientes--;
+  }
+
+  this.jarrasCogidas = function(){
+      this.numJarras--;
+      console.log(this.numClientes);
+      if(this.numClientes === 0 && this.numJarras === 0){
+          winGame();
+      }
+  }
+
+  this.youLose = function(){
+    loseGame();
+  }
+
+  this.addJarra = function(){
+      this.numJarras++;
   }
 
 };
