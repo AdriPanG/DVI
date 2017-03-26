@@ -370,11 +370,3 @@ var GameManager = new function() {
 window.addEventListener("load", function() {
   Game.initialize("game",sprites,startGame);
 });
-
-
-/* Spawner (crear 4)
-	Spawner(y, delay, nCust, tiempo, cliente);
-	y es para diferenciar entre barras, nCient es individual para
-	cada barra.
-	No hacer new, creaer un cliente y hacer object.create(cliente)
-	*/
