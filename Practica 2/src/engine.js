@@ -386,9 +386,9 @@ var TouchControls = function() {
     ctx.save();
 
     var yLoc = Game.height - unitWidth;
-    //this.drawSquare(ctx,gutterWidth,yLoc,"\u25C0", Game.keys['up']);
-    //this.drawSquare(ctx,unitWidth + gutterWidth,yLoc,"\u25B6", Game.keys['down']);
-    //this.drawSquare(ctx,4*unitWidth,yLoc,"A",Game.keys['beer']);
+    this.drawSquare(ctx,gutterWidth,yLoc,"\u25B3", Game.keys['up']);
+    this.drawSquare(ctx,unitWidth + gutterWidth,yLoc,"\u25BD", Game.keys['down']);
+    this.drawSquare(ctx,4*unitWidth,yLoc,"A",Game.keys['beer']);
 
     ctx.restore();
   };
@@ -403,7 +403,7 @@ var TouchControls = function() {
     Game.keys['down'] = false;
     for(var i=0;i<e.targetTouches.length;i++) {
       touch = e.targetTouches[i];
-      x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetup;
+      x = touch.pageX / Game.canvasMultiplier - Game.canvas.offsetLeft;
       if(x < unitWidth) {
         Game.keys['up'] = true;
       } 
