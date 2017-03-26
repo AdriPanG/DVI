@@ -198,7 +198,6 @@ var PlayerBarMan = function() {
 	  	} else if(Game.keys['beer']){
 	  		if(this.timeBeer > this.timeBeerFixed){
 	  			this.timeBeer = 0;
-          GameManager.addJarra();
 	  			this.board.add(new Beer(this.x, this.y, -50));
 	  		}
 	  	}
@@ -221,7 +220,8 @@ var Beer = function(posX, posY, velocidad) {
   		this.x += this.vx * dt;	
 	    if(this.board.collide(this, OBJECT_NPC)) {	  	    
 	  	    this.board.remove(this);
-	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));
+	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));	  	    
+          	GameManager.addJarra();
 	    }
     	if(this.board.collide(this, OBJECT_DEADZONE)) {
         	this.board.remove(this);
