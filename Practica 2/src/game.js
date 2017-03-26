@@ -236,14 +236,59 @@ Beer.prototype.type = OBJECT_BEER;
 
 var Customer = function(velocidad, pos) {
   this.setup('NPC');
+  this.spritesCustomers = [{
+	    sx: 64,
+	    sy: 96,
+	    w: 32,
+	    h: 32,
+	    frames: 1
+	  },
+	  {
+	    sx: 63,
+	    sy: 64,
+	    w: 32,
+	    h: 32,
+	    frames: 1
+	  },
+	  {
+	    sx: 64,
+	    sy: 32,
+	    w: 32,
+	    h: 32,
+	    frames: 1
+	  },
+	  {
+	    sx: 64,
+	    sy: 0,
+	    w: 32,
+	    h: 32,
+	    frames: 1
+	  }
+	];
   this.posiciones = [
-    {x:120, y:79},
-    {x:90, y:175},
-    {x:60, y:271},
-    {x:30, y:367}];
+    {x:120, y:80},
+    {x:90, y:176},
+    {x:60, y:272},
+    {x:30, y:368}];
   this.x = this.posiciones[pos].x;
   this.y = this.posiciones[pos].y;
   this.vx = velocidad;
+  this.s = this.spritesCustomers[aleatorio(0,3)];
+
+  this.draw = function(ctx){
+  	this.image = new Image();
+    this.image.src = 'img/customers.png';
+
+    
+    console.log(this.s.sx);
+
+    ctx.drawImage(this.image,
+                     this.s.sx + this.s.frames * this.s.w, 
+                     this.s.sy, 
+                     this.s.w, this.s.h, 
+                     Math.floor(this.x), Math.floor(this.y),
+                     this.s.w, this.s.h);
+  }
 
   this.step = function(dt)  {
   	this.x += this.vx * dt;
@@ -366,6 +411,10 @@ var GameManager = new function() {
   }
 
 };
+
+var aleatorio = function aleatorio(min, max) {
+    return Math.round(Math.random()*(max-min)+parseInt(min));
+}
 
 window.addEventListener("load", function() {
   Game.initialize("game",sprites,startGame);
