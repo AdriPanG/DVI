@@ -176,7 +176,6 @@ var Portada = function(callback) {
     this.image.src = 'img/pregame.png';
     ctx.drawImage(this.image, 0, 0);
 
-
     // Foreground
     ctx.fillStyle = "#FFFFFF";
 
