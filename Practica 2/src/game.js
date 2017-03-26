@@ -77,8 +77,6 @@ var level1 = [
   	tiempo: 1}
 ];
 
-//Numero de customers en el level
-var numCustomers = 0;
 
 var startGame = function() {
   var ua = navigator.userAgent.toLowerCase();
@@ -105,10 +103,13 @@ var playGame = function() {
   	return new Customer(velocidad, posicion);
   }
 
+  //Numero de customers en el level
+  var numCustomers = 0;
   for(var i = 0; i < 4; i++){
   	board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));
     numCustomers += level1[i].nCust;
   }
+  GameManager.setNumCliente(numCustomers);
 
   Game.setBoard(0, board);
   Game.setBoard(5,new GamePoints(0));
@@ -206,12 +207,6 @@ var PlayerBarMan = function() {
 PlayerBarMan.prototype = new Sprite();
 PlayerBarMan.prototype.type = OBJECT_PLAYER;
 
-PlayerBarMan.prototype.hit = function() {
-  if(this.board.remove(this)) {
-    loseGame();
-  }
-};
-
 
 var Beer = function(posX, posY, velocidad) {
 	this.setup('Beer');
@@ -225,7 +220,6 @@ var Beer = function(posX, posY, velocidad) {
 	    if(this.board.collide(this, OBJECT_NPC)) {	  	    
 	  	    this.board.remove(this);
 	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));
-          numCustomers--;
 	    }
     	if(this.board.collide(this, OBJECT_DEADZONE))
         	this.board.remove(this);
@@ -255,7 +249,6 @@ var Customer = function(velocidad, pos) {
   	  this.board.remove(this);
   	if(this.board.collide(this, OBJECT_DEADZONE)) {
 	  	this.board.remove(this);
-      numCustomers--;
     }
 	};
 
@@ -334,12 +327,14 @@ var Spawner = function(posicion, delay, nCust, tiempo, cliente){
 Spawner.prototype = new Sprite();
 
 
-var GameManager = function() {
-  this.step = function() {
-    if(numCustomers == 0) {
-      winGame();
-    }
-  };
+ var GameManager = new function() {
+  this.numClientes = 0;
+
+  this.setNumCliente = function(nClientes){
+  	this.numClientes = nClientes;
+  	console.log(nClientes);
+  }
+
 };
 
 window.addEventListener("load", function() {
