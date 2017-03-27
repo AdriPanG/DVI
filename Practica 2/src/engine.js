@@ -181,7 +181,7 @@ var Portada = function(callback) {
 
     ctx.font = "bold 20px bangers";
     var measure2 = ctx.measureText("Press 'space' to play");
-    ctx.fillText("Press 'space' to play",Game.width/2 - measure2.width/2,Game.height - 50);
+    ctx.fillText("Press 'space' to play",Game.width/2 - measure2.width/2,430);
   };
 };
 
