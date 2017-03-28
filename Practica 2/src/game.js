@@ -93,6 +93,7 @@ var playGame = function() {
   board.add(new PlayerBarMan());
   board.add(new Level(level1,winGame));
   board.add(new GamePoints());
+  board.add(new GameLifes());
 
   for (var i = posDead.length - 1; i >= 0; i--) {
     board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
@@ -223,7 +224,7 @@ var Beer = function(posX, posY, velocidad) {
 	    }
     	if(this.board.collide(this, OBJECT_DEADZONE)) {
         	this.board.remove(this);
-          GameManager.youLose();
+          GameManager.vidasPerdidas();
       }
 	};
 };
@@ -296,7 +297,7 @@ var Customer = function(velocidad, pos) {
     }
   	if(this.board.collide(this, OBJECT_DEADZONE)) {
 	  	this.board.remove(this);
-      GameManager.youLose();
+      GameManager.vidasPerdidas();
     }
 	};
 
@@ -321,7 +322,7 @@ var PlayerGlass = function(posX, posY, velocidad) {
     }
   	if(this.board.collide(this, OBJECT_DEADZONE)) {
   	  this.board.remove(this);
-      GameManager.youLose();
+      GameManager.vidasPerdidas();
     }
 	};
 };
@@ -380,6 +381,7 @@ Spawner.prototype = new Sprite();
 var GameManager = new function() {
   this.numClientes = 0;
   this.numJarras = 0;
+  this.numVidas = 1;
   
   this.setNumCliente = function(nClientes){
       this.numClientes = nClientes;
@@ -403,6 +405,13 @@ var GameManager = new function() {
 
   this.addJarra = function(){
       this.numJarras++;
+  }
+
+  this.vidasPerdidas = function(){
+      this.numVidas--;
+      if(this.numVidas === -1) {
+        this.youLose();
+      }
   }
 
 };

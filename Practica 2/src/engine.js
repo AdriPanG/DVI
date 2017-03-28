@@ -481,3 +481,19 @@ var GamePoints = function() {
 };
 
 GamePoints.prototype = new Sprite();
+
+var GameLifes = function() {
+  Game.lifes = 1;
+
+  this.draw = function(ctx) {
+    
+    //Life
+    this.image = new Image();
+    this.image.src = 'img/life.png';
+    img.onload = function(){
+      ctx.drawImage(this.image, 20, 30);
+    };
+
+  };
+
+};
