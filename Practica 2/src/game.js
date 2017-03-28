@@ -42,6 +42,7 @@ var sprites = {Beer: {
   }
 };
 
+// Posiciones de las DeadZones
 var posDead = [
     {x:335, y:100},
     {x:367, y:195},
@@ -53,6 +54,7 @@ var posDead = [
     {x:15, y:377}
     ];
 
+// Tipos de objetos
 var OBJECT_PLAYER = 1,
     OBJECT_BEER = 2,
     OBJECT_NPC = 4,
@@ -60,9 +62,8 @@ var OBJECT_PLAYER = 1,
     OBJECT_GLASS = 16,
     OBJECT_DEADZONE = 32;
 
-// Generador del nivel
+// Generador del nivel 1
 var level1 = [
- // delay, nCust, tiempo
   { delay: 5, 
   	nCust: 1,
   	tiempo: 5},
@@ -83,6 +84,7 @@ var startGame = function() {
  
   var board = new GameBoard();
 
+  // Pantalla de inicio
   Game.setBoard(0,new TitleScreen("Tapper Beer", 
                                   "Press 'space' to start playing",
                                   playGame));
@@ -90,7 +92,9 @@ var startGame = function() {
 
 var playGame = function() {
   var board = new GameBoard();
-  Game.setBoard(0,new Portada(playGame));
+  // Cargamos la pantalla de "pregame"
+  Game.setBoard(0,new Pregame());
+  // Cargamos el juego despues de 2 segundos
   setTimeout(function(){ 
   	board.add(new TapField());
 	  board.add(new Wall());
@@ -98,6 +102,7 @@ var playGame = function() {
 	  board.add(new Level(level1,winGame));
 	  board.add(new GamePoints());
 
+	  // Añadimos las DeadZones
 	  for (var i = posDead.length - 1; i >= 0; i--) {
 	    board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
 	  }
@@ -106,7 +111,7 @@ var playGame = function() {
 	  	return new Customer(velocidad, posicion);
 	  }
 
-	  //Numero de customers en el level
+	  // Cargamos los clientes
 	  var numCustomers = 0;
 	  for(var i = 0; i < 4; i++){
 	  	board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));

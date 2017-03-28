@@ -162,15 +162,12 @@ var SpriteSheet = new function() {
   return this;
 };
 
-var Portada = function(callback) {
+// Pantalla de pregame
+var Pregame = function() {
   
-  this.step = function(dt) {
-    if(!Game.keys['beer']) up = true;
-    if(up && Game.keys['beer'] && callback) callback();
-  };
+  this.step = function(dt) { };
 
-  this.draw = function(ctx) {
-    
+  this.draw = function(ctx) {    
     // Background
     this.image = new Image();
     this.image.src = 'img/pregame.png';
