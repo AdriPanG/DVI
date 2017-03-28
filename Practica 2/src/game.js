@@ -42,6 +42,7 @@ var sprites = {Beer: {
   }
 };
 
+// Posiciones de las DeadZones
 var posDead = [
     {x:335, y:100},
     {x:367, y:195},
@@ -53,6 +54,7 @@ var posDead = [
     {x:15, y:377}
     ];
 
+// Tipos de objetos
 var OBJECT_PLAYER = 1,
     OBJECT_BEER = 2,
     OBJECT_NPC = 4,
@@ -60,21 +62,20 @@ var OBJECT_PLAYER = 1,
     OBJECT_GLASS = 16,
     OBJECT_DEADZONE = 32;
 
-// Generador del nivel
+// Generador del nivel 1
 var level1 = [
- // delay, nCust, tiempo
   { delay: 5, 
-  	nCust: 1,
-  	tiempo: 5},
+    nCust: 1,
+    tiempo: 5},
   { delay: 2, 
-  	nCust: 1,
-  	tiempo: 2},
+    nCust: 1,
+    tiempo: 2},
   { delay: 7, 
-  	nCust: 1,
-  	tiempo: 4},
+    nCust: 1,
+    tiempo: 4},
   { delay: 4, 
-  	nCust: 1,
-  	tiempo: 1}
+    nCust: 1,
+    tiempo: 1}
 ];
 
 
@@ -83,35 +84,46 @@ var startGame = function() {
  
   var board = new GameBoard();
 
-  Game.setBoard(0,new Portada(playGame));
+  // Pantalla de inicio
+  Game.setBoard(0,new TitleScreen("Tapper Beer", 
+                                  "Press 'space' to start playing",
+                                  playGame));
 };
 
 var playGame = function() {
   var board = new GameBoard();
-  board.add(new TapField());
-  board.add(new Wall());
-  board.add(new PlayerBarMan());
-  board.add(new Level(level1,winGame));
-  board.add(new GamePoints());
-  board.add(new GameLifes());
+  // Cargamos la pantalla de "pregame"
+  Game.setBoard(0,new Pregame());
+  // Cargamos el juego despues de 2 segundos
+  setTimeout(function(){ 
+    board.add(new TapField());
+    board.add(new Wall());
+    board.add(new PlayerBarMan());
+    board.add(new Level(level1,winGame));
+    board.add(new GamePoints());
+    board.add(new GameLifes());
 
-  for (var i = posDead.length - 1; i >= 0; i--) {
-    board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
+    // Añadimos las DeadZones
+    for (var i = posDead.length - 1; i >= 0; i--) {
+      board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
+    }
+
+    var Cliente = function(velocidad, posicion){
+      return new Customer(velocidad, posicion);
+    }
+
+    // Cargamos los clientes
+    var numCustomers = 0;
+    for(var i = 0; i < 4; i++){
+      board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));
+      numCustomers += level1[i].nCust;
+    }
+    GameManager.setNumCliente(numCustomers);
+
+    Game.setBoard(0, board);
   }
-
-  var Cliente = function(velocidad, posicion){
-  	return new Customer(velocidad, posicion);
-  }
-
-  //Numero de customers en el level
-  var numCustomers = 0;
-  for(var i = 0; i < 4; i++){
-  	board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));
-    numCustomers += level1[i].nCust;
-  }
-  GameManager.setNumCliente(numCustomers);
-
-  Game.setBoard(0, board);
+    , 2500);
+  
 
 };
 
@@ -162,10 +174,10 @@ Wall.prototype.type = OBJECT_WALL;
 var PlayerBarMan = function() {
   this.setup('Player');
   this.posiciones = [
-  	{x:325, y:90},
-  	{x:357, y:185},
-  	{x:389, y:281},
-  	{x:421, y:377}];
+    {x:325, y:90},
+    {x:357, y:185},
+    {x:389, y:281},
+    {x:421, y:377}];
   this.x = this.posiciones[0].x;
   this.y = this.posiciones[0].y;
   this.timeMove = 0.095;  
@@ -179,27 +191,27 @@ var PlayerBarMan = function() {
     this.timeBeer += dt;
 
     if(this.time > this.timeMove){
-    	this.time = 0;
-    	if(Game.keys['up']) { 
-	    	this.pos--;
-	  		if (this.pos < 0)
-	  			this.pos = 3;
-	    	this.x = this.posiciones[this.pos].x;
-	  		this.y = this.posiciones[this.pos].y; 
-	  		this.timeBeer = 1;
-	  	} else if(Game.keys['down']) { 
-	  		this.pos++;
-	    	if(this.pos > 3)
-	    		this.pos = 0;
-	    	this.x = this.posiciones[this.pos].x;
-	  		this.y = this.posiciones[this.pos].y; 
-	  		this.timeBeer = 1;
-	  	} else if(Game.keys['beer']){
-	  		if(this.timeBeer > this.timeBeerFixed){
-	  			this.timeBeer = 0;
-	  			this.board.add(new Beer(this.x, this.y, -50));
-	  		}
-	  	}
+      this.time = 0;
+      if(Game.keys['up']) { 
+        this.pos--;
+        if (this.pos < 0)
+          this.pos = 3;
+        this.x = this.posiciones[this.pos].x;
+        this.y = this.posiciones[this.pos].y; 
+        this.timeBeer = 1;
+      } else if(Game.keys['down']) { 
+        this.pos++;
+        if(this.pos > 3)
+          this.pos = 0;
+        this.x = this.posiciones[this.pos].x;
+        this.y = this.posiciones[this.pos].y; 
+        this.timeBeer = 1;
+      } else if(Game.keys['beer']){
+        if(this.timeBeer > this.timeBeerFixed){
+          this.timeBeer = 0;
+          this.board.add(new Beer(this.x, this.y, -50));
+        }
+      }
     }   
 
   };
@@ -210,23 +222,23 @@ PlayerBarMan.prototype.type = OBJECT_PLAYER;
 
 
 var Beer = function(posX, posY, velocidad) {
-	this.setup('Beer');
-	this.x = posX - 12;
-	this.y = posY; 
-	this.vx = velocidad;
+  this.setup('Beer');
+  this.x = posX - 12;
+  this.y = posY; 
+  this.vx = velocidad;
 
-	this.step = function(dt)  {
-  		this.x += this.vx * dt;	
-	    if(this.board.collide(this, OBJECT_NPC)) {	  	    
-	  	    this.board.remove(this);
-	  	    this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));	  	    
-          	GameManager.addJarra();
-	    }
-    	if(this.board.collide(this, OBJECT_DEADZONE)) {
-        	this.board.remove(this);
+  this.step = function(dt)  {
+      this.x += this.vx * dt; 
+      if(this.board.collide(this, OBJECT_NPC)) {          
+          this.board.remove(this);
+          this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));         
+            GameManager.addJarra();
+      }
+      if(this.board.collide(this, OBJECT_DEADZONE)) {
+          this.board.remove(this);
           GameManager.vidasPerdidas();
       }
-	};
+  };
 };
 
 Beer.prototype = new Sprite();
@@ -236,34 +248,34 @@ Beer.prototype.type = OBJECT_BEER;
 var Customer = function(velocidad, pos) {
   this.setup('NPC');
   this.spritesCustomers = [{
-	    sx: 64,
-	    sy: 96,
-	    w: 32,
-	    h: 32,
-	    frames: 1
-	  },
-	  {
-	    sx: 63,
-	    sy: 64,
-	    w: 32,
-	    h: 32,
-	    frames: 1
-	  },
-	  {
-	    sx: 64,
-	    sy: 32,
-	    w: 32,
-	    h: 32,
-	    frames: 1
-	  },
-	  {
-	    sx: 64,
-	    sy: 0,
-	    w: 32,
-	    h: 32,
-	    frames: 1
-	  }
-	];
+      sx: 64,
+      sy: 96,
+      w: 32,
+      h: 32,
+      frames: 1
+    },
+    {
+      sx: 63,
+      sy: 64,
+      w: 32,
+      h: 32,
+      frames: 1
+    },
+    {
+      sx: 64,
+      sy: 32,
+      w: 32,
+      h: 32,
+      frames: 1
+    },
+    {
+      sx: 64,
+      sy: 0,
+      w: 32,
+      h: 32,
+      frames: 1
+    }
+  ];
   this.posiciones = [
     {x:120, y:80},
     {x:90, y:176},
@@ -275,7 +287,7 @@ var Customer = function(velocidad, pos) {
   this.s = this.spritesCustomers[aleatorio(0,3)];
 
   this.draw = function(ctx){
-  	this.image = new Image();
+    this.image = new Image();
     this.image.src = 'img/customers.png';
 
     ctx.drawImage(this.image,
@@ -287,19 +299,19 @@ var Customer = function(velocidad, pos) {
   }
 
   this.step = function(dt)  {
-  	this.x += this.vx * dt;
+    this.x += this.vx * dt;
 
 
     if(this.board.collide(this, OBJECT_GLASS)) {
-  	  this.board.remove(this);
-  	  Game.points += 50;
+      this.board.remove(this);
+      Game.points += 50;
       GameManager.subCliente();
     }
-  	if(this.board.collide(this, OBJECT_DEADZONE)) {
-	  	this.board.remove(this);
+    if(this.board.collide(this, OBJECT_DEADZONE)) {
+      this.board.remove(this);
       GameManager.vidasPerdidas();
     }
-	};
+  };
 
 };
 
@@ -314,17 +326,17 @@ var PlayerGlass = function(posX, posY, velocidad) {
   this.vx = velocidad;
 
   this.step = function(dt) {
-  	this.x += this.vx * dt;	
+    this.x += this.vx * dt; 
 
-  	if(this.board.collide(this, OBJECT_PLAYER)) {
-  	  this.board.remove(this);
+    if(this.board.collide(this, OBJECT_PLAYER)) {
+      this.board.remove(this);
       GameManager.jarrasCogidas();
     }
-  	if(this.board.collide(this, OBJECT_DEADZONE)) {
-  	  this.board.remove(this);
+    if(this.board.collide(this, OBJECT_DEADZONE)) {
+      this.board.remove(this);
       GameManager.vidasPerdidas();
     }
-	};
+  };
 };
 
 PlayerGlass.prototype = new Sprite();
@@ -355,24 +367,24 @@ DeadZone.prototype.type = OBJECT_DEADZONE;
 
 var Spawner = function(posicion, delay, nCust, tiempo, cliente){
 
-	this.tiempoDelay = 0;
-	this.tiempoTranscurrido = 0;
-	this.generados = 0;
-	this.cliente = cliente;
+  this.tiempoDelay = 0;
+  this.tiempoTranscurrido = 0;
+  this.generados = 0;
+  this.cliente = cliente;
 
-	this.draw = function(){};
+  this.draw = function(){};
 
-	this.step = function(dt){
-		this.tiempoDelay += dt;
-		if(this.tiempoDelay > delay){
-			this.tiempoTranscurrido += dt;
-			if(this.tiempoTranscurrido > tiempo && this.generados < nCust){
-				this.tiempoTranscurrido = 0;
-				this.board.add(Object.create(this.cliente(50, posicion)));
-				this.generados++;
-			}
-		}
-	};
+  this.step = function(dt){
+    this.tiempoDelay += dt;
+    if(this.tiempoDelay > delay){
+      this.tiempoTranscurrido += dt;
+      if(this.tiempoTranscurrido > tiempo && this.generados < nCust){
+        this.tiempoTranscurrido = 0;
+        this.board.add(Object.create(this.cliente(50, posicion)));
+        this.generados++;
+      }
+    }
+  };
 };
 
 Spawner.prototype = new Sprite();
@@ -381,7 +393,8 @@ Spawner.prototype = new Sprite();
 var GameManager = new function() {
   this.numClientes = 0;
   this.numJarras = 0;
-  this.numVidas = 1;
+  Game.lifes = 2;
+  Game.points = 0;
   
   this.setNumCliente = function(nClientes){
       this.numClientes = nClientes;
@@ -396,11 +409,15 @@ var GameManager = new function() {
       Game.points += 100;
       if(this.numClientes === 0 && this.numJarras === 0){
           winGame();
+          Game.lifes = 2;
+          Game.points = 0;
       }
   }
 
   this.youLose = function(){
     loseGame();
+    Game.lifes = 2;
+    Game.points = 0;
   }
 
   this.addJarra = function(){
@@ -408,11 +425,12 @@ var GameManager = new function() {
   }
 
   this.vidasPerdidas = function(){
-      this.numVidas--;
+    Game.lifes--;    
+    if(Game.lifes === -1){
+      this.youLose();
+    } else {
       playGame();
-      if(this.numVidas === -1) {
-        this.youLose();
-      }
+    }
   }
 
 };

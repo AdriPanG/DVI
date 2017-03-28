@@ -162,26 +162,16 @@ var SpriteSheet = new function() {
   return this;
 };
 
-var Portada = function(callback) {
+// Pantalla de pregame
+var Pregame = function() {
   
-  this.step = function(dt) {
-    if(!Game.keys['beer']) up = true;
-    if(up && Game.keys['beer'] && callback) callback();
-  };
+  this.step = function(dt) { };
 
-  this.draw = function(ctx) {
-    
+  this.draw = function(ctx) {    
     // Background
     this.image = new Image();
     this.image.src = 'img/pregame.png';
     ctx.drawImage(this.image, 0, 0);
-
-    // Foreground
-    ctx.fillStyle = "#FFFFFF";
-
-    ctx.font = "bold 20px bangers";
-    var measure2 = ctx.measureText("Press 'space' to play");
-    ctx.fillText("Press 'space' to play",Game.width/2 - measure2.width/2,430);
   };
 };
 
@@ -459,8 +449,7 @@ var TouchControls = function() {
 
 
 var GamePoints = function() {
-  Game.points = 0;
-
+  
   var pointsLength = 8;
 
   this.draw = function(ctx) {
@@ -483,8 +472,7 @@ var GamePoints = function() {
 GamePoints.prototype = new Sprite();
 
 var GameLifes = function() {
-  Game.lifes = 2;
-
+  
   this.step = function(dt){ };
 
   this.draw = function(ctx) {
