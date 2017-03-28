@@ -231,8 +231,7 @@ var Beer = function(posX, posY, velocidad) {
       this.x += this.vx * dt; 
       if(this.board.collide(this, OBJECT_NPC)) {          
           this.board.remove(this);
-          this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));         
-            GameManager.addJarra();
+          this.board.add(Object.create(new PlayerGlass(this.x, this.y, 50)));
       }
       if(this.board.collide(this, OBJECT_DEADZONE)) {
           this.board.remove(this);
@@ -304,6 +303,7 @@ var Customer = function(velocidad, pos) {
 
     if(this.board.collide(this, OBJECT_GLASS)) {
       this.board.remove(this);
+      GameManager.addJarra();
       Game.points += 50;
       GameManager.subCliente();
     }
@@ -407,6 +407,8 @@ var GameManager = new function() {
   this.jarrasCogidas = function(){
       this.numJarras--;
       Game.points += 100;
+      console.log("Jarras: " + this.numJarras);
+      console.log("Clientes: " + this.numClientes);
       if(this.numClientes === 0 && this.numJarras === 0){
           winGame();
           Game.lifes = 2;
