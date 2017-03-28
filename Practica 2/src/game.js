@@ -83,34 +83,41 @@ var startGame = function() {
  
   var board = new GameBoard();
 
-  Game.setBoard(0,new Portada(playGame));
+  Game.setBoard(0,new TitleScreen("Tapper Beer", 
+                                  "Press 'space' to start playing",
+                                  playGame));
 };
 
 var playGame = function() {
   var board = new GameBoard();
-  board.add(new TapField());
-  board.add(new Wall());
-  board.add(new PlayerBarMan());
-  board.add(new Level(level1,winGame));
-  board.add(new GamePoints());
+  Game.setBoard(0,new Portada(playGame));
+  setTimeout(function(){ 
+  	board.add(new TapField());
+	  board.add(new Wall());
+	  board.add(new PlayerBarMan());
+	  board.add(new Level(level1,winGame));
+	  board.add(new GamePoints());
 
-  for (var i = posDead.length - 1; i >= 0; i--) {
-    board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
+	  for (var i = posDead.length - 1; i >= 0; i--) {
+	    board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
+	  }
+
+	  var Cliente = function(velocidad, posicion){
+	  	return new Customer(velocidad, posicion);
+	  }
+
+	  //Numero de customers en el level
+	  var numCustomers = 0;
+	  for(var i = 0; i < 4; i++){
+	  	board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));
+	    numCustomers += level1[i].nCust;
+	  }
+	  GameManager.setNumCliente(numCustomers);
+
+	  Game.setBoard(0, board);
   }
-
-  var Cliente = function(velocidad, posicion){
-  	return new Customer(velocidad, posicion);
-  }
-
-  //Numero de customers en el level
-  var numCustomers = 0;
-  for(var i = 0; i < 4; i++){
-  	board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));
-    numCustomers += level1[i].nCust;
-  }
-  GameManager.setNumCliente(numCustomers);
-
-  Game.setBoard(0, board);
+  	, 2500);
+  
 
 };
 
