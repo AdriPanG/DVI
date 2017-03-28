@@ -409,6 +409,7 @@ var GameManager = new function() {
 
   this.vidasPerdidas = function(){
       this.numVidas--;
+      playGame();
       if(this.numVidas === -1) {
         this.youLose();
       }

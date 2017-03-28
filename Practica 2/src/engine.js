@@ -483,17 +483,20 @@ var GamePoints = function() {
 GamePoints.prototype = new Sprite();
 
 var GameLifes = function() {
-  Game.lifes = 1;
+  Game.lifes = 2;
+
+  this.step = function(dt){ };
 
   this.draw = function(ctx) {
+    for(var i = 0; i < Game.lifes; i++){
+      //Life
+      this.image = new Image();
+      this.image.src = 'img/life.png';
+      ctx.drawImage(this.image, 73 - (i*20), 28);
+    }
     
-    //Life
-    this.image = new Image();
-    this.image.src = 'img/life.png';
-    img.onload = function(){
-      ctx.drawImage(this.image, 20, 30);
-    };
-
   };
 
 };
+
+GameLifes.prototype = new Sprite();
