@@ -1,0 +1,6 @@
+Integrantes:
+Juan José Prieto Escolar
+Adrián Panadero González
+
+Se han añadido todos los apartados de la parte de desarrollo de la práctica.
+Además hemos añadido vidas, 2 niveles, puntuación y un texto en la esquina superior derecha que indica el nivel en el que te encuentras.
