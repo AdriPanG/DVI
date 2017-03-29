@@ -360,8 +360,8 @@ var PlayerGlass = function(posX, posY, velocidad) {
     this.x += this.vx * dt; 
 
     if(this.board.collide(this, OBJECT_PLAYER)) {
-      this.board.remove(this);
-      GameManager.jarrasCogidas();
+    	GameManager.jarrasCogidas();
+        this.board.remove(this);      
     }
     if(this.board.collide(this, OBJECT_DEADZONE)) {
       this.board.remove(this);
@@ -424,9 +424,7 @@ Spawner.prototype = new Sprite();
 var GameManager = new function() {
   this.numClientes = 0;
   this.numJarras = 0;
-  this.level = 0;  
-  Game.lifes = 2;
-  Game.points = 0;
+  this.level = -1;
   
   this.setNumCliente = function(nClientes){
       this.numClientes = nClientes;
@@ -442,20 +440,19 @@ var GameManager = new function() {
       if(this.numClientes === 0 && this.numJarras === 0){
       	this.level++;
       	if(this.level === levels.length){
-          this.level = 0;
+          this.level = -1;
           winGame();
         }
-        else{        	
+        else{        
+        	this.pointsLevel = Game.points;	
           	winLevel();            
         }          
       }
   }
 
   this.youLose = function(){
-  	this.level = 0;
-  	Game.lifes = 2;
-    Game.points = 0;
-    loseGame();
+  	this.level = -1;  	
+  	loseGame();
   }
 
   this.addJarra = function(){
@@ -463,6 +460,12 @@ var GameManager = new function() {
   }
 
   this.getLevel = function(){
+  	if(this.level === -1){
+  		Game.lifes = 2;
+  		Game.points = 0;
+  		this.pointsLevel = 0;
+  		this.level++;
+  	}
   	return levels[this.level];
   }
 
@@ -472,9 +475,11 @@ var GameManager = new function() {
 
   this.vidasPerdidas = function(){
     Game.lifes--;    
+    this.numJarras = 0;    
     if(Game.lifes === -1){
       this.youLose();
     } else {
+      Game.points = this.pointsLevel;
       playGame();
     }
   }
