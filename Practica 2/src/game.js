@@ -63,19 +63,37 @@ var OBJECT_PLAYER = 1,
     OBJECT_DEADZONE = 32;
 
 // Generador del nivel 1
-var level1 = [
-  { delay: 5, 
-    nCust: 1,
-    tiempo: 5},
-  { delay: 2, 
-    nCust: 1,
-    tiempo: 2},
-  { delay: 7, 
-    nCust: 1,
-    tiempo: 4},
-  { delay: 4, 
-    nCust: 1,
-    tiempo: 1}
+var levels = [
+	// Level1
+	[
+	  { delay: 5, 
+	    nCust: 1,
+	    tiempo: 5},
+	  { delay: 2, 
+	    nCust: 1,
+	    tiempo: 2},
+	  { delay: 7, 
+	    nCust: 1,
+	    tiempo: 4},
+	  { delay: 4, 
+	    nCust: 1,
+	    tiempo: 1}
+	],
+	// Level2
+	[
+	  { delay: 5, 
+	    nCust: 1,
+	    tiempo: 5},
+	  { delay: 2, 
+	    nCust: 1,
+	    tiempo: 2},
+	  { delay: 7, 
+	    nCust: 1,
+	    tiempo: 4},
+	  { delay: 4, 
+	    nCust: 1,
+	    tiempo: 1}
+	]
 ];
 
 
@@ -99,7 +117,6 @@ var playGame = function() {
     board.add(new TapField());
     board.add(new Wall());
     board.add(new PlayerBarMan());
-    board.add(new Level(level1,winGame));
     board.add(new GamePoints());
     board.add(new GameLifes());
 
@@ -107,18 +124,9 @@ var playGame = function() {
     for (var i = posDead.length - 1; i >= 0; i--) {
       board.add(Object.create(new DeadZone(posDead[i].x, posDead[i].y)));
     }
-
-    var Cliente = function(velocidad, posicion){
-      return new Customer(velocidad, posicion);
-    }
-
-    // Cargamos los clientes
-    var numCustomers = 0;
-    for(var i = 0; i < 4; i++){
-      board.add(new Spawner(i, level1[i].delay, level1[i].nCust, level1[i].tiempo, Cliente));
-      numCustomers += level1[i].nCust;
-    }
-    GameManager.setNumCliente(numCustomers);
+   
+    // Cargamos el nivel actual
+    cargaNivel(board, GameManager.getLevel());
 
     Game.setBoard(0, board);
   }
@@ -126,6 +134,22 @@ var playGame = function() {
   
 
 };
+
+var cargaNivel = function(board, level){
+
+	// Generamos el cliente
+	var Cliente = function(velocidad, posicion){
+      return new Customer(velocidad, posicion);
+    }
+
+	// Cargamos los clientes
+    var numCustomers = 0;
+    for(var i = 0; i < 4; i++){
+      board.add(new Spawner(i, level[i].delay, level[i].nCust, level[i].tiempo, Cliente));
+      numCustomers += level[i].nCust;
+    }
+    GameManager.setNumCliente(numCustomers);
+}
 
 var winGame = function() {
   var board = new GameBoard();
@@ -138,6 +162,13 @@ var loseGame = function() {
   var board = new GameBoard();
   Game.setBoard(0,new TitleScreen("You lose with " + Game.points + " points!", 
                                   "Press 'space' to play again",
+                                  playGame));
+};
+
+var winLevel = function() {
+  var board = new GameBoard();
+  Game.setBoard(0,new TitleScreen("You pass the level " + GameManager.getLevelNum() + "!", 
+                                  "Press 'space' to continue to the next level",
                                   playGame));
 };
 
@@ -393,8 +424,7 @@ Spawner.prototype = new Sprite();
 var GameManager = new function() {
   this.numClientes = 0;
   this.numJarras = 0;
-  Game.lifes = 2;
-  Game.points = 0;
+  this.level = 0;  
   
   this.setNumCliente = function(nClientes){
       this.numClientes = nClientes;
@@ -407,23 +437,37 @@ var GameManager = new function() {
   this.jarrasCogidas = function(){
       this.numJarras--;
       Game.points += 100;
-      console.log("Jarras: " + this.numJarras);
-      console.log("Clientes: " + this.numClientes);
       if(this.numClientes === 0 && this.numJarras === 0){
+      	this.level++;
+      	if(this.level === levels.length){
+          this.level = 0;
           winGame();
-          Game.lifes = 2;
-          Game.points = 0;
+        }
+        else{        	
+          	winLevel();            
+        }          
       }
   }
 
   this.youLose = function(){
+  	this.level = 0;
     loseGame();
-    Game.lifes = 2;
-    Game.points = 0;
   }
 
   this.addJarra = function(){
       this.numJarras++;
+  }
+
+  this.getLevel = function(){
+  	if(this.level === 0){
+  		Game.lifes = 2;
+        Game.points = 0;
+  	}
+  	return levels[this.level];
+  }
+
+  this.getLevelNum = function(){
+  	return this.level;
   }
 
   this.vidasPerdidas = function(){
