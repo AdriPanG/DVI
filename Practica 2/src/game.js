@@ -425,6 +425,8 @@ var GameManager = new function() {
   this.numClientes = 0;
   this.numJarras = 0;
   this.level = 0;  
+  Game.lifes = 2;
+  Game.points = 0;
   
   this.setNumCliente = function(nClientes){
       this.numClientes = nClientes;
@@ -451,6 +453,8 @@ var GameManager = new function() {
 
   this.youLose = function(){
   	this.level = 0;
+  	Game.lifes = 2;
+    Game.points = 0;
     loseGame();
   }
 
@@ -459,10 +463,6 @@ var GameManager = new function() {
   }
 
   this.getLevel = function(){
-  	if(this.level === 0){
-  		Game.lifes = 2;
-        Game.points = 0;
-  	}
   	return levels[this.level];
   }
 
