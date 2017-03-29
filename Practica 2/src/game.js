@@ -127,6 +127,7 @@ var playGame = function() {
    
     // Cargamos el nivel actual
     cargaNivel(board, GameManager.getLevel());
+    board.add(new LevelActual(GameManager.getLevelNum() + 1));
 
     Game.setBoard(0, board);
   }
@@ -167,8 +168,8 @@ var loseGame = function() {
 
 var winLevel = function() {
   var board = new GameBoard();
-  Game.setBoard(0,new TitleScreen("You pass the level " + GameManager.getLevelNum() + "!", 
-                                  "Press 'space' to continue to the next level",
+  Game.setBoard(0,new TitleScreen("Level " + GameManager.getLevelNum() + " completed!", 
+                                  "Press 'space' and get ready for level " + (GameManager.getLevelNum() + 1),
                                   playGame));
 };
 

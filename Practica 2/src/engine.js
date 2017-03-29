@@ -488,3 +488,18 @@ var GameLifes = function() {
 };
 
 GameLifes.prototype = new Sprite();
+
+var LevelActual = function(level) {
+  
+  this.step = function(dt){ };
+
+  this.draw = function(ctx) {
+    ctx.font = "bold 20px bangers";
+      var measure2 = ctx.measureText("Level " + level);
+      ctx.fillText("Level " + level, Game.width - measure2.width - 20, 30);
+    
+  };
+
+};
+
+GameLifes.prototype = new Sprite();
