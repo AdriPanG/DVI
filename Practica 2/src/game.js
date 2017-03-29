@@ -66,33 +66,33 @@ var OBJECT_PLAYER = 1,
 var levels = [
 	// Level1
 	[
-	  { delay: 5, 
+	  { delay: 13 , 
 	    nCust: 1,
 	    tiempo: 5},
 	  { delay: 2, 
 	    nCust: 1,
 	    tiempo: 2},
 	  { delay: 7, 
-	    nCust: 1,
-	    tiempo: 4},
+	    nCust: 2,
+	    tiempo: 6},
 	  { delay: 4, 
 	    nCust: 1,
 	    tiempo: 1}
 	],
 	// Level2
 	[
-	  { delay: 5, 
-	    nCust: 1,
-	    tiempo: 5},
-	  { delay: 2, 
-	    nCust: 1,
-	    tiempo: 2},
-	  { delay: 7, 
-	    nCust: 1,
-	    tiempo: 4},
-	  { delay: 4, 
-	    nCust: 1,
-	    tiempo: 1}
+	  { delay: 10, 
+      nCust: 2,
+      tiempo: 7},
+    { delay: 1, 
+      nCust: 2,
+      tiempo: 8},
+    { delay: 7, 
+      nCust: 2,
+      tiempo: 6},
+    { delay: 4, 
+      nCust: 2,
+      tiempo: 6}
 	]
 ];
 
@@ -385,7 +385,7 @@ var DeadZone = function(posX, posY) {
     this.frames = 1;
     ctx.fillRect(this.x, this.sy, this.w, this.h);
 
-};
+  };
 
   this.step = function(dt) {
 
