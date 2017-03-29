@@ -449,8 +449,7 @@ var TouchControls = function() {
 
 
 var GamePoints = function() {
-  Game.points = 0;
-
+  
   var pointsLength = 8;
 
   this.draw = function(ctx) {
@@ -471,3 +470,21 @@ var GamePoints = function() {
 };
 
 GamePoints.prototype = new Sprite();
+
+var GameLifes = function() {
+  
+  this.step = function(dt){ };
+
+  this.draw = function(ctx) {
+    for(var i = 0; i < Game.lifes; i++){
+      //Life
+      this.image = new Image();
+      this.image.src = 'img/life.png';
+      ctx.drawImage(this.image, 73 - (i*20), 28);
+    }
+    
+  };
+
+};
+
+GameLifes.prototype = new Sprite();
