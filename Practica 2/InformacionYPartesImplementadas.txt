@@ -1,0 +1,14 @@
+﻿Integrantes:
+
+Adrián Panadero González
+Juan José Prieto Escolar
+
+Se han implementado todos los apartados obligatorios de la práctica. Además hemos 
+implementado las siguientes apartados opcionales:
+
+- Varios clientes: se muestran aleatoriamente distintos sprites para los clientes.
+- Puntuación: mostrándola en la parte superior izquierda.
+- Vidas: se empieza con dos vidas disponibles que se muestran bajo la puntuación.
+- Niveles: se entrega con 2 niveles de dificultad, siendo facilmente ampliables 
+  cambiando la variable levels.
+- Texto en la esquina superior derecha que indica el nivel actual en el que te encuentras.
