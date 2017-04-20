@@ -49,7 +49,7 @@ window.addEventListener("load",function() {
 
         		this.on("bump.left,bump.right,bump.bottom",function(collision){
         			if(collision.obj.isA("Mario")) {
-        				Q.stageScene("endGame", 1, {label: "You Died"});
+        				Q.stageScene("endGame", 1, {label: "Game over"});
         				collision.obj.destroy();
         			}
         		});
@@ -85,7 +85,7 @@ window.addEventListener("load",function() {
 
         		this.on("bump.left,bump.right,bump.bottom",function(collision){
         			if(collision.obj.isA("Mario")) {
-        				Q.stageScene("endGame", 1, {label: "You Died"});
+        				Q.stageScene("endGame", 1, {label: "Game over"});
         				collision.obj.destroy();
         			}
         		});
@@ -128,27 +128,12 @@ window.addEventListener("load",function() {
         	},
 
         	sensor: function() {
-        		Q.stageScene("endGame", 1, {label: "You Won!!"});
+        		Q.stageScene("endGame", 1, {label: "Marios wins"});
         		this.p.sensor = false;
         		//Bloquear a Mario para que no se mueva
         	} 
 
-        });
-
-        /*Q.Sprite.extend("mainTitle", function(stage) {
-			
-			stage.insert(new Q.UI.Button({ asset: "mainTitle.png",x: Q.height/2, y: Q.width/2}))        
-			button.on("click",function() {
-			   	Q.clearStages();
-			    Q.stageScene("level1");
-			});
-
-			var container = stage.insert(new Q.UI.Container({ x: 0, y: 0}));
-			var label = container.insert(new Q.UI.Text({x:150, y: 40, label: "Press Enter to start",color: "red"}));
-
-			container.fit(20);
-        });*/
-
+        });			
 
         Q.scene("endGame",function(stage) {
 			var container = stage.insert(new Q.UI.Container({
@@ -168,17 +153,27 @@ window.addEventListener("load",function() {
 		});
 
         Q.scene("level1",function(stage) {
-            Q.stageTMX("level.tmx",stage);
+            var container = stage.insert(new Q.UI.Container({
+			   	x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+			}));
 
-            var player = stage.insert(new Q.Mario());
+			var button = container.insert(new Q.UI.Button({asset: "mainTitle.png", x: 0, y: 0}))         
+			button.on("click",function() {
+				Q.stageTMX("level.tmx",stage);
 
-            stage.insert(new Q.Goomba());
-            stage.insert(new Q.Bloopa());
-            stage.insert(new Q.Princess());
+			   	var player = stage.insert(new Q.Mario());
+ 
+	            stage.insert(new Q.Goomba());
+	            stage.insert(new Q.Bloopa());
+	            stage.insert(new Q.Princess());
 
-            stage.add("viewport").follow(player);
-            stage.viewport.offsetX = -20;
-			stage.viewport.offsetY = 160;
+	            stage.add("viewport").follow(player);
+	            stage.viewport.offsetX = -20;
+				stage.viewport.offsetY = 160;
+			});
+
+			container.fit(20);
+            
         });   
 
         Q.loadTMX("level.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, princess.png", function() {
