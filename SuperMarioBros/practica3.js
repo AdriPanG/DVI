@@ -8,8 +8,8 @@ window.addEventListener("load",function() {
         }).controls().touch();  
 
         Q.animations("mario anim", {
-					"marioR":{frames: [0,1,2], rate: 1/10},
-					"marioL":{frames: [14,15,16], rate: 1/10},
+					"marioR":{frames: [1,2,3], rate: 1/10},
+					"marioL":{frames: [15,16,17], rate: 1/10},
 					"stand_right":{frames: [0], rate: 1/10, loop: false},
 					"stand_left":{frames: [14], rate: 1/10, loop: false}
 		});
