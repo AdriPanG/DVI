@@ -182,9 +182,7 @@ window.addEventListener("load",function() {
 	            stage.insert(new Q.Bloopa());
 	            stage.insert(new Q.Princess());
 
-	            stage.add("viewport").follow(player);
-	            stage.viewport.offsetX = -20;
-				stage.viewport.offsetY = 160;
+	            stage.add("viewport").follow(player, {x: true, y: true}, {minX: -20, maxX: 256*16, minY: 125, maxY: 32*16});
 			});
 
 			container.fit(20);
