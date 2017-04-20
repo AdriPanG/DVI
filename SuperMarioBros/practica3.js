@@ -7,12 +7,19 @@ window.addEventListener("load",function() {
                 height: 480,
         }).controls().touch();  
 
+        Q.animations("mario anim", {
+					"marioR":{frames: [0,1,2], rate: 1/10},
+					"marioL":{frames: [14,15,16], rate: 1/10},
+					"stand_right":{frames: [0], rate: 1/10, loop: false},
+					"stand_left":{frames: [14], rate: 1/10, loop: false}
+		});
+
         Q.Sprite.extend("Mario",{
 
         	init: function(p) {
         		this._super(p, {
-        			sheet: "marioR",
-        			sprite: "mario_small",
+        			sprite: "mario anim",
+        			sheet: "mario",
         			jumpSpeed: -420,
         			speed: 200,
         			x: 150,
@@ -20,10 +27,18 @@ window.addEventListener("load",function() {
         			direction: "right",
         		});
 
-        		this.add('2d, platformerControls');
+        		this.add('2d, platformerControls, animation');
         	},
 
         	step: function(dt) {
+				if(this.p.vx > 0) {
+				 	this.play("marioR");
+				 } else if(this.p.vx < 0) {
+					this.play("marioL");
+				 } else {
+				 	this.play("stand_" + this.p.direction);
+				 }
+
         		if(this.p.y > 580){
    					Q.stageScene("endGame", 1, {label: "Game over"});
 					this.p.y = 579;
