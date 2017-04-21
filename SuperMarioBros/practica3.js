@@ -12,7 +12,8 @@ window.addEventListener("load",function() {
 					"marioL":{frames: [15,16,17], rate: 1/10},
 					"stand_right":{frames: [0], rate: 1/10, loop: false},
 					"stand_left":{frames: [14], rate: 1/10, loop: false},
-					"jumping_right":{frames: [4], rate: 1/10, loop: true}
+					"jumping_right":{frames: [4], rate: 1/10, loop: false},
+					"jumping_left":{frames: [18], rate: 1/10, loop: false}
 		});
 
         Q.Sprite.extend("Mario",{
@@ -25,7 +26,7 @@ window.addEventListener("load",function() {
         			speed: 200,
         			x: 160,
         			y: 380,
-        			direction: "right",
+        			direction: "right"
         		});
 
         		this.add('2d, platformerControls, animation');
@@ -33,7 +34,9 @@ window.addEventListener("load",function() {
 
         	step: function(dt) {
 
-				if(this.p.landed) {    
+        		if(this.p.jumping) {
+					this.play("jumping_" + this.p.direction);
+				} else if (this.p.landed > 0){    
 					if(this.p.vx > 0) {
 					 	this.play("marioR");
 					 } else if(this.p.vx < 0) {
@@ -41,8 +44,6 @@ window.addEventListener("load",function() {
 					 } else {
 					 	this.play("stand_" + this.p.direction);
 					 }
-				} else if(this.p.jumping) {
-					this.play("jumping_right");
 				}
 
         		if(this.p.y > 580){
