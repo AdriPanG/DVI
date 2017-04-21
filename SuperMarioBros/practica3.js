@@ -25,7 +25,7 @@ window.addEventListener("load",function() {
         			jumpSpeed: -420,
         			speed: 200,
         			x: 160,
-        			y: 380,
+        			y: 480,
         			direction: "right"
         		});
 
@@ -34,7 +34,7 @@ window.addEventListener("load",function() {
 
         	step: function(dt) {
 
-        		if(this.p.jumping) {
+        		if(this.p.jumping && this.p.landed < 0) {
 					this.play("jumping_" + this.p.direction);
 				} else if (this.p.landed > 0){    
 					if(this.p.vx > 0) {
