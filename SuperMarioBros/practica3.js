@@ -55,7 +55,7 @@ window.addEventListener("load",function() {
 
         });
 
-         Q.animations("goomba anim", {
+        Q.animations("goomba anim", {
 					"goomba_walk":{frames: [0,1], rate: 1/10},
 					"goomba_die":{frames: [2], rate: 1/5, loop: false, trigger: "died"}
 		});
@@ -99,16 +99,21 @@ window.addEventListener("load",function() {
         	},
 
         	step: function(dt) {
-        		//this.play("goomba_walk");
+        		
         	}
         });
+
+        Q.animations("bloopa anim", {
+					"bloopa_walk":{frames: [0,1], rate: 1/3},
+					"bloopa_die":{frames: [2], rate: 1/3, loop: false, trigger: "died"}
+		});
 
         Q.Sprite.extend("Bloopa",{
         	
         	init: function(p) {
         		this._super(p, {
+        			sprite: "bloopa anim",
         			sheet: "bloopa",
-        			sprite: "bloopa",
         			gravity: 0,
         			frame: 0,
         			vy: 100,
@@ -117,7 +122,11 @@ window.addEventListener("load",function() {
         		});
 
         		this.timeJump = 0;
-        		this.add('2d, aiBounce');
+        		this.add('2d, aiBounce, animation');
+
+        		this.play("bloopa_walk");
+
+        		this.on("died",this,"bloopadie");
 
         		this.on("bump.left,bump.right,bump.bottom",function(collision){
         			if(collision.obj.isA("Mario")) {
@@ -128,10 +137,14 @@ window.addEventListener("load",function() {
 
         		this.on("bump.top",function(collision){
         			if(collision.obj.isA("Mario")) {
-        				this.destroy();
+        				this.play("bloopa_die");
         				collision.obj.p.vy = -200;
         			}
         		});
+        	},
+
+        	bloopadie: function() {
+        		this.destroy();
         	},
 
         	step: function(dt) {
