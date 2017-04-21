@@ -55,12 +55,17 @@ window.addEventListener("load",function() {
 
         });
 
+         Q.animations("goomba anim", {
+					"goomba_walk":{frames: [0,1], rate: 1/10},
+					"goomba_die":{frames: [2], rate: 1/5, loop: false, trigger: "died"}
+		});
+
         Q.Sprite.extend("Goomba",{
         	
         	init: function(p) {
         		this._super(p, {
+        			sprite: "goomba anim",
         			sheet: "goomba",
-        			sprite: "goomba",
         			speed: 180,
         			frame: 0,
         			vx: 100,
@@ -68,7 +73,11 @@ window.addEventListener("load",function() {
         			y: 380,
         		});
 
-        		this.add('2d, aiBounce');
+        		this.add('2d, aiBounce, animation');
+
+        		this.play("goomba_walk");
+
+        		this.on("died",this,"goombadie");
 
         		this.on("bump.left,bump.right,bump.bottom",function(collision){
         			if(collision.obj.isA("Mario")) {
@@ -79,14 +88,18 @@ window.addEventListener("load",function() {
 
         		this.on("bump.top",function(collision){
         			if(collision.obj.isA("Mario")) {
-        				this.destroy();
+        				this.play("goomba_die");
         				collision.obj.p.vy = -200;
         			}
         		});
         	},
 
-        	step: function(dt) {
+        	goombadie: function() {
+        		this.destroy();
+        	},
 
+        	step: function(dt) {
+        		//this.play("goomba_walk");
         	}
         });
 
