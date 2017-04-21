@@ -11,7 +11,8 @@ window.addEventListener("load",function() {
 					"marioR":{frames: [1,2,3], rate: 1/10},
 					"marioL":{frames: [15,16,17], rate: 1/10},
 					"stand_right":{frames: [0], rate: 1/10, loop: false},
-					"stand_left":{frames: [14], rate: 1/10, loop: false}
+					"stand_left":{frames: [14], rate: 1/10, loop: false},
+					"jumping_right":{frames: [4], rate: 1/10, loop: true}
 		});
 
         Q.Sprite.extend("Mario",{
@@ -22,27 +23,33 @@ window.addEventListener("load",function() {
         			sheet: "mario",
         			jumpSpeed: -420,
         			speed: 200,
-        			x: 150,
+        			x: 160,
         			y: 380,
         			direction: "right",
         		});
 
         		this.add('2d, platformerControls, animation');
-        	},
+        	},        	
 
         	step: function(dt) {
-				if(this.p.vx > 0) {
-				 	this.play("marioR");
-				 } else if(this.p.vx < 0) {
-					this.play("marioL");
-				 } else {
-				 	this.play("stand_" + this.p.direction);
-				 }
+
+				if(this.p.landed) {    
+					if(this.p.vx > 0) {
+					 	this.play("marioR");
+					 } else if(this.p.vx < 0) {
+						this.play("marioL");
+					 } else {
+					 	this.play("stand_" + this.p.direction);
+					 }
+				} else if(this.p.jumping) {
+					this.play("jumping_right");
+				}
 
         		if(this.p.y > 580){
    					Q.stageScene("endGame", 1, {label: "Game over"});
 					this.p.y = 579;
 				}
+				
         	}
 
         });
@@ -161,31 +168,36 @@ window.addEventListener("load",function() {
 			                                                   label: stage.options.label }));
 			button.on("click",function() {
 			   	Q.clearStages();
-			    Q.stageScene("level1");
+			    Q.stageScene("mainTitle");
+			});
+
+			container.fit(20);
+		});
+
+		Q.scene("mainTitle",function(stage) {
+			var container = stage.insert(new Q.UI.Container({
+			   	x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+			}));
+
+			var button = container.insert(new Q.UI.Button({asset: "mainTitle.png", x: 0, y: 0}))         
+			button.on("click",function() {
+				Q.clearStages();
+				Q.stageScene("level1");
 			});
 
 			container.fit(20);
 		});
 
         Q.scene("level1",function(stage) {
-            var container = stage.insert(new Q.UI.Container({
-			   	x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
-			}));
+            Q.stageTMX("level.tmx",stage);
 
-			var button = container.insert(new Q.UI.Button({asset: "mainTitle.png", x: 0, y: 0}))         
-			button.on("click",function() {
-				Q.stageTMX("level.tmx",stage);
+		   	var player = stage.insert(new Q.Mario());
 
-			   	var player = stage.insert(new Q.Mario());
- 
-	            stage.insert(new Q.Goomba());
-	            stage.insert(new Q.Bloopa());
-	            stage.insert(new Q.Princess());
+            stage.insert(new Q.Goomba());
+            stage.insert(new Q.Bloopa());
+            stage.insert(new Q.Princess());
 
-	            stage.add("viewport").follow(player, {x: true, y: true}, {minX: -20, maxX: 256*16, minY: 125, maxY: 32*16});
-			});
-
-			container.fit(20);
+            stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
             
         });   
 
@@ -193,7 +205,7 @@ window.addEventListener("load",function() {
         	Q.compileSheets("mario_small.png", "mario_small.json");
         	Q.compileSheets("goomba.png", "goomba.json");
         	Q.compileSheets("bloopa.png", "bloopa.json");
-            Q.stageScene("level1");
+            Q.stageScene("mainTitle");
         });   
 
 });
