@@ -1,5 +1,5 @@
 window.addEventListener("load",function() {
-		
+
 		var Q = Quintus()
             .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX")
             .setup({
@@ -13,7 +13,8 @@ window.addEventListener("load",function() {
 					"stand_right":{frames: [0], rate: 1/10, loop: false},
 					"stand_left":{frames: [14], rate: 1/10, loop: false},
 					"jumping_right":{frames: [4], rate: 1/10, loop: false},
-					"jumping_left":{frames: [18], rate: 1/10, loop: false}
+					"jumping_left":{frames: [18], rate: 1/10, loop: false},
+					"mario_die":{frames: [12], rate: 1/10, loop: false}
 		});
 
         Q.Sprite.extend("Mario",{
@@ -26,6 +27,7 @@ window.addEventListener("load",function() {
         			speed: 200,
         			x: 160,
         			y: 480,
+        			vy: 10,
         			direction: "right"
         		});
 
@@ -47,6 +49,7 @@ window.addEventListener("load",function() {
 				}
 
         		if(this.p.y > 580){
+        			this.play("mario_die");
    					Q.stageScene("endGame", 1, {label: "Game over"});
 					this.p.y = 579;
 				}
@@ -56,7 +59,7 @@ window.addEventListener("load",function() {
         });
 
         Q.animations("goomba anim", {
-					"goomba_walk":{frames: [0,1], rate: 1/10},
+					"goomba_walk":{frames: [0,1], rate: 1/5},
 					"goomba_die":{frames: [2], rate: 1/5, loop: false, trigger: "died"}
 		});
 
@@ -69,7 +72,7 @@ window.addEventListener("load",function() {
         			speed: 180,
         			frame: 0,
         			vx: 100,
-        			x: 800,
+        			x: 1000,
         			y: 380,
         		});
 
@@ -81,6 +84,7 @@ window.addEventListener("load",function() {
 
         		this.on("bump.left,bump.right,bump.bottom",function(collision){
         			if(collision.obj.isA("Mario")) {
+        				//player.play("mario_die");
         				Q.stageScene("endGame", 1, {label: "Game over"});
         				collision.obj.destroy();
         			}
@@ -130,6 +134,7 @@ window.addEventListener("load",function() {
 
         		this.on("bump.left,bump.right,bump.bottom",function(collision){
         			if(collision.obj.isA("Mario")) {
+        				//player.play("mario_die");
         				Q.stageScene("endGame", 1, {label: "Game over"});
         				collision.obj.destroy();
         			}
@@ -161,6 +166,35 @@ window.addEventListener("load",function() {
 	        	}
         });
 
+        Q.Sprite.extend("Coin",{
+        	
+        	init: function(p) {
+        		this._super(p, {
+        			sprite: "coin",
+        			sheet: "coin",
+        			frame: 2,
+        			x: 350,
+        			y: 470,
+        			sensor: true
+        		});
+
+				this.add("tween");
+
+        		this.on("sensor");		
+        	},
+
+        	sensor: function() {
+        		var callDestroy = function(){
+        			this.destroy();
+        		}
+        		this.animate({ x: this.p.x, y: this.p.y - 50, angle: 0},0.3,{callback: callDestroy});         		
+        	},
+
+        	step: function(dt) {
+        		
+        	}
+
+        });	
 
         Q.Sprite.extend("Princess",{
         	
@@ -182,7 +216,8 @@ window.addEventListener("load",function() {
         		//Bloquear a Mario para que no se mueva
         	} 
 
-        });			
+        });	
+	
 
         Q.scene("endGame",function(stage) {
 			var container = stage.insert(new Q.UI.Container({
@@ -223,15 +258,17 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Goomba());
             stage.insert(new Q.Bloopa());
             stage.insert(new Q.Princess());
+            stage.insert(new Q.Coin());
 
             stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
             
         });   
 
-        Q.loadTMX("level.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, princess.png", function() {
+        Q.loadTMX("level.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, princess.png, coin.png, coin.json", function() {
         	Q.compileSheets("mario_small.png", "mario_small.json");
         	Q.compileSheets("goomba.png", "goomba.json");
         	Q.compileSheets("bloopa.png", "bloopa.json");
+        	Q.compileSheets("coin.png", "coin.json");
             Q.stageScene("mainTitle");
         });   
 
