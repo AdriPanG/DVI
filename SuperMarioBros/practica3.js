@@ -59,7 +59,7 @@ window.addEventListener("load",function() {
         });
 
         Q.animations("goomba anim", {
-					"goomba_walk":{frames: [0,1], rate: 1/10},
+					"goomba_walk":{frames: [0,1], rate: 1/5},
 					"goomba_die":{frames: [2], rate: 1/5, loop: false, trigger: "died"}
 		});
 
@@ -173,16 +173,26 @@ window.addEventListener("load",function() {
         			sprite: "coin",
         			sheet: "coin",
         			frame: 2,
-        			x: 1200,
+        			x: 350,
         			y: 470,
+        			sensor: true
         		});
 
-        		this.on("bump.top,bump.left,bump.right,bump.bottom",function(collision){
-        			if(collision.obj.isA("Mario")) {
-        				collision.obj.destroy();
-        			}
-        		});
+				this.add("tween");
+
+        		this.on("sensor");		
         	},
+
+        	sensor: function() {
+        		var callDestroy = function(){
+        			this.destroy();
+        		}
+        		this.animate({ x: this.p.x, y: this.p.y - 50, angle: 0},0.3,{callback: callDestroy});         		
+        	},
+
+        	step: function(dt) {
+        		
+        	}
 
         });	
 
