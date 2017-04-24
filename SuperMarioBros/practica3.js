@@ -29,13 +29,26 @@ window.addEventListener("load",function() {
         			y: 480,
         			vy: 10,
         			direction: "right",
-        			moverse: true
+        			moverse: true,
+        			muerto: false
         		});
 
-        		this.add('2d, platformerControls, animation');
+        		this.add('2d, platformerControls, animation, tween');
 
+        		this.on("die", this, "die");
         		this.on("win", this, "win");
-        	},        	
+        	},    
+
+        	die: function(){
+        		this.p.muerto = true;
+        		var callDestroy = function(){        			
+        			this.destroy();
+        		} 
+        		var caeHaciaAbajo = function(){     
+        			this.animate({ x: this.p.x, y: this.p.y + (620 - this.p.y), angle: 0},0.6,{callback: callDestroy}); 
+        		} 
+        		this.animate({ x: this.p.x, y: this.p.y - 75, angle: 0},0.3,{callback: caeHaciaAbajo}); 
+        	}, 	
 
         	win: function(){
         		this.p.moverse = false;
@@ -43,25 +56,28 @@ window.addEventListener("load",function() {
 
         	step: function(dt) {
 
-        		if(this.p.moverse){
-        			if(this.p.jumping && this.p.landed < 0) {
-						this.play("jumping_" + this.p.direction);
-					} else if (this.p.landed > 0){    
-						if(this.p.vx > 0) {
-						 	this.play("marioR");
-						 } else if(this.p.vx < 0) {
-							this.play("marioL");
-						 } else {
-						 	this.play("stand_" + this.p.direction);
-						 }
-					}
+        		if(this.p.muerto){
+        			this.play("mario_die");
+        		} else {
+	        		if(this.p.moverse){
+	        			if(this.p.jumping && this.p.landed < 0) {
+							this.play("jumping_" + this.p.direction);
+						} else if (this.p.landed > 0){    
+							if(this.p.vx > 0) {
+							 	this.play("marioR");
+							 } else if(this.p.vx < 0) {
+								this.play("marioL");
+							 } else {
+							 	this.play("stand_" + this.p.direction);
+							 }
+						}
+	        		}
+	        		else{
+	        			this.play("stand_" + this.p.direction);
+	        			this.p.speed = 0;
+	        			this.p.jumpSpeed = 0;
+	        		}
         		}
-        		else{
-        			this.play("stand_" + this.p.direction);
-        			this.p.speed = 0;
-        			this.p.jumpSpeed = 0;
-        		}
-        		
 
         		if(this.p.y > 580){
         			this.play("mario_die");
@@ -149,9 +165,8 @@ window.addEventListener("load",function() {
 
         		this.on("bump.left,bump.right,bump.bottom",function(collision){
         			if(collision.obj.isA("Mario")) {
-        				//player.play("mario_die");
         				Q.stageScene("endGame", 1, {label: "Game over"});
-        				collision.obj.destroy();
+        				collision.obj.trigger("die");
         			}
         		});
 
