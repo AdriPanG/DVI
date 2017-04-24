@@ -80,7 +80,7 @@ window.addEventListener("load",function() {
 
 	        		if(this.p.y > 580){
 	        			this.trigger("die");
-	   					Q.stageScene("endGame", 1, {label: "Game over"});
+	   					Q.stageScene("looseGame", 1);
 					}
         		}
 
@@ -110,7 +110,7 @@ window.addEventListener("load",function() {
 			 coll: function(collision){
 			 	if(collision.obj.isA("Mario")) {
     				if(!this.collisioned){
-    					Q.stageScene("endGame", 1, {label: "Game over"});
+    					Q.stageScene("looseGame", 1);
     					collision.obj.trigger("die");
     					this.collisioned = true;
     				}
@@ -234,7 +234,7 @@ window.addEventListener("load",function() {
         	},
 
         	sensor: function() {
-        		Q.stageScene("endGame", 1, {label: "Marios wins"});
+        		Q.stageScene("winGame", 1);
         		this.p.sensor = false;
         		//Bloquear a Mario para que no se mueva
         		Q("Mario").trigger("win");
@@ -243,7 +243,7 @@ window.addEventListener("load",function() {
         });	
 	
 
-        Q.scene("endGame",function(stage) {
+        Q.scene("looseGame",function(stage) {
         	Q.audio.stop("music_main.mp3");
 
         	Q.audio.play('music_die.mp3');
@@ -254,7 +254,27 @@ window.addEventListener("load",function() {
 			var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
 			                                                  label: "Play Again" }));         
 			var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
-			                                                   label: stage.options.label }));
+			                                                   label: "Game over" }));
+			button.on("click",function() {
+			   	Q.clearStages();
+			    Q.stageScene("mainTitle");
+			});
+
+			container.fit(20);
+		});
+
+		Q.scene("winGame",function(stage) {
+        	Q.audio.stop("music_main.mp3");
+
+        	Q.audio.play('music_level_complete.mp3');
+			var container = stage.insert(new Q.UI.Container({
+			   	x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+			}));
+
+			var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+			                                                  label: "Play Again" }));         
+			var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
+			                                                   label: "Mario wins" }));
 			button.on("click",function() {
 			   	Q.clearStages();
 			    Q.stageScene("mainTitle");
