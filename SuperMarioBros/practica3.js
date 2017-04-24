@@ -28,25 +28,40 @@ window.addEventListener("load",function() {
         			x: 160,
         			y: 480,
         			vy: 10,
-        			direction: "right"
+        			direction: "right",
+        			moverse: true
         		});
 
         		this.add('2d, platformerControls, animation');
+
+        		this.on("win", this, "win");
         	},        	
+
+        	win: function(){
+        		this.p.moverse = false;
+        	},
 
         	step: function(dt) {
 
-        		if(this.p.jumping && this.p.landed < 0) {
-					this.play("jumping_" + this.p.direction);
-				} else if (this.p.landed > 0){    
-					if(this.p.vx > 0) {
-					 	this.play("marioR");
-					 } else if(this.p.vx < 0) {
-						this.play("marioL");
-					 } else {
-					 	this.play("stand_" + this.p.direction);
-					 }
-				}
+        		if(this.p.moverse){
+        			if(this.p.jumping && this.p.landed < 0) {
+						this.play("jumping_" + this.p.direction);
+					} else if (this.p.landed > 0){    
+						if(this.p.vx > 0) {
+						 	this.play("marioR");
+						 } else if(this.p.vx < 0) {
+							this.play("marioL");
+						 } else {
+						 	this.play("stand_" + this.p.direction);
+						 }
+					}
+        		}
+        		else{
+        			this.play("stand_" + this.p.direction);
+        			this.p.speed = 0;
+        			this.p.jumpSpeed = 0;
+        		}
+        		
 
         		if(this.p.y > 580){
         			this.play("mario_die");
@@ -219,6 +234,7 @@ window.addEventListener("load",function() {
         		Q.stageScene("endGame", 1, {label: "Marios wins"});
         		this.p.sensor = false;
         		//Bloquear a Mario para que no se mueva
+        		Q("Mario").trigger("win");
         	} 
 
         });	
