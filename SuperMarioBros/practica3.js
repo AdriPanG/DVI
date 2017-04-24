@@ -291,7 +291,11 @@ window.addEventListener("load",function() {
 			   	x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
 			}));
 
-			var button = container.insert(new Q.UI.Button({asset: "mainTitle.png", x: 0, y: 0}))         
+			var button = container.insert(new Q.UI.Button({asset: "mainTitle.png", x: 0, y: 0}, function() {
+										Q.clearStages();
+										Q.stageScene("level1");
+								}, { keyActionName: 'confirm' }));   
+								      
 			button.on("click",function() {
 				Q.clearStages();
 				Q.stageScene("level1");				
