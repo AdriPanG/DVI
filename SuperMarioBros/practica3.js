@@ -102,8 +102,11 @@ window.addEventListener("load",function() {
 
 			top: function(collision) {
 				if(collision.obj.isA("Mario")) {
-    				this.entity.play("die");
-    				collision.obj.p.vy = -200;
+					if(!this.collisioned){
+	    				this.entity.play("die");
+	    				collision.obj.p.vy = -200;
+	    				this.collisioned = true;
+    				}
     			}
 			 },
 
