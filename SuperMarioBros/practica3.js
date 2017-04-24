@@ -77,13 +77,14 @@ window.addEventListener("load",function() {
 	        			this.p.speed = 0;
 	        			this.p.jumpSpeed = 0;
 	        		}
+
+	        		if(this.p.y > 580){
+	        			this.trigger("die");
+	   					Q.stageScene("endGame", 1, {label: "Game over"});
+					}
         		}
 
-        		if(this.p.y > 580){
-        			this.play("mario_die");
-   					Q.stageScene("endGame", 1, {label: "Game over"});
-					this.p.y = 579;
-				}
+        		
 				
         	}
 
@@ -115,9 +116,8 @@ window.addEventListener("load",function() {
 
         		this.on("bump.left,bump.right,bump.bottom",function(collision){
         			if(collision.obj.isA("Mario")) {
-        				//player.play("mario_die");
         				Q.stageScene("endGame", 1, {label: "Game over"});
-        				collision.obj.destroy();
+        				collision.obj.trigger("die");
         			}
         		});
 
