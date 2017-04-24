@@ -175,7 +175,8 @@ window.addEventListener("load",function() {
         			frame: 2,
         			x: 350,
         			y: 470,
-        			sensor: true
+        			sensor: true,
+        			puntuado: false
         		});
 
 				this.add("tween");
@@ -184,10 +185,14 @@ window.addEventListener("load",function() {
         	},
 
         	sensor: function() {
-        		var callDestroy = function(){
+        		var callDestroy = function(){        			
         			this.destroy();
-        		}
-        		this.animate({ x: this.p.x, y: this.p.y - 50, angle: 0},0.3,{callback: callDestroy});         		
+        		}        		
+        		this.animate({ x: this.p.x, y: this.p.y - 50, angle: 0},0.3,{callback: callDestroy}); 
+        		if(!this.p.puntuado){
+    				Q.state.inc("score",50);
+    				this.p.puntuado = true;
+    			}        		
         	},
 
         	step: function(dt) {
@@ -225,7 +230,7 @@ window.addEventListener("load",function() {
 			}));
 
 			var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-			                                                  label: "Play Again" }))         
+			                                                  label: "Play Again" }));         
 			var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
 			                                                   label: stage.options.label }));
 			button.on("click",function() {
@@ -259,10 +264,44 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Bloopa());
             stage.insert(new Q.Princess());
             stage.insert(new Q.Coin());
+            //stage.insert(new Q.Coin({x:500, y: 470}));
+
+            Q.state.reset({ score: 0, lives: 2 });   
 
             stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
+
+            Q.stageScene("scoreLabel", 1);
             
-        });   
+        }); 
+
+        Q.scene("scoreLabel",function(stage) {
+			var container = stage.insert(new Q.UI.Container({
+			   	x: Q.width/2, y: 0, fill: "rgba(0,0,0,0.0)"
+			}));
+
+			Q.UI.Text.extend("Score",{
+				init: function(p) {
+					this._super({
+						label: "Score: 0",
+						x: 0,
+						y: 0
+					});
+
+					Q.state.on("change.score",this,"score");
+
+				},
+
+				score: function(score) {
+					this.p.label = "Score: " + score;
+				}
+			});
+
+			var label = container.insert(new Q.Score());
+
+			container.fit(20);	
+		});
+
+        ;  
 
         Q.loadTMX("level.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, princess.png, coin.png, coin.json", function() {
         	Q.compileSheets("mario_small.png", "mario_small.json");
