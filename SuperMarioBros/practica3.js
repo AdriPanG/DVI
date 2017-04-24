@@ -90,9 +90,37 @@ window.addEventListener("load",function() {
 
         });
 
+        Q.component("defaultEnemy", {
+        	added: function() {
+        		this.entity.add('2d, aiBounce, animation');
+        		this.entity.play("walk");
+        		this.entity.on("died",this,"die");
+				this.entity.on('bump.top',this,'top');
+				this.entity.on('bump.left,bump.right,bump.bottom',this,'coll');
+			},
+
+			top: function(collision) {
+				if(collision.obj.isA("Mario")) {
+    				this.entity.play("die");
+    				collision.obj.p.vy = -200;
+    			}
+			 },
+
+			 coll: function(collision){
+			 	if(collision.obj.isA("Mario")) {
+    				Q.stageScene("endGame", 1, {label: "Game over"});
+    				collision.obj.trigger("die");
+    			}
+			 },
+
+			die: function() {
+        		this.entity.destroy();
+        	},
+		});
+
         Q.animations("goomba anim", {
-					"goomba_walk":{frames: [0,1], rate: 1/5},
-					"goomba_die":{frames: [2], rate: 1/5, loop: false, trigger: "died"}
+					"walk":{frames: [0,1], rate: 1/5},
+					"die":{frames: [2], rate: 1/5, loop: false, trigger: "died"}
 		});
 
         Q.Sprite.extend("Goomba",{
@@ -108,29 +136,7 @@ window.addEventListener("load",function() {
         			y: 380,
         		});
 
-        		this.add('2d, aiBounce, animation');
-
-        		this.play("goomba_walk");
-
-        		this.on("died",this,"goombadie");
-
-        		this.on("bump.left,bump.right,bump.bottom",function(collision){
-        			if(collision.obj.isA("Mario")) {
-        				Q.stageScene("endGame", 1, {label: "Game over"});
-        				collision.obj.trigger("die");
-        			}
-        		});
-
-        		this.on("bump.top",function(collision){
-        			if(collision.obj.isA("Mario")) {
-        				this.play("goomba_die");
-        				collision.obj.p.vy = -200;
-        			}
-        		});
-        	},
-
-        	goombadie: function() {
-        		this.destroy();
+        		this.add("defaultEnemy");
         	},
 
         	step: function(dt) {
@@ -139,8 +145,8 @@ window.addEventListener("load",function() {
         });
 
         Q.animations("bloopa anim", {
-					"bloopa_walk":{frames: [0,1], rate: 1/3},
-					"bloopa_die":{frames: [2], rate: 1/3, loop: false, trigger: "died"}
+					"walk":{frames: [0,1], rate: 1/3},
+					"die":{frames: [2], rate: 1/3, loop: false, trigger: "died"}
 		});
 
         Q.Sprite.extend("Bloopa",{
@@ -156,30 +162,7 @@ window.addEventListener("load",function() {
         			y: 380,
         		});
 
-        		this.timeJump = 0;
-        		this.add('2d, aiBounce, animation');
-
-        		this.play("bloopa_walk");
-
-        		this.on("died",this,"bloopadie");
-
-        		this.on("bump.left,bump.right,bump.bottom",function(collision){
-        			if(collision.obj.isA("Mario")) {
-        				Q.stageScene("endGame", 1, {label: "Game over"});
-        				collision.obj.trigger("die");
-        			}
-        		});
-
-        		this.on("bump.top",function(collision){
-        			if(collision.obj.isA("Mario")) {
-        				this.play("bloopa_die");
-        				collision.obj.p.vy = -200;
-        			}
-        		});
-        	},
-
-        	bloopadie: function() {
-        		this.destroy();
+        		this.add("defaultEnemy");
         	},
 
         	step: function(dt) {
