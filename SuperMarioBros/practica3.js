@@ -315,8 +315,11 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Goomba());
             stage.insert(new Q.Bloopa());
             stage.insert(new Q.Princess());
-            stage.insert(new Q.Coin());
-            //stage.insert(new Q.Coin({x:500, y: 470}));
+
+            // Monedas
+            stage.insert(new Q.Coin({x:350, y: 470}));
+            stage.insert(new Q.Coin({x:850, y: 420}));
+            stage.insert(new Q.Coin({x:1150, y: 470}));
 
             Q.state.reset({ score: 0, lives: 2 });   
 
