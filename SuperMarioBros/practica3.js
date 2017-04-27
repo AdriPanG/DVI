@@ -318,8 +318,18 @@ window.addEventListener("load",function() {
 
             // Monedas
             stage.insert(new Q.Coin({x:350, y: 470}));
+            stage.insert(new Q.Coin({x:650, y: 300}));
             stage.insert(new Q.Coin({x:850, y: 420}));
             stage.insert(new Q.Coin({x:1150, y: 470}));
+            stage.insert(new Q.Coin({x:1900, y: 380}));
+            stage.insert(new Q.Coin({x:1900, y: 420}));
+            stage.insert(new Q.Coin({x:1900, y: 460}));
+            stage.insert(new Q.Coin({x:1920, y: 400}));
+            stage.insert(new Q.Coin({x:1940, y: 420}));
+            stage.insert(new Q.Coin({x:1960, y: 400}));
+            stage.insert(new Q.Coin({x:1980, y: 380}));
+            stage.insert(new Q.Coin({x:1980, y: 420}));
+            stage.insert(new Q.Coin({x:1980, y: 460}));
 
             Q.state.reset({ score: 0, lives: 2 });   
 
