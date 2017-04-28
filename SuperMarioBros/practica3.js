@@ -40,9 +40,22 @@ window.addEventListener("load",function() {
         	},    
 
         	die: function(){
+        		Q.audio.stop("music_main.mp3");
+
+        		Q.audio.play('music_die.mp3');
         		this.p.muerto = true;
+        		this.p.moverse = false;
         		var callDestroy = function(){        			
         			this.destroy();
+        			setTimeout(function() {
+					 	if(Q.state.get("lives") === 0){
+	        				Q.stageScene("looseGame", 1);
+	        			} else {
+	        				Q.state.dec("lives",1); 
+	        				Q.clearStages();
+				    		Q.stageScene("level1");
+	        			}
+					}, 2000);        			
         		} 
         		var caeHaciaAbajo = function(){     
         			this.animate({ x: this.p.x, y: this.p.y + (620 - this.p.y), angle: 0},0.6,{callback: callDestroy}); 
@@ -80,7 +93,6 @@ window.addEventListener("load",function() {
 
 	        		if(this.p.y > 580){
 	        			this.trigger("die");
-	   					Q.stageScene("looseGame", 1);
 					}
         		}
 
@@ -112,8 +124,7 @@ window.addEventListener("load",function() {
 
 			 coll: function(collision){
 			 	if(collision.obj.isA("Mario")) {
-    				if(!this.collisioned){
-    					Q.stageScene("looseGame", 1);
+    				if(!this.collisioned){    					
     					collision.obj.trigger("die");
     					this.collisioned = true;
     				}
@@ -246,10 +257,7 @@ window.addEventListener("load",function() {
         });	
 	
 
-        Q.scene("looseGame",function(stage) {
-        	Q.audio.stop("music_main.mp3");
-
-        	Q.audio.play('music_die.mp3');
+        Q.scene("looseGame",function(stage) {        	
 			var container = stage.insert(new Q.UI.Container({
 			   	x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
 			}));
@@ -299,10 +307,9 @@ window.addEventListener("load",function() {
 			button.on("click",function() {
 				Q.clearStages();
 				Q.stageScene("level1");				
-			});
+			});		
 
-			Q.audio.stop();
-			Q.audio.play('music_main.mp3',{ loop: true });
+			Q.state.reset({ score: 0, lives: 2 });
 
 			container.fit(20);
 		});
@@ -329,11 +336,12 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Coin({x:1960, y: 400}));
             stage.insert(new Q.Coin({x:1980, y: 380}));
             stage.insert(new Q.Coin({x:1980, y: 420}));
-            stage.insert(new Q.Coin({x:1980, y: 460}));
-
-            Q.state.reset({ score: 0, lives: 2 });   
+            stage.insert(new Q.Coin({x:1980, y: 460}));               
 
             stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
+
+            Q.audio.stop();
+			Q.audio.play('music_main.mp3',{ loop: true });
 
             Q.stageScene("scoreLabel", 1);
             
@@ -347,21 +355,21 @@ window.addEventListener("load",function() {
 			Q.UI.Text.extend("Score",{
 				init: function(p) {
 					this._super({
-						label: "Score: 0",
+						label: p.label,
 						x: 0,
 						y: 0
 					});
 
 					Q.state.on("change.score",this,"score");
-
+					//Q.state.on("change.lives",this,"lives");
 				},
 
 				score: function(score) {
-					this.p.label = "Score: " + score;
+					this.p.label = "Score: " + score + " Lives: " + Q.state.get("lives");
 				}
 			});
 
-			var label = container.insert(new Q.Score());
+			var label = container.insert(new Q.Score({label: "Score: " + Q.state.get("score") + " Lives: " + Q.state.get("lives")}));
 
 			container.fit(20);	
 		});
