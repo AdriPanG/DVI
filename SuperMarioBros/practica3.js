@@ -295,6 +295,8 @@ window.addEventListener("load",function() {
 		});
 
 		Q.scene("mainTitle",function(stage) {
+			Q.audio.stop("music_level_complete.mp3");
+
 			var container = stage.insert(new Q.UI.Container({
 			   	x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
 			}));
@@ -340,8 +342,7 @@ window.addEventListener("load",function() {
 
             stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
 
-            Q.audio.stop();
-			Q.audio.play('music_main.mp3',{ loop: true });
+            Q.audio.play('music_main.mp3',{ loop: true });
 
             Q.stageScene("scoreLabel", 1);
             
