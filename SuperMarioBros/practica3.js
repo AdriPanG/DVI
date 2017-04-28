@@ -69,23 +69,25 @@ window.addEventListener("load",function() {
         	},
 
         	step: function(dt) {
-
         		if(this.p.muerto){
         			this.play("mario_die");
         		} else {
         			if(this.p.x >= 2850){
-        				this.moverse = false;
-        				if(this.p.caminaMeta){
+        				this.p.speed = 0;
+        				this.p.jumpSpeed = 0;
+        				if(this.p.caminaMeta && this.p.landed > 0){
         					this.play("marioR")
         					this.p.x += dt * 100;
-        					if(this.p.x >= 3130){        						
+        					if(this.p.x >= 3135){        						
         						this.destroy();
         					}
         				}
         				else{
         					Q.audio.stop("music_main.mp3");
         					Q.audio.play('music_level_complete.mp3');
-        					this.animate({ x: this.p.x, y: this.p.y + (525 - this.p.y), angle: 0},0.6,{callback: function(){
+        					if (this.p.landed > 0) this.p.caminaMeta = true;
+        					else
+        					this.animate({ x: this.p.x, y: this.p.y + (528 - this.p.y), angle: 0},1,{callback: function(){
 	        					this.p.caminaMeta = true;
 	        				}}); 
         				}        				
