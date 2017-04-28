@@ -30,7 +30,8 @@ window.addEventListener("load",function() {
         			vy: 10,
         			direction: "right",
         			moverse: true,
-        			muerto: false
+        			muerto: false,
+        			caminaMeta: false
         		});
 
         		this.add('2d, platformerControls, animation, tween');
@@ -72,28 +73,47 @@ window.addEventListener("load",function() {
         		if(this.p.muerto){
         			this.play("mario_die");
         		} else {
-	        		if(this.p.moverse){
-	        			if(this.p.jumping && this.p.landed < 0) {
-							this.play("jumping_" + this.p.direction);
-						} else if (this.p.landed > 0){    
-							if(this.p.vx > 0) {
-							 	this.play("marioR");
-							 } else if(this.p.vx < 0) {
-								this.play("marioL");
-							 } else {
-							 	this.play("stand_" + this.p.direction);
-							 }
-						}
-	        		}
-	        		else{
-	        			this.play("stand_" + this.p.direction);
-	        			this.p.speed = 0;
-	        			this.p.jumpSpeed = 0;
-	        		}
+        			if(this.p.x >= 2850){
+        				this.moverse = false;
+        				if(this.p.caminaMeta){
+        					this.play("marioR")
+        					this.p.x += dt * 100;
+        					if(this.p.x >= 3130){        						
+        						this.destroy();
+        					}
+        				}
+        				else{
+        					Q.audio.stop("music_main.mp3");
+        					Q.audio.play('music_level_complete.mp3');
+        					this.animate({ x: this.p.x, y: this.p.y + (525 - this.p.y), angle: 0},0.6,{callback: function(){
+	        					this.p.caminaMeta = true;
+	        				}}); 
+        				}        				
+        			}
+        			else{
+        				if(this.p.moverse){
+		        			if(this.p.jumping && this.p.landed < 0) {
+								this.play("jumping_" + this.p.direction);
+							} else if (this.p.landed > 0){    
+								if(this.p.vx > 0) {
+								 	this.play("marioR");
+								 } else if(this.p.vx < 0) {
+									this.play("marioL");
+								 } else {
+								 	this.play("stand_" + this.p.direction);
+								 }
+							}
+		        		}
+		        		else{
+		        			this.play("stand_" + this.p.direction);
+		        			this.p.speed = 0;
+		        			this.p.jumpSpeed = 0;
+		        		}
 
-	        		if(this.p.y > 580){
-	        			this.trigger("die");
-					}
+		        		if(this.p.y > 580){
+		        			this.trigger("die");
+						}
+        			}	        		
         		}
 
         		
@@ -323,7 +343,7 @@ window.addEventListener("load",function() {
 
             stage.insert(new Q.Goomba());
             stage.insert(new Q.Bloopa());
-            stage.insert(new Q.Princess());
+            //stage.insert(new Q.Princess());
 
             // Monedas
             stage.insert(new Q.Coin({x:350, y: 470}));
