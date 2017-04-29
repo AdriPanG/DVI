@@ -228,6 +228,7 @@ window.addEventListener("load",function() {
 					"walk_right":{frames: [0,1], rate: 1/5},
 					"walk_left":{frames: [4,5], rate: 1/5},
 					"caparazon":{frames: [8], rate: 1/3},
+					"caparazon_walk":{frames: [8,9], rate: 1/3},
 					"die":{frames: [10], rate: 1/3, loop: false, trigger: "died"}
 		});
 
@@ -243,17 +244,44 @@ window.addEventListener("load",function() {
         			vx: 100,
         			x: 1600,
         			y: 380,
-        			firstCollision: false
+        			firstCollision: false,
+        			secondCollision: false
         		});
 
         		this.add("defaultEnemy");
         		this.on('bump.top',this,'top');
+        		this.on('bump.left,bump.right,bump.bottom',this,'coll');
         	},
 
         	top: function(collision) {
         		if(collision.obj.isA("Mario")) {
-					this.play("caparazon");
-	    			this.p.firstCollision = true;
+        			if(!this.p.firstCollision){
+        				this.play("caparazon");
+	    				this.p.firstCollision = true;
+	    				this.p.speed = 0;
+	    				this.p.vx = 0;
+        			} else if (this.p.secondCollision){
+        				this.entity.play("die");
+	    				collision.obj.p.vy = -200;
+	    				this.destroy;
+        			}
+					
+    			}
+			 },
+
+			 coll: function(collision){
+			 	if(collision.obj.isA("Mario")) {
+    				if(!this.p.firstCollision){    					
+    					collision.obj.trigger("die");
+    					this.collisioned = true;
+    				} else if (this.p.secondCollision){
+    					collision.obj.trigger("die");    					
+    					this.collisioned = true;
+    				}else{
+    					this.secondCollision = true
+    					this.play("caparazon_walk");
+    					this.p.vx = 200;
+    				}
     			}
 			 },
 
@@ -264,7 +292,7 @@ window.addEventListener("load",function() {
 	        		else
 	        			this.play("walk_right");
 	        		this.p.xAnt = this.p.x;        		
-	        	}
+	        	} 
         	}
         });
 
