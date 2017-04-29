@@ -159,12 +159,12 @@ window.addEventListener("load",function() {
 
 			die: function() {
         		this.entity.destroy();
-        	},
+        	}
 		});
 
         Q.animations("goomba anim", {
 					"walk":{frames: [0,1], rate: 1/5},
-					"die":{frames: [2], rate: 1/5, loop: false, trigger: "died"}
+					"die":{frames: [2], rate: 1/3, loop: false, trigger: "died"}
 		});
 
         Q.Sprite.extend("Goomba",{
@@ -221,6 +221,51 @@ window.addEventListener("load",function() {
 				if (this.timeJump >= 2)
 					this.p.vy = 120;
 	        	}
+        });
+
+        Q.animations("koopa anim", {
+        			"walk":{frames: [0,1], rate: 1/5},
+					"walk_right":{frames: [0,1], rate: 1/5},
+					"walk_left":{frames: [4,5], rate: 1/5},
+					"caparazon":{frames: [8], rate: 1/3},
+					"die":{frames: [10], rate: 1/3, loop: false, trigger: "died"}
+		});
+
+        Q.Sprite.extend("Koopa",{
+        	
+        	init: function(p) {
+        		this._super(p, {
+        			sprite: "koopa anim",
+        			sheet: "koopa",
+        			speed: 180,
+        			xAnt: 0,
+        			frame: 0,
+        			vx: 100,
+        			x: 1600,
+        			y: 380,
+        			firstCollision: false
+        		});
+
+        		this.add("defaultEnemy");
+        		this.on('bump.top',this,'top');
+        	},
+
+        	top: function(collision) {
+        		if(collision.obj.isA("Mario")) {
+					this.play("caparazon");
+	    			this.p.firstCollision = true;
+    			}
+			 },
+
+        	step: function(dt) {
+        		if(!this.p.firstCollision){
+	        		if(this.p.xAnt > this.p.x)
+	        			this.play("walk_left");
+	        		else
+	        			this.play("walk_right");
+	        		this.p.xAnt = this.p.x;        		
+	        	}
+        	}
         });
 
         Q.Sprite.extend("Coin",{
@@ -349,6 +394,7 @@ window.addEventListener("load",function() {
 
             stage.insert(new Q.Goomba());
             stage.insert(new Q.Bloopa());
+            stage.insert(new Q.Koopa());
             //stage.insert(new Q.Princess());
 
             // Monedas
@@ -403,10 +449,11 @@ window.addEventListener("load",function() {
 
         ;  
 
-        Q.loadTMX("level.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, princess.png, coin.png, coin.json, music_main.mp3, music_die.mp3, music_level_complete.mp3, coin.mp3", function() {
+        Q.loadTMX("level.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, koopa.json, koopa.png, princess.png, coin.png, coin.json, music_main.mp3, music_die.mp3, music_level_complete.mp3, coin.mp3", function() {
         	Q.compileSheets("mario_small.png", "mario_small.json");
         	Q.compileSheets("goomba.png", "goomba.json");
         	Q.compileSheets("bloopa.png", "bloopa.json");
+        	Q.compileSheets("koopa.png", "koopa.json");
         	Q.compileSheets("coin.png", "coin.json");
             Q.stageScene("mainTitle");
         });   
