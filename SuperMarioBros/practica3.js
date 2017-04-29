@@ -31,7 +31,8 @@ window.addEventListener("load",function() {
         			direction: "right",
         			moverse: true,
         			muerto: false,
-        			caminaMeta: false
+        			caminaMeta: false,
+        			meta: false
         		});
 
         		this.add('2d, platformerControls, animation, tween');
@@ -84,7 +85,10 @@ window.addEventListener("load",function() {
         				}
         				else{
         					Q.audio.stop("music_main.mp3");
-        					Q.audio.play('music_level_complete.mp3');
+        					if(!this.p.meta){
+        						Q.audio.play('music_level_complete.mp3');
+        						this.p.meta = true;
+        					}
         					if (this.p.landed > 0) this.p.caminaMeta = true;
         					else
         					this.animate({ x: this.p.x, y: this.p.y + (528 - this.p.y), angle: 0},1,{callback: function(){
