@@ -30,7 +30,9 @@ window.addEventListener("load",function() {
         			vy: 10,
         			direction: "right",
         			moverse: true,
-        			muerto: false
+        			muerto: false,
+        			caminaMeta: false,
+        			meta: false
         		});
 
         		this.add('2d, platformerControls, animation, tween');
@@ -49,7 +51,7 @@ window.addEventListener("load",function() {
         			this.destroy();
         			setTimeout(function() {
 					 	if(Q.state.get("lives") === 0){
-	        				Q.stageScene("looseGame", 1);
+	        				Q.stageScene("loseGame", 1);
 	        			} else {
 	        				Q.state.dec("lives",1); 
 	        				Q.clearStages();
@@ -68,32 +70,57 @@ window.addEventListener("load",function() {
         	},
 
         	step: function(dt) {
-
         		if(this.p.muerto){
         			this.play("mario_die");
         		} else {
-	        		if(this.p.moverse){
-	        			if(this.p.jumping && this.p.landed < 0) {
-							this.play("jumping_" + this.p.direction);
-						} else if (this.p.landed > 0){    
-							if(this.p.vx > 0) {
-							 	this.play("marioR");
-							 } else if(this.p.vx < 0) {
-								this.play("marioL");
-							 } else {
-							 	this.play("stand_" + this.p.direction);
-							 }
-						}
-	        		}
-	        		else{
-	        			this.play("stand_" + this.p.direction);
-	        			this.p.speed = 0;
-	        			this.p.jumpSpeed = 0;
-	        		}
+        			if(this.p.x >= 2850){
+        				this.p.speed = 0;
+        				this.p.jumpSpeed = 0;
+        				if(this.p.caminaMeta && this.p.landed > 0){
+        					this.play("marioR")
+        					this.p.x += dt * 100;
+        					if(this.p.x >= 3135){   
+        						Q.clearStages();
+			    				Q.stageScene("level2");
+        					}
+        				}
+        				else{
+        					Q.audio.stop("music_main.mp3");
+        					if(!this.p.meta){
+        						Q.audio.play('music_level_complete.mp3');
+        						this.p.meta = true;
+        					}
+        					if (this.p.landed > 0) this.p.caminaMeta = true;
+        					else
+        					this.animate({ x: this.p.x, y: this.p.y + (528 - this.p.y), angle: 0},1,{callback: function(){
+	        					this.p.caminaMeta = true;
+	        				}}); 
+        				}        				
+        			}
+        			else{
+        				if(this.p.moverse){
+		        			if(this.p.jumping && this.p.landed < 0) {
+								this.play("jumping_" + this.p.direction);
+							} else if (this.p.landed > 0){    
+								if(this.p.vx > 0) {
+								 	this.play("marioR");
+								 } else if(this.p.vx < 0) {
+									this.play("marioL");
+								 } else {
+								 	this.play("stand_" + this.p.direction);
+								 }
+							}
+		        		}
+		        		else{
+		        			this.play("stand_" + this.p.direction);
+		        			this.p.speed = 0;
+		        			this.p.jumpSpeed = 0;
+		        		}
 
-	        		if(this.p.y > 580){
-	        			this.trigger("die");
-					}
+		        		if(this.p.y > 580){
+		        			this.trigger("die");
+						}
+        			}	        		
         		}
 
         		
@@ -239,8 +266,8 @@ window.addEventListener("load",function() {
         		this._super(p, {
         			asset: "princess.png",
         			frame: 0,
-        			x: 3000,
-        			y: 520,
+        			x: 2600,
+        			y: 490,
         			sensor: true,
         		});
 
@@ -257,7 +284,7 @@ window.addEventListener("load",function() {
         });	
 	
 
-        Q.scene("looseGame",function(stage) {        	
+        Q.scene("loseGame",function(stage) {        	
 			var container = stage.insert(new Q.UI.Container({
 			   	x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
 			}));
@@ -323,10 +350,10 @@ window.addEventListener("load",function() {
 
             stage.insert(new Q.Goomba());
             stage.insert(new Q.Bloopa());
-            stage.insert(new Q.Princess());
+            //stage.insert(new Q.Princess());
 
             // Monedas
-            stage.insert(new Q.Coin({x:350, y: 470}));
+            //stage.insert(new Q.Coin({x:350, y: 470}));
             stage.insert(new Q.Coin({x:650, y: 300}));
             stage.insert(new Q.Coin({x:850, y: 420}));
             stage.insert(new Q.Coin({x:1150, y: 470}));
@@ -339,6 +366,34 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Coin({x:1980, y: 380}));
             stage.insert(new Q.Coin({x:1980, y: 420}));
             stage.insert(new Q.Coin({x:1980, y: 460}));               
+
+            stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
+
+            Q.audio.play('music_main.mp3',{ loop: true });
+
+            Q.stageScene("scoreLabel", 1);
+            
+        }); 
+
+        Q.scene("level2",function(stage) {
+            Q.stageTMX("levelFinal.tmx",stage);
+
+		   	var player = stage.insert(new Q.Mario());
+
+            stage.insert(new Q.Goomba({x: 900, y: 380}));
+            stage.insert(new Q.Goomba({x: 1000, y: 380}));
+            stage.insert(new Q.Bloopa({x: 800, y: 380}));
+            stage.insert(new Q.Bloopa({x: 1990, y: 380}));
+            stage.insert(new Q.Bloopa({x: 2230, y: 380}));
+            stage.insert(new Q.Princess());
+
+            // Monedas
+            //stage.insert(new Q.Coin({x:350, y: 470}));
+            stage.insert(new Q.Coin({x:650, y: 400}));
+            stage.insert(new Q.Coin({x:850, y: 440}));
+            stage.insert(new Q.Coin({x:1150, y: 470}));    
+            stage.insert(new Q.Coin({x:1750, y: 420}));
+            stage.insert(new Q.Coin({x:2100, y: 420}));             
 
             stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
 
@@ -377,7 +432,7 @@ window.addEventListener("load",function() {
 
         ;  
 
-        Q.loadTMX("level.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, princess.png, coin.png, coin.json, music_main.mp3, music_die.mp3, music_level_complete.mp3, coin.mp3", function() {
+        Q.loadTMX("level.tmx, levelFinal.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, princess.png, coin.png, coin.json, music_main.mp3, music_die.mp3, music_level_complete.mp3, coin.mp3", function() {
         	Q.compileSheets("mario_small.png", "mario_small.json");
         	Q.compileSheets("goomba.png", "goomba.json");
         	Q.compileSheets("bloopa.png", "bloopa.json");
