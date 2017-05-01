@@ -373,7 +373,7 @@ window.addEventListener("load",function() {
 			var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
 			                                                  label: "Play Again" }));         
 			var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
-			                                                   label: "Game over" }));
+			                                                   label: "Game over", color: "white"}));
 			button.on("click",function() {
 			   	Q.clearStages();
 			    Q.stageScene("mainTitle");
@@ -393,7 +393,7 @@ window.addEventListener("load",function() {
 			var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
 			                                                  label: "Play Again" }));         
 			var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
-			                                                   label: "Mario wins" }));
+			                                                   label: "Mario wins: " + Q.state.get("score") + " points" , color: "white"}));
 			button.on("click",function() {
 			   	Q.clearStages();
 			    Q.stageScene("mainTitle");
@@ -403,17 +403,20 @@ window.addEventListener("load",function() {
 		});
 
 		Q.scene("mainTitle",function(stage) {
-			Q.audio.stop("music_level_complete.mp3");
+			Q.audio.stop("music_level_complete.mp3");			
 
-			var container = stage.insert(new Q.UI.Container({
-			   	x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
-			}));
-
-			var button = container.insert(new Q.UI.Button({asset: "mainTitle.png", x: 0, y: 0}, function() {
+			var button = stage.insert(new Q.UI.Button({asset: "mainTitle.png", x: Q.width/2, y: Q.height/2}, function() {
 										Q.clearStages();
 										Q.stageScene("level1");
-								}, { keyActionName: 'confirm' }));   
-								      
+								}, { keyActionName: 'confirm' }));
+
+			var container = stage.insert(new Q.UI.Container({
+			   	x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
+			}));   
+								     
+			var label = container.insert(new Q.UI.Text({x: 0, y: 0, 
+			                                                   label: "Press ENTER to start", color: "black"}));
+
 			button.on("click",function() {
 				Q.clearStages();
 				Q.stageScene("level1");				
