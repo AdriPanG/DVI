@@ -414,8 +414,8 @@ window.addEventListener("load",function() {
 			   	x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
 			}));   
 								     
-			var label = container.insert(new Q.UI.Text({x: 0, y: 0, 
-			                                                   label: "Press B to start", color: "black"}));
+			var label = container.insert(new Q.UI.Text({x: 0, y: 10, 
+			                                                   label: "Press B (x) or click to start", size: 18, color: "black"}));
 
 			button.on("click",function() {
 				Q.clearStages();
@@ -504,7 +504,8 @@ window.addEventListener("load",function() {
 					this._super({
 						label: p.label,
 						x: 0,
-						y: 0
+						y: 10,
+						size: 18
 					});
 
 					Q.state.on("change.score",this,"score");
@@ -512,11 +513,11 @@ window.addEventListener("load",function() {
 				},
 
 				score: function(score) {
-					this.p.label = "Score: " + score + " Lives: " + Q.state.get("lives");
+					this.p.label = "Level: " + Q.state.get("level") + " Score: " + score + " Lives: " + Q.state.get("lives");
 				}
 			});
 
-			var label = container.insert(new Q.Score({label: "Score: " + Q.state.get("score") + " Lives: " + Q.state.get("lives")}));
+			var label = container.insert(new Q.Score({label: "Level: " + Q.state.get("level") + " Score: " + Q.state.get("score") + " Lives: " + Q.state.get("lives")}));
 
 			container.fit(20);	
 		});
