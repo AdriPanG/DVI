@@ -160,12 +160,12 @@ window.addEventListener("load",function() {
 
 			die: function() {
         		this.entity.destroy();
-        	},
+        	}
 		});
 
         Q.animations("goomba anim", {
 					"walk":{frames: [0,1], rate: 1/5},
-					"die":{frames: [2], rate: 1/5, loop: false, trigger: "died"}
+					"die":{frames: [2], rate: 1/3, loop: false, trigger: "died"}
 		});
 
         Q.Sprite.extend("Goomba",{
@@ -177,7 +177,7 @@ window.addEventListener("load",function() {
         			speed: 180,
         			frame: 0,
         			vx: 100,
-        			x: 1000,
+        			x: 1200,
         			y: 380,
         		});
 
@@ -222,6 +222,85 @@ window.addEventListener("load",function() {
 				if (this.timeJump >= 2)
 					this.p.vy = 120;
 	        	}
+        });
+
+        Q.animations("koopa anim", {
+        			"walk":{frames: [0,1], rate: 1/5},
+					"walk_right":{frames: [0,1], rate: 1/5},
+					"walk_left":{frames: [4,5], rate: 1/5},
+					"caparazon":{frames: [8], rate: 1/3},
+					"caparazon_walk":{frames: [8,9], rate: 1/3},
+					"die":{frames: [10], rate: 1/3, loop: false, trigger: "died"}
+		});
+
+        Q.Sprite.extend("Koopa",{
+        	
+        	init: function(p) {
+        		this._super(p, {
+        			sprite: "koopa anim",
+        			sheet: "koopa",
+        			speed: 180,
+        			xAnt: 0,
+        			frame: 0,
+        			vx: 100,
+        			x: 1150,
+        			y: 380,
+        			firstCollision: false,
+        			secondCollision: false
+        		});
+
+        		this.add("defaultEnemy");
+        		this.on('bump.top',this,'top');
+        		this.on('bump.left,bump.right,bump.bottom',this,'coll');
+        	},
+
+        	top: function(collision) {
+        		if(collision.obj.isA("Mario")) {
+        			if(!this.p.firstCollision){
+        				this.play("caparazon");
+	    				this.p.firstCollision = true;
+	    				this.p.speed = 0;
+	    				this.p.vx = 0;
+        			} else {
+        				this.play("die");
+	    				collision.obj.p.vy = -200;
+	    				this.destroy;
+        			}
+					
+    			}
+			 },
+
+			 coll: function(collision){
+			 	if(collision.obj.isA("Mario")) {
+			 		console.log(this.p.secondCollision);
+    				if(!this.p.firstCollision){    					
+    					collision.obj.trigger("die");
+    					this.collisioned = true;
+    				} else if (this.p.secondCollision){
+    					collision.obj.trigger("die");    					
+    					this.collisioned = true;
+    				}else{    					
+    					this.play("caparazon_walk");
+    					if(collision.obj.p.direction === "right")
+	    					this.p.vx = 200;
+	    				else
+	    					this.p.vx = -200;
+	    				this.p.secondCollision = true;
+    				}
+    			} else if(collision.obj.isA("Goomba") && this.p.secondCollision) {
+    				collision.obj.trigger("died");
+    			}
+			 },
+
+        	step: function(dt) {
+        		if(!this.p.firstCollision){
+	        		if(this.p.xAnt > this.p.x)
+	        			this.play("walk_left");
+	        		else
+	        			this.play("walk_right");
+	        		this.p.xAnt = this.p.x;        		
+	        	} 
+        	}
         });
 
         Q.Sprite.extend("Coin",{
@@ -350,13 +429,15 @@ window.addEventListener("load",function() {
 
             stage.insert(new Q.Goomba());
             stage.insert(new Q.Bloopa());
+            stage.insert(new Q.Goomba({x:1650}));
+            stage.insert(new Q.Koopa());
             //stage.insert(new Q.Princess());
 
             // Monedas
             //stage.insert(new Q.Coin({x:350, y: 470}));
             stage.insert(new Q.Coin({x:650, y: 300}));
             stage.insert(new Q.Coin({x:850, y: 420}));
-            stage.insert(new Q.Coin({x:1150, y: 470}));
+            //stage.insert(new Q.Coin({x:1150, y: 420}));
             stage.insert(new Q.Coin({x:1900, y: 380}));
             stage.insert(new Q.Coin({x:1900, y: 420}));
             stage.insert(new Q.Coin({x:1900, y: 460}));
@@ -432,10 +513,11 @@ window.addEventListener("load",function() {
 
         ;  
 
-        Q.loadTMX("level.tmx, levelFinal.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, princess.png, coin.png, coin.json, music_main.mp3, music_die.mp3, music_level_complete.mp3, coin.mp3", function() {
+        Q.loadTMX("level.tmx, levelFinal.tmx, mainTitle.png, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, koopa.json, koopa.png, princess.png, coin.png, coin.json, music_main.mp3, music_die.mp3, music_level_complete.mp3, coin.mp3", function() {
         	Q.compileSheets("mario_small.png", "mario_small.json");
         	Q.compileSheets("goomba.png", "goomba.json");
         	Q.compileSheets("bloopa.png", "bloopa.json");
+        	Q.compileSheets("koopa.png", "koopa.json");
         	Q.compileSheets("coin.png", "coin.json");
             Q.stageScene("mainTitle");
         });   
