@@ -55,7 +55,7 @@ window.addEventListener("load",function() {
 	        			} else {
 	        				Q.state.dec("lives",1); 
 	        				Q.clearStages();
-				    		Q.stageScene("level1");
+				    		Q.stageScene("level" + Q.state.get("level"));
 	        			}
 					}, 2000);        			
         		} 
@@ -417,7 +417,7 @@ window.addEventListener("load",function() {
 				Q.stageScene("level1");				
 			});		
 
-			Q.state.reset({ score: 0, lives: 2 });
+			Q.state.reset({ score: 0, lives: 2, level: 1, coinsStartLevel: 0 });
 
 			container.fit(20);
 		});
@@ -459,6 +459,7 @@ window.addEventListener("load",function() {
         Q.scene("level2",function(stage) {
             Q.stageTMX("levelFinal.tmx",stage);
 
+            Q.state.set("level",2);
 		   	var player = stage.insert(new Q.Mario());
 
             stage.insert(new Q.Goomba({x: 900, y: 380}));
