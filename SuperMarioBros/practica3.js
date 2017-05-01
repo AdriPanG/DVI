@@ -176,7 +176,7 @@ window.addEventListener("load",function() {
         			speed: 180,
         			frame: 0,
         			vx: 100,
-        			x: 1000,
+        			x: 1200,
         			y: 380,
         		});
 
@@ -242,7 +242,7 @@ window.addEventListener("load",function() {
         			xAnt: 0,
         			frame: 0,
         			vx: 100,
-        			x: 1600,
+        			x: 1150,
         			y: 380,
         			firstCollision: false,
         			secondCollision: false
@@ -260,8 +260,8 @@ window.addEventListener("load",function() {
 	    				this.p.firstCollision = true;
 	    				this.p.speed = 0;
 	    				this.p.vx = 0;
-        			} else if (this.p.secondCollision){
-        				this.entity.play("die");
+        			} else {
+        				this.play("die");
 	    				collision.obj.p.vy = -200;
 	    				this.destroy;
         			}
@@ -271,17 +271,23 @@ window.addEventListener("load",function() {
 
 			 coll: function(collision){
 			 	if(collision.obj.isA("Mario")) {
+			 		console.log(this.p.secondCollision);
     				if(!this.p.firstCollision){    					
     					collision.obj.trigger("die");
     					this.collisioned = true;
     				} else if (this.p.secondCollision){
     					collision.obj.trigger("die");    					
     					this.collisioned = true;
-    				}else{
-    					this.secondCollision = true
+    				}else{    					
     					this.play("caparazon_walk");
-    					this.p.vx = 200;
+    					if(collision.obj.p.direction === "right")
+	    					this.p.vx = 200;
+	    				else
+	    					this.p.vx = -200;
+	    				this.p.secondCollision = true;
     				}
+    			} else if(collision.obj.isA("Goomba") && this.p.secondCollision) {
+    				collision.obj.trigger("died");
     			}
 			 },
 
@@ -422,6 +428,7 @@ window.addEventListener("load",function() {
 
             stage.insert(new Q.Goomba());
             stage.insert(new Q.Bloopa());
+            stage.insert(new Q.Goomba({x:1650}));
             stage.insert(new Q.Koopa());
             //stage.insert(new Q.Princess());
 
@@ -429,7 +436,7 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Coin({x:350, y: 470}));
             stage.insert(new Q.Coin({x:650, y: 300}));
             stage.insert(new Q.Coin({x:850, y: 420}));
-            stage.insert(new Q.Coin({x:1150, y: 470}));
+            //stage.insert(new Q.Coin({x:1150, y: 420}));
             stage.insert(new Q.Coin({x:1900, y: 380}));
             stage.insert(new Q.Coin({x:1900, y: 420}));
             stage.insert(new Q.Coin({x:1900, y: 460}));
