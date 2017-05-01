@@ -44,7 +44,7 @@ window.addEventListener("load",function() {
         	die: function(){
         		Q.audio.stop("music_main.mp3");
 
-        		Q.audio.play('music_die.mp3');
+        		Q.audio.play('music_die.mp3');        		
         		this.p.muerto = true;
         		this.p.moverse = false;
         		var callDestroy = function(){        			
@@ -54,7 +54,8 @@ window.addEventListener("load",function() {
 	        				Q.stageScene("loseGame", 1);
 	        			} else {
 	        				Q.state.dec("lives",1); 
-	        				Q.clearStages();
+	        				Q.state.set({"score" : Q.state.get("coinsStartLevel")});
+	        				Q.clearStages();	        				
 				    		Q.stageScene("level" + Q.state.get("level"));
 	        			}
 					}, 2000);        			
@@ -72,6 +73,8 @@ window.addEventListener("load",function() {
         	step: function(dt) {
         		if(this.p.muerto){
         			this.play("mario_die");
+        			this.p.speed = 0;
+		        	this.p.jumpSpeed = 0;
         		} else {
         			if(this.p.x >= 2850){
         				this.p.speed = 0;
@@ -81,6 +84,7 @@ window.addEventListener("load",function() {
         					this.p.x += dt * 100;
         					if(this.p.x >= 3135){   
         						Q.clearStages();
+        						Q.state.set({"coinsStartLevel" : Q.state.get("score")})
 			    				Q.stageScene("level2");
         					}
         				}
@@ -119,6 +123,8 @@ window.addEventListener("load",function() {
 
 		        		if(this.p.y > 580){
 		        			this.trigger("die");
+		        			this.p.speed = 0;
+		        			this.p.jumpSpeed = 0;
 						}
         			}	        		
         		}
@@ -131,7 +137,6 @@ window.addEventListener("load",function() {
 
         Q.component("defaultEnemy", {
         	added: function() {
-        		var collisioned = false;
         		this.entity.add('2d, aiBounce, animation');
         		this.entity.play("walk");
         		this.entity.on("died",this,"die");
@@ -141,19 +146,19 @@ window.addEventListener("load",function() {
 
 			top: function(collision) {
 				if(collision.obj.isA("Mario")) {
-					if(!this.collisioned){
+					if(!this.entity.p.collisioned){
 	    				this.entity.play("die");
 	    				collision.obj.p.vy = -200;
-	    				this.collisioned = true;
+	    				this.entity.p.collisioned = true;
     				}
     			}
 			 },
 
 			 coll: function(collision){
 			 	if(collision.obj.isA("Mario")) {
-    				if(!this.collisioned){    					
+    				if(!this.entity.p.collisioned){    					
     					collision.obj.trigger("die");
-    					this.collisioned = true;
+    					this.entity.p.collisioned = true;
     				}
     			}
 			 },
@@ -179,6 +184,7 @@ window.addEventListener("load",function() {
         			vx: 100,
         			x: 1200,
         			y: 380,
+        			collisioned: false
         		});
 
         		this.add("defaultEnemy");
@@ -205,6 +211,7 @@ window.addEventListener("load",function() {
         			vy: 100,
         			x: 500,
         			y: 380,
+        			collisioned: false
         		});
 
         		this.add("defaultEnemy");
@@ -246,7 +253,9 @@ window.addEventListener("load",function() {
         			x: 1150,
         			y: 380,
         			firstCollision: false,
-        			secondCollision: false
+        			secondCollision: false,
+        			collisioned: false,
+        			collisionedSecond: false
         		});
 
         		this.add("defaultEnemy");
@@ -256,6 +265,7 @@ window.addEventListener("load",function() {
 
         	top: function(collision) {
         		if(collision.obj.isA("Mario")) {
+        			console.log(this.p.collisioned + " " + this.p.firstCollision + " " + this.p.secondCollision);
         			if(!this.p.firstCollision){
         				this.play("caparazon");
 	    				this.p.firstCollision = true;
@@ -264,28 +274,23 @@ window.addEventListener("load",function() {
         			} else {
         				this.play("die");
 	    				collision.obj.p.vy = -200;
-	    				this.destroy;
-        			}
-					
+        			}					
     			}
 			 },
 
 			 coll: function(collision){
 			 	if(collision.obj.isA("Mario")) {
-			 		console.log(this.p.secondCollision);
-    				if(!this.p.firstCollision){    					
-    					collision.obj.trigger("die");
-    					this.collisioned = true;
-    				} else if (this.p.secondCollision){
-    					collision.obj.trigger("die");    					
-    					this.collisioned = true;
-    				}else{    					
-    					this.play("caparazon_walk");
+			 		console.log(this.p.collisioned + " " + this.p.firstCollision + " " + this.p.secondCollision);
+			 		if(this.p.firstCollision && !this.p.secondCollision){  
+			 			this.play("caparazon_walk");
     					if(collision.obj.p.direction === "right")
 	    					this.p.vx = 200;
 	    				else
 	    					this.p.vx = -200;
 	    				this.p.secondCollision = true;
+    				} else if (this.p.collisioned && this.p.secondCollision && !this.p.collisionedSecond) {     					
+	    				collision.obj.trigger("die");
+	    				this.p.collisionedSecond = true;
     				}
     			} else if(collision.obj.isA("Goomba") && this.p.secondCollision) {
     				collision.obj.trigger("died");
@@ -426,6 +431,8 @@ window.addEventListener("load",function() {
             Q.stageTMX("level.tmx",stage);
 
 		   	var player = stage.insert(new Q.Mario());
+
+		   	Q.state.set({"score" : 0})
 
             stage.insert(new Q.Goomba());
             stage.insert(new Q.Bloopa());
