@@ -265,7 +265,6 @@ window.addEventListener("load",function() {
 
         	top: function(collision) {
         		if(collision.obj.isA("Mario")) {
-        			console.log(this.p.collisioned + " " + this.p.firstCollision + " " + this.p.secondCollision);
         			if(!this.p.firstCollision){
         				this.play("caparazon");
 	    				this.p.firstCollision = true;
@@ -280,7 +279,6 @@ window.addEventListener("load",function() {
 
 			 coll: function(collision){
 			 	if(collision.obj.isA("Mario")) {
-			 		console.log(this.p.collisioned + " " + this.p.firstCollision + " " + this.p.secondCollision);
 			 		if(this.p.firstCollision && !this.p.secondCollision){  
 			 			this.play("caparazon_walk");
     					if(collision.obj.p.direction === "right")
@@ -457,6 +455,7 @@ window.addEventListener("load",function() {
 
             stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
 
+            Q.audio.stop();
             Q.audio.play('music_main.mp3',{ loop: true });
 
             Q.stageScene("scoreLabel", 1);
@@ -486,6 +485,7 @@ window.addEventListener("load",function() {
 
             stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
 
+            Q.audio.stop();
             Q.audio.play('music_main.mp3',{ loop: true });
 
             Q.stageScene("scoreLabel", 1);
