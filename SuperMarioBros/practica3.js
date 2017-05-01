@@ -408,19 +408,19 @@ window.addEventListener("load",function() {
 			var button = stage.insert(new Q.UI.Button({asset: "mainTitle.png", x: Q.width/2, y: Q.height/2}, function() {
 										Q.clearStages();
 										Q.stageScene("level1");
-								}, { keyActionName: 'confirm' }));
+								}, { keyActionName: 'action' }));
 
 			var container = stage.insert(new Q.UI.Container({
 			   	x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
 			}));   
 								     
 			var label = container.insert(new Q.UI.Text({x: 0, y: 0, 
-			                                                   label: "Press ENTER to start", color: "black"}));
+			                                                   label: "Press B to start", color: "black"}));
 
 			button.on("click",function() {
 				Q.clearStages();
 				Q.stageScene("level1");				
-			});		
+			});
 
 			Q.state.reset({ score: 0, lives: 2, level: 1, coinsStartLevel: 0 });
 
