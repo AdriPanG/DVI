@@ -43,8 +43,7 @@ window.addEventListener("load",function() {
 
         	die: function(){
         		Q.audio.stop("music_main.mp3");
-
-        		Q.audio.play('music_die.mp3');        		
+        		if(!this.p.muerto) Q.audio.play('music_die.mp3');        		
         		this.p.muerto = true;
         		this.p.moverse = false;
         		var callDestroy = function(){        			
