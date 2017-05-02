@@ -312,7 +312,7 @@ window.addEventListener("load",function() {
         			sprite: "coin",
         			sheet: "coin",
         			frame: 2,
-        			x: 350,
+        			x: 1050,
         			y: 470,
         			sensor: true,
         			puntuado: false
@@ -438,13 +438,10 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Bloopa());
             stage.insert(new Q.Goomba({x:1650}));
             stage.insert(new Q.Koopa());
-            //stage.insert(new Q.Princess());
 
             // Monedas
-            //stage.insert(new Q.Coin({x:350, y: 470}));
             stage.insert(new Q.Coin({x:650, y: 300}));
             stage.insert(new Q.Coin({x:850, y: 420}));
-            //stage.insert(new Q.Coin({x:1150, y: 420}));
             stage.insert(new Q.Coin({x:1900, y: 380}));
             stage.insert(new Q.Coin({x:1900, y: 420}));
             stage.insert(new Q.Coin({x:1900, y: 460}));
@@ -478,12 +475,11 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Princess());
 
             // Monedas
-            //stage.insert(new Q.Coin({x:350, y: 470}));
-            stage.insert(new Q.Coin({x:650, y: 400}));
-            stage.insert(new Q.Coin({x:850, y: 440}));
+            stage.insert(new Q.Coin({x:620, y: 400}));
+            //stage.insert(new Q.Coin({x:850, y: 440}));
             stage.insert(new Q.Coin({x:1150, y: 470}));    
             stage.insert(new Q.Coin({x:1750, y: 420}));
-            stage.insert(new Q.Coin({x:2100, y: 420}));             
+            stage.insert(new Q.Coin({x:2100, y: 420}));           
 
             stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
 
@@ -509,7 +505,6 @@ window.addEventListener("load",function() {
 					});
 
 					Q.state.on("change.score",this,"score");
-					//Q.state.on("change.lives",this,"lives");
 				},
 
 				score: function(score) {
