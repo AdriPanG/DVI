@@ -1,11 +1,16 @@
-Integrantes:
+﻿Integrantes:
 
 Adrián Panadero González
 Juan José Prieto Escolar
 
-Se han implementado todos los apartados obligatorios de la práctica. Además hemos 
-implementado las siguientes apartados opcionales:
+Implementación:
 
-- Enemigos nuevos: se ha añadido a Koopa en el juego, tiene el movimiento normal y el del caparazón que rueda, mata a los enemigos con los que colisiones.
-- Vidas: se empieza con dos vidas disponibles que se muestran junto a la puntuación y al nivel en el que estamos.
+Se han implementado todos los apartados obligatorios de la práctica. Además hemos 
+implementado los siguientes apartados opcionales:
+
+- Vidas: se empieza con dos vidas disponibles que se muestran junto a la puntuación 
+	 y al nivel en el que estamos.
 - Niveles: se entrega con 2 niveles de dificultad.
+- Nuevos enemigos: se ha añadido a Koopa al juego, el cual tiene el movimiento normal 
+		   y (tras saltar una vez sobre él) el movimiento del caparazón, que 
+		   rueda tras empujarlo y mata a los enemigos con los que colisiona.

@@ -70,11 +70,11 @@ window.addEventListener("load",function() {
         	},
 
         	step: function(dt) {
-        		if(this.p.muerto){
+        		if(this.p.muerto){ // Mario muere
         			this.play("mario_die");
         			this.p.speed = 0;
 		        	this.p.jumpSpeed = 0;
-        		} else {
+        		} else { // Final del nivel
         			if(this.p.x >= 2850){
         				this.p.speed = 0;
         				this.p.jumpSpeed = 0;
@@ -100,7 +100,7 @@ window.addEventListener("load",function() {
 	        				}}); 
         				}        				
         			}
-        			else{
+        			else{ // Movimiento normal
         				if(this.p.moverse){
 		        			if(this.p.jumping && this.p.landed < 0) {
 								this.play("jumping_" + this.p.direction);
@@ -127,9 +127,6 @@ window.addEventListener("load",function() {
 						}
         			}	        		
         		}
-
-        		
-				
         	}
 
         });
@@ -281,9 +278,9 @@ window.addEventListener("load",function() {
 			 		if(this.p.firstCollision && !this.p.secondCollision){  
 			 			this.play("caparazon_walk");
     					if(collision.obj.p.direction === "right")
-	    					this.p.vx = 200;
+	    					this.p.vx = 250;
 	    				else
-	    					this.p.vx = -200;
+	    					this.p.vx = -250;
 	    				this.p.secondCollision = true;
     				} else if (this.p.collisioned && this.p.secondCollision && !this.p.collisionedSecond) {     					
 	    				collision.obj.trigger("die");
@@ -358,7 +355,6 @@ window.addEventListener("load",function() {
         	sensor: function() {
         		Q.stageScene("winGame", 1);
         		this.p.sensor = false;
-        		//Bloquear a Mario para que no se mueva
         		Q("Mario").trigger("win");
         	} 
 
@@ -371,7 +367,10 @@ window.addEventListener("load",function() {
 			}));
 
 			var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-			                                                  label: "Play Again" }));         
+			                                                  label: "Play Again" }, function() {
+											Q.clearStages();
+			    							Q.stageScene("mainTitle");
+								}, { keyActionName: 'action' }));         
 			var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
 			                                                   label: "Game over", color: "white"}));
 			button.on("click",function() {
@@ -391,7 +390,10 @@ window.addEventListener("load",function() {
 			}));
 
 			var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-			                                                  label: "Play Again" }));         
+			                                                  label: "Play Again" }, function() {
+											Q.clearStages();
+			    							Q.stageScene("mainTitle");
+								}, { keyActionName: 'action' }));         
 			var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
 			                                                   label: "Mario wins: " + Q.state.get("score") + " points" , color: "white"}));
 			button.on("click",function() {
@@ -454,7 +456,6 @@ window.addEventListener("load",function() {
 
             stage.add("viewport").follow(player, {x: true, y: true}, {minX: -200, maxX: 256*16, minY: 125, maxY: 32*16});
 
-            Q.audio.stop();
             Q.audio.play('music_main.mp3',{ loop: true });
 
             Q.stageScene("scoreLabel", 1);
