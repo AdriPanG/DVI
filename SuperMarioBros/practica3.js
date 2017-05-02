@@ -476,7 +476,6 @@ window.addEventListener("load",function() {
 
             // Monedas
             stage.insert(new Q.Coin({x:620, y: 400}));
-            //stage.insert(new Q.Coin({x:850, y: 440}));
             stage.insert(new Q.Coin({x:1150, y: 470}));    
             stage.insert(new Q.Coin({x:1750, y: 420}));
             stage.insert(new Q.Coin({x:2100, y: 420}));           
