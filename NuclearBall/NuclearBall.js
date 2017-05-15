@@ -3,8 +3,8 @@ window.addEventListener("load",function() {
 	var Q = Quintus({audioSupported: [ 'mp3','ogg' ]})
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
         .setup({
-            width: 760,
-            height: 480,
+            width: 840,
+            height: 600,
     }).controls().touch().enableSound();
 
    	Q.scene("mainTitle",function(stage) {
