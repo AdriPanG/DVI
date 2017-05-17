@@ -11,13 +11,13 @@ window.addEventListener("load",function() {
 
         init: function(p) {
             this._super(p, {
-                
+                sheet: "Ball",
+                frame: 0,
+                x: 210,
+                y: 158
             });
 
-            
-        },    
-
-        step: function(dt) {
+            this.add('2d, platformerControls');
             
         }
 
@@ -35,7 +35,7 @@ window.addEventListener("load",function() {
 
 	});
 
-    Q.loadTMX("level1.tmx", function() {
+    Q.loadTMX("level1.tmx, ballsprites.png", function() {
     	Q.stageScene("mainTitle");
     });   
 

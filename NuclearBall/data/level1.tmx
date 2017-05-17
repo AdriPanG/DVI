@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="7" tilewidth="256" tileheight="256" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="7" tilewidth="256" tileheight="256" nextobjectid="10">
  <tileset firstgid="1" name="Tiles" tilewidth="256" tileheight="256" tilecount="40" columns="8">
   <image source="../images/Tiles.png" width="2048" height="1280"/>
+ </tileset>
+ <tileset firstgid="41" name="Ball" tilewidth="105" tileheight="79" tilecount="9" columns="9">
+  <image source="../images/ballsprites.png" width="950" height="79"/>
+  <tile id="0">
+   <properties>
+    <property name="Class" value="Ball"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="Fondo" width="12" height="7">
   <data>
@@ -93,7 +101,7 @@
  </layer>
  <layer name="Colisiones" width="12" height="7">
   <properties>
-   <property name="collision" type="bool" value="true"/>
+   <property name="collision" value="true"/>
   </properties>
   <data>
    <tile gid="37"/>
@@ -182,4 +190,11 @@
    <tile gid="11"/>
   </data>
  </layer>
+ <objectgroup name="Player">
+  <object id="9" name="Ball" type="Object" gid="41" x="360" y="1115" width="210" height="158">
+   <properties>
+    <property name="Class" value="Ball"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
