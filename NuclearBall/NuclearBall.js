@@ -13,8 +13,8 @@ window.addEventListener("load",function() {
             this._super(p, {
                 sheet: "Ball",
                 frame: 0,
-                x: 210,
-                y: 158
+                scale: 2,
+                jumpSpeed: -8000
             });
 
             this.add('2d, platformerControls');
@@ -23,9 +23,22 @@ window.addEventListener("load",function() {
 
     });
 
-   	Q.scene("mainTitle",function(stage) {
+    Q.Sprite.extend("WallsTopBot",{
 
-        var player = stage.insert(new Q.Ball());
+        init: function(p) {
+            this._super(p, {
+                sheet: "Walls1",
+            });            
+        },
+
+        step: function(dt){
+            this.y = this.p.y;
+            this.x = this.p.x;
+        }
+
+    });
+
+   	Q.scene("mainTitle",function(stage) {
 
         Q.stageTMX("level1.tmx",stage);
 
