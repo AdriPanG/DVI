@@ -14,7 +14,8 @@ window.addEventListener("load",function() {
                 sheet: "Ball",
                 frame: 0,
                 scale: 2,
-                jumpSpeed: -8000
+                jumpSpeed: -8000,
+                speed: 1200
             });
 
             this.add('2d, platformerControls');
@@ -28,6 +29,21 @@ window.addEventListener("load",function() {
         init: function(p) {
             this._super(p, {
                 sheet: "Walls1",
+            });            
+        },
+
+        step: function(dt){
+            this.y = this.p.y;
+            this.x = this.p.x;
+        }
+
+    });
+
+    Q.Sprite.extend("WallsLeftRight",{
+
+        init: function(p) {
+            this._super(p, {
+                sheet: "Walls2",
             });            
         },
 
