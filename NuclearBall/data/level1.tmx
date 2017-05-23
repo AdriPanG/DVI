@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="7" tilewidth="256" tileheight="256" nextobjectid="56">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="7" tilewidth="256" tileheight="256" nextobjectid="95">
  <tileset firstgid="1" name="Tiles" tilewidth="256" tileheight="256" tilecount="40" columns="8">
   <image source="../images/Tiles.png" width="2048" height="1280"/>
  </tileset>
- <tileset firstgid="41" name="Ball" tilewidth="105" tileheight="79" tilecount="9" columns="9">
-  <image source="../images/ballsprites.png" width="950" height="79"/>
+ <tileset firstgid="41" name="Ball" tilewidth="76" tileheight="76" tilecount="9" columns="1">
+  <image source="../images/ball.png" width="76" height="76"/>
   <tile id="0">
    <properties>
     <property name="Class" value="Ball"/>
@@ -57,94 +57,9 @@
    </properties>
   </tile>
  </tileset>
- <layer name="Fondo" width="12" height="7">
-  <data>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-   <tile gid="24"/>
-  </data>
- </layer>
+ <imagelayer name="Background">
+  <image source="../images/background.png" width="3048" height="1778"/>
+ </imagelayer>
  <objectgroup name="Walls">
   <object id="13" gid="51" x="2560" y="1791.67" width="256" height="68"/>
   <object id="14" gid="51" x="2304.67" y="1792" width="256" height="68"/>
@@ -186,6 +101,6 @@
   <object id="54" gid="53" x="2816" y="68" width="256" height="68"/>
  </objectgroup>
  <objectgroup name="Player">
-  <object id="55" gid="41" x="326.788" y="1560.21" width="105" height="79"/>
+  <object id="94" gid="41" x="271.091" y="277.394" width="76" height="76"/>
  </objectgroup>
 </map>

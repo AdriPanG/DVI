@@ -12,13 +12,15 @@ window.addEventListener("load",function() {
         init: function(p) {
             this._super(p, {
                 sheet: "Ball",
-                frame: 0,
                 scale: 2,
                 jumpSpeed: -8000,
                 speed: 1200
             });
 
-            this.add('2d, platformerControls');
+            this.add('2d, platformerControls, aiBounce');
+        },
+
+        step: function(dt){
             
         }
 
@@ -54,18 +56,16 @@ window.addEventListener("load",function() {
 
     });
 
-   	Q.scene("mainTitle",function(stage) {
-
+   	Q.scene("level1",function(stage) {
         Q.stageTMX("level1.tmx",stage);
 
         stage.add("viewport");
 
-        Q.stage().viewport.scale = 0.261;
-
+        Q.stage().viewport.scale = 0.261;  
 	});
 
-    Q.loadTMX("level1.tmx, ballsprites.png", function() {
-    	Q.stageScene("mainTitle");
+    Q.loadTMX("level1.tmx", function() {
+        Q.stageScene("level1");
     });   
 
 });
