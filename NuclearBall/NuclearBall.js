@@ -30,13 +30,47 @@ window.addEventListener("load",function() {
         fire: function() {
             this.p.dx = Math.cos(this.p.angle / 180 * Math.PI),
             this.p.dy = Math.sin(this.p.angle / 180 * Math.PI),
-            this.physics.velocity(this.p.dx*4000,this.p.dy*4000);
+            this.physics.velocity(this.p.dx*2000,this.p.dy*2000);
+        },
+
+        die: function() {
+            this.p.destroy();
         },
 
         step: function(dt){
             
         }
 
+    });
+
+    Q.Sprite.extend("Barrel",{
+        init: function(p) {
+            this._super(p, {
+                sheet: "BarrelRed",
+                scale: 1.7,
+                type:'static',
+                shape: 'polygon',
+                x: 2780,
+                y: 1527,
+            }); 
+
+            this.add('physics, aiBounce');
+            this.on('bump.top',this,'top');
+        },
+
+        /*top: function(collision) {
+            if(collision.obj.isA("Ball")) {
+                if(!this.p.collisioned){
+                    this.die("die");
+                    this.p.collisioned = true;
+                }
+            }
+        },*/
+
+        step: function(dt){
+            this.p.y = this.p.y;
+            this.p.x = this.p.x;
+        }
     });
 
     Q.Sprite.extend("WallsTopBot",{
@@ -85,6 +119,7 @@ window.addEventListener("load",function() {
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball());
+        stage.insert(new Q.Barrel());
              
         Q.stage().viewport.scale = 0.261;  
 
