@@ -1,11 +1,11 @@
 window.addEventListener("load",function() {
 
-	var Q = Quintus({audioSupported: [ 'mp3','ogg' ]})
+	var Q = Quintus()
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio, SVG, Physics")
         .setup('NuclearBall', {
             width: 800,
             height: 467,
-    }).enableSound();
+    });
 
     Q.Sprite.extend("Ball",{
 
@@ -21,8 +21,7 @@ window.addEventListener("load",function() {
                 y: 1700,
                 dx: 0,
                 dy: 0,
-                angle: 0,
-                seconds: 35
+                angle: 0
             });
 
             this.add('physics');
@@ -39,29 +38,6 @@ window.addEventListener("load",function() {
         }
 
     });
-
-        Q.Sprite.extend('Cannon',{
-            init: function(props) {
-              this._super({
-                shape:'polygon',
-                color: 'black',
-                points: [[ 0,0 ], [0,-500], [500,-1000], [800, -1100], [4000, -1100], 
-                          [ 4000, 1100], [800, 1100], [500, 1000], [0, 500] ],
-                x: 10,
-                y: 210
-              });
-            },
-
-            fire: function() {
-              var dx = Math.cos(this.p.angle / 180 * Math.PI),
-                  dy = Math.sin(this.p.angle / 180 * Math.PI),
-                  ball = Q("Ball");
-                  ball.p.dx = dx;
-                  ball.p.dy = dy;
-                  ball.angle = this.p.angle;
-              ball.physics.velocity(dx*400,dy*400);
-            }
-      });
 
     Q.Sprite.extend("WallsTopBot",{
 
