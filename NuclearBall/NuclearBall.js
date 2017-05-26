@@ -98,20 +98,31 @@ window.addEventListener("load",function() {
             touch = e.changedTouches ?  
                     e.changedTouches[0] : e,
             canvas = document.getElementById("NuclearBall"),
-            ClientRect = canvas.getBoundingClientRect(),
-            point = {
-                x: Math.round((e.clientX - ClientRect.left)  / 0.261),
-                y: Math.round((e.clientY - ClientRect.top) / 0.261)
-            };
+            ClientRect = canvas.getBoundingClientRect();
+            
+            if(e.type === "mousemove"){
+                point = {
+                    x: Math.round((e.clientX - ClientRect.left)  / 0.261),
+                    y: Math.round((e.clientY - ClientRect.top) / 0.261)
+                };
+            }
+            else if(e.type === "touchmove"){
+                point = {
+                    x: Math.round((e.changedTouches[0].clientX - ClientRect.left)  / 0.261),
+                    y: Math.round((e.changedTouches[0].clientY - ClientRect.top) / 0.261)
+                };
+            }
+            
        
             var angle = Math.atan2(point.y - ball.p.y,
                                point.x - ball.p.x);
+
             ball.physics.angle(angle * 180 / Math.PI);
             e.preventDefault();  
         }
     };  
 
-    Q._each(["touchstart","mousemove","touchmove"],function(evt) {            
+    Q._each(["mousemove","touchmove"],function(evt) { 
             Q.wrapper.addEventListener(evt,cannonMove);
         },this);
 
