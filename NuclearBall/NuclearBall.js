@@ -58,14 +58,15 @@ window.addEventListener("load",function() {
             this.on('bump.top',this,'top');
         },
 
-        /*top: function(collision) {
+        top: function(collision) {
             if(collision.obj.isA("Ball")) {
                 if(!this.p.collisioned){
-                    this.die("die");
+                    this.physics.removed();
+                    //this.die("die");
                     this.p.collisioned = true;
                 }
             }
-        },*/
+        },
 
         step: function(dt){
             this.p.y = this.p.y;
