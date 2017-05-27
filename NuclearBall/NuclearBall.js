@@ -25,6 +25,7 @@ window.addEventListener("load",function() {
             });
 
             this.add('physics');
+            this.on("die", this, "die");
         },
 
         fire: function() {
@@ -34,6 +35,7 @@ window.addEventListener("load",function() {
         },
 
         die: function() {
+            this.play("die");
             this.p.destroy();
         },
 
@@ -52,19 +54,20 @@ window.addEventListener("load",function() {
                 shape: 'polygon',
                 x: 2780,
                 y: 1527,
+                gravity: 0,
+                density: 0
             }); 
 
-            this.add('physics, aiBounce');
+            this.add('physics, aiBounce, 2d');
             this.on('bump.top',this,'top');
         },
 
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
-                if(!this.p.collisioned){
-                    this.physics.removed();
-                    //this.die("die");
-                    this.p.collisioned = true;
-                }
+                //if(!this.p.collisioned){
+                    //this.physics.removed();
+                    //this.p.collisioned = true;
+                //}
             }
         },
 
