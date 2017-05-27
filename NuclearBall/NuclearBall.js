@@ -16,16 +16,22 @@ window.addEventListener("load",function() {
                 shape: 'circle',
                 r: 18,
                 restitution: 0.5,
-                density: 0.5,
+                density: 1,
                 x: 280,
                 y: 1700,
                 dx: 0,
                 dy: 0,
-                angle: 0
+                angle: 0,
             });
 
-            this.add('physics');
+            this.add('physics,2d');
             this.on("die", this, "die");
+            this.on("win", this, "win");
+        },
+
+        win: function(){
+            this.p.dx = 0,
+            this.p.dy = 0
         },
 
         fire: function() {
@@ -35,8 +41,8 @@ window.addEventListener("load",function() {
         },
 
         die: function() {
-            this.play("die");
-            this.p.destroy();
+            //this.play("die");
+            this.destroy();
         },
 
         step: function(dt){
@@ -55,19 +61,39 @@ window.addEventListener("load",function() {
                 x: 2780,
                 y: 1527,
                 gravity: 0,
-                density: 0
+                density: 0,
+                collisioned: false,
+                sensor: true
             }); 
 
-            this.add('physics, aiBounce, 2d');
+            this.add('physics,aiBounce,2d');
             this.on('bump.top',this,'top');
+            this.on('bump.left,bump.right,bump.bottom',this,'coll');
+            this.on("sensor");
         },
+
+        sensor: function() {
+            Q.stageScene("winGame", 1);
+            this.p.sensor = false;
+            Q("Ball").trigger("win");
+        }, 
 
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
-                //if(!this.p.collisioned){
-                    //this.physics.removed();
-                    //this.p.collisioned = true;
-                //}
+                if(!this.p.collisioned){
+                    collision.obj.trigger("die");
+                    //this.destroy();
+                    this.p.collisioned = true;
+                }
+            }
+        },
+
+        coll: function(collision){
+            if(collision.obj.isA("Ball")) {
+                if(!this.p.collisioned){                     
+                    collision.obj.trigger("die");
+                    this.p.collisioned = true;
+                }
             }
         },
 
@@ -85,7 +111,7 @@ window.addEventListener("load",function() {
                 type:'static',
                 shape: 'polygon',
                 gravity: 0,
-                density: 0
+                density: 1
             });            
 
             this.add('physics');
@@ -105,6 +131,8 @@ window.addEventListener("load",function() {
                 sheet: "Walls2",
                 type:'static',
                 shape: 'polygon',
+                gravity: 0,
+                density: 1
             });         
 
             this.add('physics');   
@@ -115,6 +143,29 @@ window.addEventListener("load",function() {
             this.x = this.p.x;
         }
 
+    });
+
+    Q.scene("winGame",function(stage) {
+            //Q.audio.stop("music_main.mp3");
+
+            //Q.audio.play('music_level_complete.mp3');
+        var container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+        }));
+
+        var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+                                                          label: "Play Again" }, function() {
+                                        Q.clearStages();
+                                        //Q.stageScene("mainTitle");
+                            }, { keyActionName: 'action' }));         
+        var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
+                                                               label: "Mexico wins" /*+ Q.state.get("score") + " points" */, color: "white"}));
+        button.on("click",function() {
+            Q.clearStages();
+            //Q.stageScene("mainTitle");
+        });
+
+        container.fit(20);
     });
 
    	Q.scene("level1",function(stage) {
