@@ -146,6 +146,10 @@ Quintus.Physics = function(Q) {
                  B2d.Body.b2_staticBody :
                  B2d.Body.b2_dynamicBody;
       def.active = true;
+      // Cambiar estos valores:
+      def.linearDamping = 0.0;
+      def.angularDamping = 0.0;
+      def.gravityScale = 9;
       
       this._body = stage.world.createBody(def); 
       this._body.SetUserData(entity);
