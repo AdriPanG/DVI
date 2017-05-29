@@ -19,7 +19,7 @@ window.addEventListener("load",function() {
                 density: 0.1,
                 friction: 0.2,
                 x: 280,
-                y: 1700,
+                y: 1650,
                 dx: 0,
                 dy: 0,
                 angle: 0
@@ -84,7 +84,7 @@ window.addEventListener("load",function() {
                 gravity: 0,
                 density: 1,
                 x: 1780,
-                y: 877,
+                y: 857,
                 h: 256,
                 w: 256,
             });         
@@ -150,9 +150,12 @@ window.addEventListener("load",function() {
         }));
 
         var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Play Again" }));    
+                                                          label: "Play Again" }, function() {
+                                        Q.clearStages();
+                                        //Q.stageScene("level1");
+                            }, { keyActionName: 'action' }));         
         var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
-                                                               label: "You win", color: "white"}));
+                                                               label: "Mexico wins", color: "white"}));
         button.on("click",function() {
             Q.clearStages();
             Q.stageScene("level1");
@@ -167,7 +170,10 @@ window.addEventListener("load",function() {
         }));
 
         var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Play Again" }));         
+                                                          label: "Play Again" }, function() {
+                                        Q.clearStages();
+                                        Q.stageScene("level1");
+                            }, { keyActionName: 'action' }));         
         var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
                                                                label: "You lose", color: "white"}));
         button.on("click",function() {
@@ -186,9 +192,9 @@ window.addEventListener("load",function() {
         stage.ball = stage.insert(new Q.Ball());
         stage.insert(new Q.Barrel());
         stage.insert(new Q.Box());
-        stage.insert(new Q.Box({y:1120}));
-        stage.insert(new Q.Box({y:1370}));
-        stage.insert(new Q.Box({y:1620}));
+        stage.insert(new Q.Box({y:1100}));
+        stage.insert(new Q.Box({y:1350}));
+        stage.insert(new Q.Box({y:1600}));
 
         var boxGirada = new Q.Box({x: 500, y:500, angle: 45, dx: 10, dy: 10});
         stage.insert(boxGirada);
@@ -244,8 +250,7 @@ window.addEventListener("load",function() {
             Q.state.set({"lanzada" : 1});
             Q.stage(0).ball.fire();
             e.preventDefault();
-        }        
-       
+        }
     }
 
     Q._each(["touchend","mouseup"],function(evt) {
