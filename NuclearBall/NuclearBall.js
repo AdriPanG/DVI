@@ -14,7 +14,7 @@ window.addEventListener("load",function() {
                 sheet: "Ball",
                 scale: 2,
                 shape: 'circle',
-                r: 80,
+                r: 76,
                 restitution: 0.8,
                 density: 0.1,
                 friction: 0.2,
@@ -22,7 +22,7 @@ window.addEventListener("load",function() {
                 y: 1700,
                 dx: 0,
                 dy: 0,
-                angle: 0,
+                angle: 0
             });
 
             this.add('physics');
@@ -63,7 +63,7 @@ window.addEventListener("load",function() {
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
                 collision.obj.destroy();
-                Q.stageScene("winGame", 1);
+                Q.stageScene("winGame", 1);                
             }
         },
 
@@ -84,9 +84,9 @@ window.addEventListener("load",function() {
                 gravity: 0,
                 density: 1,
                 x: 1780,
-                y: 827,
-                h: 300,
-                w: 300,
+                y: 877,
+                h: 256,
+                w: 256,
             });         
 
             this.add('physics');   
@@ -107,7 +107,8 @@ window.addEventListener("load",function() {
                 type:'static',
                 shape: 'polygon',
                 gravity: 0,
-                
+                h: 68,
+                w: 256                
             });            
 
             this.add('physics');
@@ -128,7 +129,9 @@ window.addEventListener("load",function() {
                 type:'static',
                 shape: 'polygon',
                 gravity: 0,
-                density: 1
+                density: 1,
+                h: 256,
+                w: 68
             });         
 
             this.add('physics');   
@@ -147,11 +150,26 @@ window.addEventListener("load",function() {
         }));
 
         var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Play Again" }, function() {
-      this.p.label = "Pressed";
-    }));    
+                                                          label: "Play Again" }));    
         var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
                                                                label: "You win", color: "white"}));
+        button.on("click",function() {
+            Q.clearStages();
+            Q.stageScene("level1");
+        });
+
+        container.fit(20);
+    });
+
+    Q.scene("loseGame",function(stage) {
+        var container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+        }));
+
+        var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+                                                          label: "Play Again" }));         
+        var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
+                                                               label: "You lose", color: "white"}));
         button.on("click",function() {
             Q.clearStages();
             Q.stageScene("level1");
@@ -168,12 +186,24 @@ window.addEventListener("load",function() {
         stage.ball = stage.insert(new Q.Ball());
         stage.insert(new Q.Barrel());
         stage.insert(new Q.Box());
+        stage.insert(new Q.Box({y:1120}));
+        stage.insert(new Q.Box({y:1370}));
+        stage.insert(new Q.Box({y:1620}));
+
+        var boxGirada = new Q.Box({x: 500, y:500, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada);
+        boxGirada.physics.angle(45);
              
         Q.stage().viewport.scale = 0.261;  
 
+        Q.state.set({lives: 2});        
+
+        Q.stageScene("LivesLabel", 1);
+
         Q.state.set({"lanzada" : 0})
 
-	});  
+	});
+
 
      var cannonMove = function(e) {
         if(Q.stage(0) && Q.state.get("lanzada") == 0){
@@ -207,7 +237,7 @@ window.addEventListener("load",function() {
 
     Q._each(["mousemove","touchmove"],function(evt) { 
             Q.wrapper.addEventListener(evt,cannonMove);
-        },this);
+    },this);
 
     var canonFire=function(e) {
         if(Q.state.get("lanzada") == 0){
@@ -220,6 +250,35 @@ window.addEventListener("load",function() {
 
     Q._each(["touchend","mouseup"],function(evt) {
         Q.wrapper.addEventListener(evt,canonFire);
+    });
+
+
+    Q.scene("LivesLabel",function(stage) {
+        var container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: 0, fill: "rgba(0,0,0,0.0)",
+        }));
+
+        Q.UI.Text.extend("Live",{
+            init: function(p) {
+                this._super({
+                    label: p.label,
+                    x: 0,
+                    y: 30,
+                    size: 18,
+                    color: "white",
+                });
+
+                Q.state.on("change.live",this,"lives");
+            },
+
+            live: function(live) {
+                this.p.label = "Lives: " + lives;
+            }
+        });
+
+        var label = container.insert(new Q.Live({label: "Lives: " + Q.state.get("lives")}));
+
+        container.fit(20);  
     });
 
     Q.loadTMX("level1.tmx", function() {
