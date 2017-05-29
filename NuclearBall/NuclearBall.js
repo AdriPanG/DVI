@@ -23,7 +23,7 @@ window.addEventListener("load",function() {
                 dx: 0,
                 dy: 0,
                 angle: 0,
-                seconds: 10
+                //seconds: 10
             });
 
             this.add('physics');
@@ -221,9 +221,16 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
+        Q.state.set({lives: 2});
+
+        //Q.state.set({"Lives" : 2})
+
+        Q.stageScene("LivesLabel", 1);
+
         Q.state.set({"lanzada" : 0})
 
-	});  
+	});
+
 
      var cannonMove = function(e) {
         if(Q.stage(0) && Q.state.get("lanzada") == 0){
@@ -257,7 +264,7 @@ window.addEventListener("load",function() {
 
     Q._each(["mousemove","touchmove"],function(evt) { 
             Q.wrapper.addEventListener(evt,cannonMove);
-        },this);
+    },this);
 
     var canonFire=function(e) {
         if(Q.state.get("lanzada") == 0){
@@ -269,6 +276,35 @@ window.addEventListener("load",function() {
 
     Q._each(["touchend","mouseup"],function(evt) {
         Q.wrapper.addEventListener(evt,canonFire);
+    });
+
+
+    Q.scene("LivesLabel",function(stage) {
+        var container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: 0, fill: "rgba(0,0,0,0.0)",
+        }));
+
+        Q.UI.Text.extend("Live",{
+            init: function(p) {
+                this._super({
+                    label: p.label,
+                    x: 0,
+                    y: 30,
+                    size: 18,
+                    color: "white",
+                });
+
+                Q.state.on("change.live",this,"lives");
+            },
+
+            live: function(live) {
+                this.p.label = "Lives: " + lives;
+            }
+        });
+
+        var label = container.insert(new Q.Live({label: "Lives: " + Q.state.get("lives")}));
+
+        container.fit(20);  
     });
 
     Q.loadTMX("level1.tmx", function() {
