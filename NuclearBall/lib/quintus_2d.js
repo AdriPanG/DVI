@@ -457,8 +457,8 @@ Quintus["2D"] = function(Q) {
       var impactX = Math.abs(p.vx);
       var impactY = Math.abs(p.vy);
 
-      p.x -= col.separate[0];
-      p.y -= col.separate[1];
+      //p.x -= col.separate[0];
+      //p.y -= col.separate[1];
 
       // Top collision
       if(col.normalY < -0.3) {

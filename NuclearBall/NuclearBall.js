@@ -66,7 +66,7 @@ window.addEventListener("load",function() {
                 density: 1
             }); 
 
-            this.add('physics');
+            this.add('physics, 2d');
             this.on('bump.top',this,'top');
         },
 
@@ -101,7 +101,7 @@ window.addEventListener("load",function() {
                 sheet: "Box",
                 type:'static',
                 shape: 'polygon',
-                scale: 1.5,
+                scale: 1,
                 gravity: 0,
                 density: 1,
                 x: 1780,
