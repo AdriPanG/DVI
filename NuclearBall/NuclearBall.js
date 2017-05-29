@@ -35,16 +35,6 @@ window.addEventListener("load",function() {
         },
 
         step: function(dt){
-            /*var maxCol = 10, collided = false;
-            this.p.hit = false;
-            while((collided = this.stage.search(this)) && maxCol > 0) {
-                if(collided) {
-                  this.p.hit = true;
-                  this.p.x -= collided.separate[0];
-                  this.p.y -= collided.separate[1];
-                }
-                maxCol--;
-            }*/
             
         }
 
@@ -80,17 +70,6 @@ window.addEventListener("load",function() {
         step: function(dt){
             this.p.y = this.p.y;
             this.p.x = this.p.x;
-
-            /*var maxCol = 3, collided = false;
-            this.p.hit = false;
-            while((collided = this.stage.search(this)) && maxCol > 0) {
-                if(collided) {
-                  this.p.hit = true;
-                  this.p.x -= collided.separate[0];
-                  this.p.y -= collided.separate[1];
-                }
-                maxCol--;
-            }*/
         }
     });
 
@@ -169,14 +148,13 @@ window.addEventListener("load",function() {
 
         var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
                                                           label: "Play Again" }, function() {
-                                        Q.clearStages();
-                                        //Q.stageScene("level1");
-                            }, { keyActionName: 'action' }));         
+      this.p.label = "Pressed";
+    }));    
         var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
-                                                               label: "Mexico wins", color: "white"}));
+                                                               label: "You win", color: "white"}));
         button.on("click",function() {
             Q.clearStages();
-            //Q.stageScene("level1");
+            Q.stageScene("level1");
         });
 
         container.fit(20);
@@ -236,7 +214,8 @@ window.addEventListener("load",function() {
             Q.state.set({"lanzada" : 1});
             Q.stage(0).ball.fire();
             e.preventDefault();
-        }
+        }        
+       
     }
 
     Q._each(["touchend","mouseup"],function(evt) {
