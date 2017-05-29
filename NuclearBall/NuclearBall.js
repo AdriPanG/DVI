@@ -35,6 +35,16 @@ window.addEventListener("load",function() {
         },
 
         step: function(dt){
+            /*var maxCol = 10, collided = false;
+            this.p.hit = false;
+            while((collided = this.stage.search(this)) && maxCol > 0) {
+                if(collided) {
+                  this.p.hit = true;
+                  this.p.x -= collided.separate[0];
+                  this.p.y -= collided.separate[1];
+                }
+                maxCol--;
+            }*/
             
         }
 
@@ -46,7 +56,7 @@ window.addEventListener("load",function() {
                 sheet: "BarrelRed",
                 scale: 1,
                 type: 'static',
-                shape: 'block',
+                shape: 'polygon',
                 x: 2780,
                 y: 1527,
                 h: 405,
@@ -63,13 +73,51 @@ window.addEventListener("load",function() {
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
                 collision.obj.destroy();
+                Q.stageScene("winGame", 1);
             }
         },
 
         step: function(dt){
             this.p.y = this.p.y;
             this.p.x = this.p.x;
+
+            /*var maxCol = 3, collided = false;
+            this.p.hit = false;
+            while((collided = this.stage.search(this)) && maxCol > 0) {
+                if(collided) {
+                  this.p.hit = true;
+                  this.p.x -= collided.separate[0];
+                  this.p.y -= collided.separate[1];
+                }
+                maxCol--;
+            }*/
         }
+    });
+
+    Q.Sprite.extend("Box",{
+
+        init: function(p) {
+            this._super(p, {
+                sheet: "Box",
+                type:'static',
+                shape: 'polygon',
+                scale: 1.5,
+                gravity: 0,
+                density: 1,
+                x: 1780,
+                y: 827,
+                h: 300,
+                w: 300,
+            });         
+
+            this.add('physics');   
+        },
+
+        step: function(dt){
+            this.y = this.p.y;
+            this.x = this.p.x;
+        }
+
     });
 
     Q.Sprite.extend("WallsTopBot",{
@@ -122,13 +170,13 @@ window.addEventListener("load",function() {
         var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
                                                           label: "Play Again" }, function() {
                                         Q.clearStages();
-                                        //Q.stageScene("mainTitle");
+                                        //Q.stageScene("level1");
                             }, { keyActionName: 'action' }));         
         var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
                                                                label: "Mexico wins", color: "white"}));
         button.on("click",function() {
             Q.clearStages();
-            //Q.stageScene("mainTitle");
+            //Q.stageScene("level1");
         });
 
         container.fit(20);
@@ -141,6 +189,7 @@ window.addEventListener("load",function() {
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball());
         stage.insert(new Q.Barrel());
+        stage.insert(new Q.Box());
              
         Q.stage().viewport.scale = 0.261;  
 
