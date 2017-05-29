@@ -14,7 +14,7 @@ window.addEventListener("load",function() {
                 sheet: "Ball",
                 scale: 2,
                 shape: 'circle',
-                r: 80,
+                r: 76,
                 restitution: 0.8,
                 density: 0.1,
                 friction: 0.2,
@@ -22,8 +22,7 @@ window.addEventListener("load",function() {
                 y: 1700,
                 dx: 0,
                 dy: 0,
-                angle: 0,
-                //seconds: 10
+                angle: 0
             });
 
             this.add('physics');
@@ -36,16 +35,6 @@ window.addEventListener("load",function() {
         },
 
         step: function(dt){
-            /*var maxCol = 10, collided = false;
-            this.p.hit = false;
-            while((collided = this.stage.search(this)) && maxCol > 0) {
-                if(collided) {
-                  this.p.hit = true;
-                  this.p.x -= collided.separate[0];
-                  this.p.y -= collided.separate[1];
-                }
-                maxCol--;
-            }*/
             
         }
 
@@ -74,28 +63,13 @@ window.addEventListener("load",function() {
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
                 collision.obj.destroy();
-                //if(collision.obj.seconds > 10) {
-                    Q.stageScene("winGame", 1);
-                /*} else {
-                    Q.stageScene("loseGame", 1);
-                }*/
+                Q.stageScene("winGame", 1);                
             }
         },
 
         step: function(dt){
             this.p.y = this.p.y;
             this.p.x = this.p.x;
-
-            /*var maxCol = 3, collided = false;
-            this.p.hit = false;
-            while((collided = this.stage.search(this)) && maxCol > 0) {
-                if(collided) {
-                  this.p.hit = true;
-                  this.p.x -= collided.separate[0];
-                  this.p.y -= collided.separate[1];
-                }
-                maxCol--;
-            }*/
         }
     });
 
@@ -111,8 +85,8 @@ window.addEventListener("load",function() {
                 density: 1,
                 x: 1780,
                 y: 877,
-                h: 300,
-                w: 300,
+                h: 256,
+                w: 256,
             });         
 
             this.add('physics');   
@@ -133,7 +107,8 @@ window.addEventListener("load",function() {
                 type:'static',
                 shape: 'polygon',
                 gravity: 0,
-                
+                h: 68,
+                w: 256                
             });            
 
             this.add('physics');
@@ -154,7 +129,9 @@ window.addEventListener("load",function() {
                 type:'static',
                 shape: 'polygon',
                 gravity: 0,
-                density: 1
+                density: 1,
+                h: 256,
+                w: 68
             });         
 
             this.add('physics');   
@@ -181,7 +158,7 @@ window.addEventListener("load",function() {
                                                                label: "Mexico wins", color: "white"}));
         button.on("click",function() {
             Q.clearStages();
-            //Q.stageScene("level1");
+            Q.stageScene("level1");
         });
 
         container.fit(20);
@@ -195,13 +172,13 @@ window.addEventListener("load",function() {
         var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
                                                           label: "Play Again" }, function() {
                                         Q.clearStages();
-                                        //Q.stageScene("level1");
+                                        Q.stageScene("level1");
                             }, { keyActionName: 'action' }));         
         var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
                                                                label: "You lose", color: "white"}));
         button.on("click",function() {
             Q.clearStages();
-            //Q.stageScene("level1");
+            Q.stageScene("level1");
         });
 
         container.fit(20);
@@ -218,12 +195,14 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Box({y:1120}));
         stage.insert(new Q.Box({y:1370}));
         stage.insert(new Q.Box({y:1620}));
+
+        var boxGirada = new Q.Box({x: 500, y:500, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada);
+        boxGirada.physics.angle(45);
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lives: 2});
-
-        //Q.state.set({"Lives" : 2})
+        Q.state.set({lives: 2});        
 
         Q.stageScene("LivesLabel", 1);
 
