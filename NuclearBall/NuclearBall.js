@@ -23,6 +23,7 @@ window.addEventListener("load",function() {
                 dx: 0,
                 dy: 0,
                 angle: 0,
+                seconds: 10
             });
 
             this.add('physics');
@@ -73,7 +74,11 @@ window.addEventListener("load",function() {
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
                 collision.obj.destroy();
-                Q.stageScene("winGame", 1);
+                //if(collision.obj.seconds > 10) {
+                    Q.stageScene("winGame", 1);
+                /*} else {
+                    Q.stageScene("loseGame", 1);
+                }*/
             }
         },
 
@@ -105,7 +110,7 @@ window.addEventListener("load",function() {
                 gravity: 0,
                 density: 1,
                 x: 1780,
-                y: 827,
+                y: 877,
                 h: 300,
                 w: 300,
             });         
@@ -182,6 +187,26 @@ window.addEventListener("load",function() {
         container.fit(20);
     });
 
+    Q.scene("loseGame",function(stage) {
+        var container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+        }));
+
+        var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+                                                          label: "Play Again" }, function() {
+                                        Q.clearStages();
+                                        //Q.stageScene("level1");
+                            }, { keyActionName: 'action' }));         
+        var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
+                                                               label: "You lose", color: "white"}));
+        button.on("click",function() {
+            Q.clearStages();
+            //Q.stageScene("level1");
+        });
+
+        container.fit(20);
+    });
+
    	Q.scene("level1",function(stage) {
 
         stage.add("world");
@@ -190,6 +215,9 @@ window.addEventListener("load",function() {
         stage.ball = stage.insert(new Q.Ball());
         stage.insert(new Q.Barrel());
         stage.insert(new Q.Box());
+        stage.insert(new Q.Box({y:1120}));
+        stage.insert(new Q.Box({y:1370}));
+        stage.insert(new Q.Box({y:1620}));
              
         Q.stage().viewport.scale = 0.261;  
 
