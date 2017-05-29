@@ -150,12 +150,9 @@ window.addEventListener("load",function() {
         }));
 
         var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Play Again" }, function() {
-                                        Q.clearStages();
-                                        //Q.stageScene("level1");
-                            }, { keyActionName: 'action' }));         
+                                                          label: "Play Again" }));    
         var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
-                                                               label: "Mexico wins", color: "white"}));
+                                                               label: "You win", color: "white"}));
         button.on("click",function() {
             Q.clearStages();
             Q.stageScene("level1");
@@ -170,10 +167,7 @@ window.addEventListener("load",function() {
         }));
 
         var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Play Again" }, function() {
-                                        Q.clearStages();
-                                        Q.stageScene("level1");
-                            }, { keyActionName: 'action' }));         
+                                                          label: "Play Again" }));         
         var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
                                                                label: "You lose", color: "white"}));
         button.on("click",function() {
@@ -250,7 +244,8 @@ window.addEventListener("load",function() {
             Q.state.set({"lanzada" : 1});
             Q.stage(0).ball.fire();
             e.preventDefault();
-        }
+        }        
+       
     }
 
     Q._each(["touchend","mouseup"],function(evt) {
