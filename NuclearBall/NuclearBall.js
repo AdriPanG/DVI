@@ -22,7 +22,10 @@ window.addEventListener("load",function() {
                 y: 1650,
                 dx: 0,
                 dy: 0,
-                angle: 0
+                angle: 0,
+                seconds: 5,
+                maxAltura: 1527,
+                alturaAnterior: 1650
             });
 
             this.add('physics');
@@ -35,7 +38,13 @@ window.addEventListener("load",function() {
         },
 
         step: function(dt){
-            
+            this.p.seconds -= dt;
+            if(this.p.y > this.p.alturaAnterior)
+                this.p.maxAltura = this.p.alturaAnterior;
+            if(this.p.seconds < 0 && this.p.maxAltura > 1527){
+                Q.stageScene("loseGame", 1);
+            }
+            this.p.alturaAnterior = this.p.y;
         }
 
     });
