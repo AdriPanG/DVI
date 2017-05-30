@@ -23,7 +23,7 @@ window.addEventListener("load",function() {
                 dx: 0,
                 dy: 0,
                 angle: 0,
-                seconds: 5,
+                seconds: 10,
                 maxAltura: 1527,
                 alturaAnterior: 1650
             });
@@ -42,7 +42,11 @@ window.addEventListener("load",function() {
             if(this.p.y > this.p.alturaAnterior)
                 this.p.maxAltura = this.p.alturaAnterior;
             if(this.p.seconds < 0 && this.p.maxAltura > 1527){
-                Q.stageScene("loseGame", 1);
+                if(Q.state.get("lives") === 0){
+                    Q.stageScene("loseGame", 1);
+                } else {
+                    Q.stageScene("tryAgain", 1);
+                }
             }
             this.p.alturaAnterior = this.p.y;
         }
@@ -164,7 +168,7 @@ window.addEventListener("load",function() {
                                         Q.stageScene("level1");
                             }, { keyActionName: 'action' }));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
-                                                               label: "Mexico wins", color: "white"}));
+                                                               label: "You wins", color: "white"}));
 
         stage.container.button.on("click",function() {
             Q.clearStages();
@@ -191,7 +195,29 @@ window.addEventListener("load",function() {
             if(Q.state.get("lives") === 0){
                 Q.state.set({lives: 2});
                 Q.stageScene("loseGame", 1);
-            } else {
+            }
+            Q.clearStages();                            
+            Q.stageScene("level1"); 
+        });
+
+        stage.container.fit(20);
+    });
+
+    Q.scene("tryAgain",function(stage) {
+        stage.container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+        }));
+
+        stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+                                                          label: "Try Again" }, function() {
+                                        Q.clearStages();
+                                        Q.stageScene("level1");
+                            }, { keyActionName: 'action' }));         
+        var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
+                                                               label: "You failed", color: "white"}));
+
+        stage.container.button.on("click",function() {
+            if(Q.state.get("lives") != 0){
                 Q.state.dec("lives",1); 
             }
             Q.clearStages();                            
