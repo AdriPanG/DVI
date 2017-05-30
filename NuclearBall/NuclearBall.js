@@ -25,7 +25,8 @@ window.addEventListener("load",function() {
                 angle: 0,
                 seconds: 10,
                 maxAltura: 1527,
-                alturaAnterior: 1650
+                alturaAnterior: 1650,
+                retry: true
             });
 
             this.add('physics');
@@ -42,7 +43,13 @@ window.addEventListener("load",function() {
             if(this.p.y > this.p.alturaAnterior)
                 this.p.maxAltura = this.p.alturaAnterior;
             if(this.p.seconds < 0 && this.p.maxAltura > 1527){
-                if(Q.state.get("lives") === 0){
+                if(Q.state.get("lives") === 0 && Q.state.get("moneda")){                    
+                    if(this.p.retry){
+                        this.p.retry = false;
+                        var randNum = Math.floor((Math.random() * 2) + 1);
+                        Q.stage(0).insert(new Q.Coin({rand: randNum}));
+                    }
+                } else if (Q.state.get("lives") === 0 && this.p.retry) {
                     Q.stageScene("loseGame", 1);
                 } else {
                     Q.stageScene("tryAgain", 1);
@@ -157,6 +164,48 @@ window.addEventListener("load",function() {
 
     });
 
+    Q.animations("coin anim", {
+                    "true":{frames: [0,1,2,5,4,3,7,6,9,10,0,1,2,5,4,3,7,6,9,10,0], rate: 1/5, loop: false, trigger: "gana"},
+                    "false":{frames: [0,1,2,5,4,3,7,6,9,10,0,1,2,5,4,3], rate: 1/5, loop: false, trigger: "pierde"}
+    });
+
+    Q.Sprite.extend("Coin",{
+
+        init: function(p) {
+            this._super(p, {
+                sprite: "coin anim",
+                sheet: "coin",
+                x: 1530,
+                y: 500,
+                scale: 3,
+                rand: 0
+            });          
+
+            this.add('animation');
+            this.on("gana", this, "gana");
+            this.on("pierde", this, "pierde");
+            if(this.p.rand === 1) this.play("false");
+            else this.play("true");
+        },
+
+        pierde: function(){
+            Q.state.set({moneda: true});
+            Q.stageScene("loseGame", 1);
+        },
+
+        gana: function(){
+            Q.state.set({moneda: false});
+            Q.stageScene("tryAgain", 1);
+        },
+
+        step: function(dt){
+            this.y = this.p.y;
+            this.x = this.p.x;
+        }
+
+    });
+
+
     Q.scene("winGame",function(stage) {
         stage.container = stage.insert(new Q.UI.Container({
             x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
@@ -237,7 +286,7 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Box());
         stage.insert(new Q.Box({y:1100}));
         stage.insert(new Q.Box({y:1350}));
-        stage.insert(new Q.Box({y:1600}));
+        stage.insert(new Q.Box({y:1600}));        
 
         var boxGirada = new Q.Box({x: 500, y:500, angle: 45, dx: 10, dy: 10});
         stage.insert(boxGirada);
@@ -245,7 +294,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.stageScene("LivesLabel", 1);
+        Q.stageScene("LivesLabel", 2);
 
         Q.state.set({"lanzada" : 0})
 
@@ -330,8 +379,10 @@ window.addEventListener("load",function() {
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx", function() {
-        Q.state.set({lives: 2});  
+    Q.loadTMX("level1.tmx, coin.png, coin.json", function() {
+        Q.compileSheets("coin.png", "coin.json");
+        Q.state.set({lives: 2});
+        Q.state.set({moneda: true});
         Q.stageScene("level1");
     });   
 
