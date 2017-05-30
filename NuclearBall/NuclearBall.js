@@ -370,20 +370,19 @@ window.addEventListener("load",function() {
             },
 
             live: function(live) {
-                this.p.label = "Lives: " + lives;
+                this.p.label = "Level: " + Q.state.get("level") + "  Lives: " + lives;
             }
         });
 
-        var label = container.insert(new Q.Live({label: "Lives: " + Q.state.get("lives")}));
+        var label = container.insert(new Q.Live({label: "Level: " + Q.state.get("level") + "  Lives: " + Q.state.get("lives")}));
 
         container.fit(20);  
     });
 
     Q.loadTMX("level1.tmx, coin.png, coin.json", function() {
         Q.compileSheets("coin.png", "coin.json");
-        Q.state.set({lives: 2});
+        Q.state.set({lives: 2, level: 1});
         Q.state.set({moneda: true});
         Q.stageScene("level1");
     });   
-
 });
