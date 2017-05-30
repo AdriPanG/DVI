@@ -154,43 +154,45 @@ window.addEventListener("load",function() {
     });
 
     Q.scene("winGame",function(stage) {
-        var container = stage.insert(new Q.UI.Container({
+        stage.container = stage.insert(new Q.UI.Container({
             x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
         }));
 
-        var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Play Again" }, function() {
-                                        Q.clearStages();
-                                        //Q.stageScene("level1");
-                            }, { keyActionName: 'action' }));         
-        var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
-                                                               label: "Mexico wins", color: "white"}));
-        button.on("click",function() {
-            Q.clearStages();
-            Q.stageScene("level1");
-        });
-
-        container.fit(20);
-    });
-
-    Q.scene("loseGame",function(stage) {
-        var container = stage.insert(new Q.UI.Container({
-            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
-        }));
-
-        var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+        stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
                                                           label: "Play Again" }, function() {
                                         Q.clearStages();
                                         Q.stageScene("level1");
                             }, { keyActionName: 'action' }));         
-        var label = container.insert(new Q.UI.Text({x: 0, y: -10 - button.p.h, 
+        var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
+                                                               label: "Mexico wins", color: "white"}));
+
+        stage.container.button.on("click",function() {
+            Q.clearStages();
+            Q.stageScene("level1");
+        });
+        
+        stage.container.fit(20);
+    });
+
+    Q.scene("loseGame",function(stage) {
+        stage.container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+        }));
+
+        stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+                                                          label: "Play Again" }, function() {
+                                        Q.clearStages();
+                                        Q.stageScene("level1");
+                            }, { keyActionName: 'action' }));         
+        var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
                                                                label: "You lose", color: "white"}));
-        button.on("click",function() {
+
+        stage.container.button.on("click",function() {
             Q.clearStages();
             Q.stageScene("level1");
         });
 
-        container.fit(20);
+        stage.container.fit(20);
     });
 
    	Q.scene("level1",function(stage) {
@@ -259,6 +261,9 @@ window.addEventListener("load",function() {
             Q.state.set({"lanzada" : 1});
             Q.stage(0).ball.fire();
             e.preventDefault();
+        }
+        else if(Q.stage(1)){
+            Q.stage(1).container.button.trigger("click");
         }
     }
 
