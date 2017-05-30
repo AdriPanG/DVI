@@ -170,7 +170,7 @@ window.addEventListener("load",function() {
             Q.clearStages();
             Q.stageScene("level1");
         });
-        
+
         stage.container.fit(20);
     });
 
@@ -188,8 +188,14 @@ window.addEventListener("load",function() {
                                                                label: "You lose", color: "white"}));
 
         stage.container.button.on("click",function() {
-            Q.clearStages();
-            Q.stageScene("level1");
+            if(Q.state.get("lives") === 0){
+                Q.state.set({lives: 2});
+                Q.stageScene("loseGame", 1);
+            } else {
+                Q.state.dec("lives",1); 
+            }
+            Q.clearStages();                            
+            Q.stageScene("level1"); 
         });
 
         stage.container.fit(20);
@@ -212,8 +218,6 @@ window.addEventListener("load",function() {
         boxGirada.physics.angle(45);
              
         Q.stage().viewport.scale = 0.261;  
-
-        Q.state.set({lives: 2});        
 
         Q.stageScene("LivesLabel", 1);
 
@@ -301,6 +305,7 @@ window.addEventListener("load",function() {
     });
 
     Q.loadTMX("level1.tmx", function() {
+        Q.state.set({lives: 2});  
         Q.stageScene("level1");
     });   
 
