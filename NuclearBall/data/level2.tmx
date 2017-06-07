@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0.0" orientation="orthogonal" renderorder="right-down" width="12" height="7" tilewidth="256" tileheight="256" nextobjectid="95">
+ <tileset firstgid="1" name="Tiles" tilewidth="256" tileheight="256" tilecount="40" columns="8">
+  <image source="../images/Tiles.png" width="2048" height="1280"/>
+  <tile id="18">
+   <properties>
+    <property name="Class" value="Spike"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="41" name="Ball" tilewidth="76" tileheight="76" tilecount="1" columns="1">
+  <image source="../images/ball.png" width="76" height="76"/>
+  <tile id="0">
+   <properties>
+    <property name="Class" value="Ball"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="42" name="Walls1" tilewidth="256" tileheight="68" tilecount="4" columns="4">
+  <image source="../images/Walls1.png" width="1024" height="68"/>
+  <tile id="0">
+   <properties>
+    <property name="Class" value="WallsTopBot"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="Class" value="WallsTopBot"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="Class" value="WallsTopBot"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="Class" value="WallsTopBot"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="46" name="Walls2" tilewidth="68" tileheight="256" tilecount="4" columns="1">
+  <image source="../images/Walls2.png" width="68" height="1024"/>
+  <tile id="0">
+   <properties>
+    <property name="Class" value="WallsLeftRight"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="Class" value="WallsLeftRight"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="Class" value="WallsLeftRight"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="Class" value="WallsLeftRight"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="50" name="BarrelRed" tilewidth="301" tileheight="405" tilecount="1" columns="1">
+  <image source="../images/BarrelRed.png" width="301" height="405"/>
+  <tile id="0">
+   <properties>
+    <property name="Class" value="Barrel"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="51" name="Box" tilewidth="256" tileheight="256" tilecount="1" columns="1">
+  <image source="../images/Box.png" width="256" height="256"/>
+  <tile id="0">
+   <properties>
+    <property name="Class" value="Box"/>
+   </properties>
+  </tile>
+ </tileset>
+ <imagelayer name="Background">
+  <image source="../images/background.png" width="3048" height="1778"/>
+ </imagelayer>
+ <objectgroup name="Walls">
+  <object id="13" gid="43" x="2560" y="1791.67" width="256" height="68"/>
+  <object id="14" gid="43" x="2304.67" y="1792" width="256" height="68"/>
+  <object id="17" gid="43" x="2048.83" y="1791.84" width="256" height="68"/>
+  <object id="18" gid="43" x="1792.5" y="1792.16" width="256" height="68"/>
+  <object id="19" gid="43" x="1536.5" y="1792.17" width="256" height="68"/>
+  <object id="20" gid="43" x="1280.17" y="1792.5" width="256" height="68"/>
+  <object id="21" gid="43" x="1024.16" y="1792.17" width="256" height="68"/>
+  <object id="22" gid="43" x="767.835" y="1792.5" width="256" height="68"/>
+  <object id="23" gid="43" x="512.498" y="1792.84" width="256" height="68"/>
+  <object id="24" gid="43" x="256.168" y="1793.16" width="256" height="68"/>
+  <object id="25" gid="49" x="3004.3" y="1791.61" width="68" height="256"/>
+  <object id="26" gid="49" x="3004" y="1536" width="68" height="256"/>
+  <object id="27" gid="49" x="3004" y="1280" width="68" height="256"/>
+  <object id="28" gid="49" x="3004" y="1024" width="68" height="256"/>
+  <object id="29" gid="49" x="3004" y="768" width="68" height="256"/>
+  <object id="30" gid="49" x="3004" y="512" width="68" height="256"/>
+  <object id="31" gid="48" x="3004" y="256" width="68" height="256"/>
+  <object id="11" gid="42" x="2816.45" y="1791.55" width="256" height="68"/>
+  <object id="33" gid="43" x="0" y="1793" width="256" height="68"/>
+  <object id="36" gid="46" x="-1" y="1792" width="68" height="256"/>
+  <object id="37" gid="47" x="-1" y="1536" width="68" height="256"/>
+  <object id="38" gid="47" x="-1" y="1280" width="68" height="256"/>
+  <object id="39" gid="47" x="-1" y="1024" width="68" height="256"/>
+  <object id="40" gid="47" x="-1" y="768" width="68" height="256"/>
+  <object id="41" gid="47" x="-1" y="512" width="68" height="256"/>
+  <object id="42" gid="47" x="-1" y="256" width="68" height="256"/>
+  <object id="43" gid="44" x="0" y="68" width="256" height="68"/>
+  <object id="44" gid="45" x="256" y="68" width="256" height="68"/>
+  <object id="45" gid="45" x="512" y="68" width="256" height="68"/>
+  <object id="46" gid="45" x="768" y="68" width="256" height="68"/>
+  <object id="47" gid="45" x="1024" y="68" width="256" height="68"/>
+  <object id="48" gid="45" x="1280" y="68" width="256" height="68"/>
+  <object id="49" gid="45" x="1536" y="68" width="256" height="68"/>
+  <object id="50" gid="45" x="1792" y="68" width="256" height="68"/>
+  <object id="51" gid="45" x="2048" y="68" width="256" height="68"/>
+  <object id="52" gid="45" x="2304" y="68" width="256" height="68"/>
+  <object id="53" gid="45" x="2560" y="68" width="256" height="68"/>
+  <object id="54" gid="45" x="2816" y="68" width="256" height="68"/>
+ </objectgroup>
+</map>

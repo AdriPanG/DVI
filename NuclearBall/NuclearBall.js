@@ -83,7 +83,9 @@ window.addEventListener("load",function() {
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
                 collision.obj.destroy();
-                Q.stageScene("winGame", 1);                
+                Q.state.inc("score",100);
+                Q.stageScene("nextLevel", 1);
+                                
             }
         },
 
@@ -205,6 +207,26 @@ window.addEventListener("load",function() {
 
     });
 
+    Q.scene("nextLevel",function(stage) {
+        stage.container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+        }));
+
+        stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+                                                          label: "Next Level" }, function() {
+                                        Q.clearStages();
+                                        Q.stageScene("level2");
+                            }, { keyActionName: 'action' }));         
+        var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
+                                                               label: "Level completed", color: "white"}));
+
+        stage.container.button.on("click",function() {
+            Q.clearStages();
+            Q.stageScene("level2");
+        });
+
+        stage.container.fit(20);
+    });
 
     Q.scene("winGame",function(stage) {
         stage.container = stage.insert(new Q.UI.Container({
@@ -260,7 +282,7 @@ window.addEventListener("load",function() {
         stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
                                                           label: "Try Again" }, function() {
                                         Q.clearStages();
-                                        Q.stageScene("level1");
+                                        //Q.stageScene("level1");
                             }, { keyActionName: 'action' }));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
                                                                label: "You failed", color: "white"}));
@@ -270,7 +292,7 @@ window.addEventListener("load",function() {
                 Q.state.dec("lives",1); 
             }
             Q.clearStages();                            
-            Q.stageScene("level1"); 
+            //Q.stageScene("level1"); 
         });
 
         stage.container.fit(20);
@@ -294,9 +316,33 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
+        Q.state.set({"lanzada" : 0, level: 1, score : 0});
+
         Q.stageScene("LivesLabel", 2);
 
-        Q.state.set({"lanzada" : 0})
+
+	});
+
+	Q.scene("level2",function(stage) {
+
+        stage.add("world");
+        Q.stageTMX("level1.tmx",stage);   
+        stage.add("viewport");
+        stage.ball = stage.insert(new Q.Ball({maxAltura: 1030,
+                alturaAnterior: 900}));
+        stage.insert(new Q.Barrel({x:2840, y: 1024}));
+        stage.insert(new Q.Box({x:2040, y:650}));
+        stage.insert(new Q.Box({x:2296, y:800}));
+        stage.insert(new Q.Box({x:2552, y:950})); 
+        stage.insert(new Q.Box({x:2840, y: 1354}));
+        stage.insert(new Q.Box({x:2840, y: 1600}));   
+
+             
+        Q.stage().viewport.scale = 0.261;  
+
+        Q.state.set({"lanzada" : 0, level: 2});
+
+        Q.stageScene("LivesLabel", 2);
 
 	});
 
@@ -370,18 +416,18 @@ window.addEventListener("load",function() {
             },
 
             live: function(live) {
-                this.p.label = "Level: " + Q.state.get("level") + "  Lives: " + lives;
+                this.p.label = "Score: " + Q.state.get("score") + "Level: " + Q.state.get("level") + "  Lives: " + lives;
             }
         });
 
-        var label = container.insert(new Q.Live({label: "Level: " + Q.state.get("level") + "  Lives: " + Q.state.get("lives")}));
+        var label = container.insert(new Q.Live({label: "Score: " + Q.state.get("score") + "  Level: " + Q.state.get("level") + "  Lives: " + Q.state.get("lives")}));
 
         container.fit(20);  
     });
 
     Q.loadTMX("level1.tmx, coin.png, coin.json", function() {
         Q.compileSheets("coin.png", "coin.json");
-        Q.state.set({lives: 2, level: 1});
+        Q.state.set({score: 0, lives: 2, level: 1});
         Q.state.set({moneda: true});
         Q.stageScene("level1");
     });   
