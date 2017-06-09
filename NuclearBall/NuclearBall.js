@@ -7,6 +7,8 @@ window.addEventListener("load",function() {
             height: 467,
     });
 
+    var point;
+
     Q.Sprite.extend("Ball",{
 
         init: function(p) {
@@ -22,6 +24,8 @@ window.addEventListener("load",function() {
                 y: 1650,
                 dx: 0,
                 dy: 0,
+                vx: 0,
+                vy: 0,
                 angle: 0,
                 seconds: 10,
                 maxAltura: 1527,
@@ -35,7 +39,11 @@ window.addEventListener("load",function() {
         fire: function() {
             this.p.dx = Math.cos(this.p.angle / 180 * Math.PI),
             this.p.dy = Math.sin(this.p.angle / 180 * Math.PI),
-            this.physics.velocity(this.p.dx*2000,this.p.dy*2000);
+            this.p.vx = point.x + this.p.dx;
+            this.p.vy = point.y + this.p.dy;
+            this.p.vx = this.p.vx - this.p.x;
+            this.p.vy = this.p.vy - this.p.y;
+            this.physics.velocity(this.p.dx*this.p.vx*1.3,this.p.dy*this.p.vy*1.3);
         },
 
         step: function(dt){
@@ -282,7 +290,7 @@ window.addEventListener("load",function() {
         stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
                                                           label: "Try Again" }, function() {
                                         Q.clearStages();
-                                        //Q.stageScene("level1");
+                                        Q.stageScene("level1");
                             }, { keyActionName: 'action' }));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
                                                                label: "You failed", color: "white"}));
@@ -292,7 +300,7 @@ window.addEventListener("load",function() {
                 Q.state.dec("lives",1); 
             }
             Q.clearStages();                            
-            //Q.stageScene("level1"); 
+            Q.stageScene("level1"); 
         });
 
         stage.container.fit(20);
