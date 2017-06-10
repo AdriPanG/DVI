@@ -43,7 +43,7 @@ window.addEventListener("load",function() {
             this.p.vy = point.y + this.p.dy;
             this.p.vx = this.p.vx - this.p.x;
             this.p.vy = this.p.vy - this.p.y;
-            this.physics.velocity(this.p.dx*this.p.vx*1.3,this.p.dy*this.p.vy*1.3);
+            this.physics.velocity(this.p.dx*4000,this.p.dy*4000);
         },
 
         step: function(dt){
@@ -66,6 +66,21 @@ window.addEventListener("load",function() {
             this.p.alturaAnterior = this.p.y;
         }
 
+    });
+
+    Q.Sprite.extend("Flecha",{
+        init: function(p) {
+            this._super(p, {
+                sheet: "flecha",
+                sprite:"flecha",
+                cx: 0,
+                frame: 0        
+            });            
+        },
+
+        step: function(dt){
+            
+        }
     });
 
     Q.Sprite.extend("Barrel",{
@@ -311,7 +326,8 @@ window.addEventListener("load",function() {
         stage.add("world");
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
-        stage.ball = stage.insert(new Q.Ball());
+        stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
+        stage.ball = stage.insert(new Q.Ball());        
         stage.insert(new Q.Barrel());
         stage.insert(new Q.Box());
         stage.insert(new Q.Box({y:1100}));
@@ -320,7 +336,7 @@ window.addEventListener("load",function() {
 
         var boxGirada = new Q.Box({x: 500, y:500, angle: 45, dx: 10, dy: 10});
         stage.insert(boxGirada);
-        boxGirada.physics.angle(45);
+        boxGirada.physics.angle(45);        
              
         Q.stage().viewport.scale = 0.261;  
 
@@ -358,6 +374,7 @@ window.addEventListener("load",function() {
      var cannonMove = function(e) {
         if(Q.stage(0) && Q.state.get("lanzada") == 0){
             var ball = Q.stage(0).ball,
+            flecha = Q.stage(0).flecha,
             touch = e.changedTouches ?  
                     e.changedTouches[0] : e,
             canvas = document.getElementById("NuclearBall"),
@@ -381,6 +398,13 @@ window.addEventListener("load",function() {
                                point.x - ball.p.x);
 
             ball.physics.angle(angle * 180 / Math.PI);
+            flecha.p.angle = angle * 180 / Math.PI;
+            var scale = Math.sqrt(Math.pow((point.x - ball.p.x), 2) + Math.pow((point.y - ball.p.y), 2)) / 250;
+            if(scale < 0.6)
+                scale = 0.6;
+            else if (scale > 4)
+                scale = 4;
+            flecha.p.scale = scale;
             e.preventDefault();  
         }
     };  
@@ -392,6 +416,7 @@ window.addEventListener("load",function() {
     var canonFire=function(e) {
         if(Q.state.get("lanzada") == 0){
             Q.state.set({"lanzada" : 1});
+            Q.stage(0).flecha.destroy();
             Q.stage(0).ball.fire();
             e.preventDefault();
         }
@@ -433,8 +458,9 @@ window.addEventListener("load",function() {
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json", function() {
         Q.compileSheets("coin.png", "coin.json");
+        Q.compileSheets("flecha.png", "flecha.json");
         Q.state.set({score: 0, lives: 2, level: 1});
         Q.state.set({moneda: true});
         Q.stageScene("level1");
