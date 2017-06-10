@@ -30,6 +30,7 @@ window.addEventListener("load",function() {
                 seconds: 10,
                 maxAltura: 1527,
                 alturaAnterior: 1650,
+                ratioVelocidad: 0,
                 retry: true
             });
 
@@ -39,11 +40,7 @@ window.addEventListener("load",function() {
         fire: function() {
             this.p.dx = Math.cos(this.p.angle / 180 * Math.PI),
             this.p.dy = Math.sin(this.p.angle / 180 * Math.PI),
-            this.p.vx = point.x + this.p.dx;
-            this.p.vy = point.y + this.p.dy;
-            this.p.vx = this.p.vx - this.p.x;
-            this.p.vy = this.p.vy - this.p.y;
-            this.physics.velocity(this.p.dx*4000,this.p.dy*4000);
+            this.physics.velocity(this.p.dx*888*this.p.ratioVelocidad,this.p.dy*888*this.p.ratioVelocidad);
         },
 
         step: function(dt){
@@ -322,6 +319,25 @@ window.addEventListener("load",function() {
         stage.container.fit(20);
     });
 
+    Q.scene("mainTitle",function(stage) {
+            stage.container = container = stage.insert(new Q.UI.Container({
+                x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
+            }));   
+                                     
+            stage.container.button = button = stage.insert(new Q.UI.Button({asset: "mainTitle.png", x: Q.width/2, y: Q.height/2}));
+
+            stage.container.button.on("click",function() {
+                Q.state.set({score: 0, lives: 2, level: 1});
+                Q.state.set({moneda: true});
+                Q.clearStages();
+                Q.stageScene("level1");             
+            });
+
+            Q.state.reset({ score: 0, lives: 2, level: 1, coinsStartLevel: 0 });
+
+            stage.container.fit(20);
+        });
+
    	Q.scene("level1",function(stage) {
 
         stage.add("world");
@@ -404,9 +420,10 @@ window.addEventListener("load",function() {
             var scale = Math.sqrt(Math.pow((point.x - ball.p.x), 2) + Math.pow((point.y - ball.p.y), 2)) / 250;
             if(scale < 0.6)
                 scale = 0.6;
-            else if (scale > 4)
-                scale = 4;
+            else if (scale > 4.5)
+                scale = 4.5;
             flecha.p.scale = scale;
+            ball.p.ratioVelocidad = scale;
             e.preventDefault();  
         }
     };  
@@ -421,9 +438,10 @@ window.addEventListener("load",function() {
             Q.stage(0).flecha.destroy();
             Q.stage(0).ball.fire();
             e.preventDefault();
-        }
-        else if(Q.stage(1)){
+        } else if(Q.stage(1)){
             Q.stage(1).container.button.trigger("click");
+        } else if(Q.stage(2)){
+            Q.stage(2).container.button.trigger("click");
         }
     }
 
@@ -460,11 +478,9 @@ window.addEventListener("load",function() {
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
-        Q.state.set({score: 0, lives: 2, level: 1});
-        Q.state.set({moneda: true});
-        Q.stageScene("level1");
+        Q.stageScene("mainTitle", 2);
     });   
 });
