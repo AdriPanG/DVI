@@ -284,12 +284,8 @@ window.addEventListener("load",function() {
                                                                label: "You lose", color: "white"}));
 
         stage.container.button.on("click",function() {
-            if(Q.state.get("lives") === 0){
-                Q.state.set({lives: 2});
-                Q.stageScene("loseGame", 1);
-            }
             Q.clearStages();                            
-            Q.stageScene("level1"); 
+            Q.stageScene("mainTitle", 2); 
         });
 
         stage.container.fit(20);
