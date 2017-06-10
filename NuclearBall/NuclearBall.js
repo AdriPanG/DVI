@@ -74,6 +74,7 @@ window.addEventListener("load",function() {
                 sheet: "flecha",
                 sprite:"flecha",
                 cx: 0,
+                opacity: 0.65,
                 frame: 0        
             });            
         },
@@ -352,6 +353,7 @@ window.addEventListener("load",function() {
         stage.add("world");
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
+        stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
         stage.ball = stage.insert(new Q.Ball({maxAltura: 1030,
                 alturaAnterior: 900}));
         stage.insert(new Q.Barrel({x:2840, y: 1024}));
