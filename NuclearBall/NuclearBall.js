@@ -5,7 +5,7 @@ window.addEventListener("load",function() {
         .setup('NuclearBall', {
             width: 800,
             height: 467,
-    });
+    }).touch();
 
     var point;
 
@@ -55,8 +55,10 @@ window.addEventListener("load",function() {
                         Q.stage(0).insert(new Q.Coin({rand: randNum}));
                     }
                 } else if (Q.state.get("lives") === 0 && this.p.retry) {
+                    this.destroy();
                     Q.stageScene("loseGame", 1);
                 } else {
+                    this.destroy();
                     Q.stageScene("tryAgain", 1);
                 }
             }
@@ -234,37 +236,13 @@ window.addEventListener("load",function() {
         }));
 
         stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Next Level" }, function() {
-                                        Q.clearStages();
-                                        Q.stageScene("level2");
-                            }, { keyActionName: 'action' }));         
+                                                          label: "Next Level" }));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
                                                                label: "Level completed", color: "white"}));
 
         stage.container.button.on("click",function() {
             Q.clearStages();
             Q.stageScene("level2");
-        });
-
-        stage.container.fit(20);
-    });
-
-    Q.scene("winGame",function(stage) {
-        stage.container = stage.insert(new Q.UI.Container({
-            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
-        }));
-
-        stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Play Again" }, function() {
-                                        Q.clearStages();
-                                        Q.stageScene("level1");
-                            }, { keyActionName: 'action' }));         
-        var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
-                                                               label: "You wins", color: "white"}));
-
-        stage.container.button.on("click",function() {
-            Q.clearStages();
-            Q.stageScene("level1");
         });
 
         stage.container.fit(20);
@@ -297,17 +275,12 @@ window.addEventListener("load",function() {
         }));
 
         stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Try Again" }, function() {
-                                        Q.clearStages();
-                                        Q.stageScene("level1");
-                            }, { keyActionName: 'action' }));         
+                                                          label: "Try Again" } ));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
                                                                label: "You failed", color: "white"}));
 
         stage.container.button.on("click",function() {
-            if(Q.state.get("lives") != 0){
-                Q.state.dec("lives",1); 
-            }
+            Q.state.dec("lives",1);  
             Q.clearStages();                            
             Q.stageScene("level1"); 
         });
@@ -316,22 +289,21 @@ window.addEventListener("load",function() {
     });
 
     Q.scene("mainTitle",function(stage) {
-            stage.container = container = stage.insert(new Q.UI.Container({
+            var container = container = stage.insert(new Q.UI.Container({
                 x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
             }));   
                                      
-            stage.container.button = button = stage.insert(new Q.UI.Button({asset: "mainTitle.png", x: Q.width/2, y: Q.height/2}));
+            var button = stage.insert(new Q.UI.Button({asset: "ball.png", x: Q.width/2 - 180, y: Q.height/2 + 60}));
 
-            stage.container.button.on("click",function() {
-                Q.state.set({score: 0, lives: 2, level: 1});
-                Q.state.set({moneda: true});
+            button.on("click",function() {
+                Q.state.set({score: 0, lives: 2, level: 1, lanzada: -1, moneda: true});
                 Q.clearStages();
                 Q.stageScene("level1");             
             });
 
-            Q.state.reset({ score: 0, lives: 2, level: 1, coinsStartLevel: 0 });
+            container.fit(20);
 
-            stage.container.fit(20);
+            stage.insert(new Q.Sprite({asset:'mainTitle.png',scale:1,x:0,y:0, cy:0}),container);
         });
 
    	Q.scene("level1",function(stage) {
@@ -353,7 +325,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({"lanzada" : 0, level: 1, score : 0});
+        Q.state.set({lanzada: -1, level: 1, score : 0});
 
         Q.stageScene("LivesLabel", 2);
 
@@ -378,7 +350,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({"lanzada" : 0, level: 2});
+        Q.state.set({lanzada: -1, level: 2});
 
         Q.stageScene("LivesLabel", 2);
 
@@ -420,7 +392,7 @@ window.addEventListener("load",function() {
                 scale = 4.5;
             flecha.p.scale = scale;
             ball.p.ratioVelocidad = scale;
-            e.preventDefault();  
+            //e.preventDefault();  
         }
     };  
 
@@ -429,16 +401,14 @@ window.addEventListener("load",function() {
     },this);
 
     var canonFire=function(e) {
-        if(Q.state.get("lanzada") == 0){
-            Q.state.set({"lanzada" : 1});
+        if(Q.stage(0) && Q.state.get("lanzada") === -1){
+            Q.state.set({lanzada: 0});
+        } else if(Q.stage(0) && Q.state.get("lanzada") === 0){
+            Q.state.set({lanzada: 1});
             Q.stage(0).flecha.destroy();
             Q.stage(0).ball.fire();
-            e.preventDefault();
-        } else if(Q.stage(1)){
-            Q.stage(1).container.button.trigger("click");
-        } else if(Q.stage(2)){
-            Q.stage(2).container.button.trigger("click");
-        }
+            //e.preventDefault();
+        } 
     }
 
     Q._each(["touchend","mouseup"],function(evt) {
@@ -474,7 +444,7 @@ window.addEventListener("load",function() {
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.stageScene("mainTitle", 2);
