@@ -396,7 +396,7 @@ window.addEventListener("load",function() {
         }
     };  
 
-    Q._each(["mousemove","touchmove"],function(evt) { 
+    Q._each(["touchstart", "mousemove","touchmove"],function(evt) { 
             Q.wrapper.addEventListener(evt,cannonMove);
     },this);
 
