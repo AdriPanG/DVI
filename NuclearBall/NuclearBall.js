@@ -242,7 +242,7 @@ window.addEventListener("load",function() {
 
         stage.container.button.on("click",function() {
             Q.clearStages();
-            Q.stageScene("level2");
+            Q.stageScene("level" + (Q.state.get("level") + 1));
         });
 
         stage.container.fit(20);
@@ -296,7 +296,7 @@ window.addEventListener("load",function() {
             var button = stage.insert(new Q.UI.Button({asset: "ball.png", x: Q.width/2 - 180, y: Q.height/2 + 60}));
 
             button.on("click",function() {
-                Q.state.set({score: 0, lives: 2, level: 1, lanzada: -1, moneda: true});
+                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true});
                 Q.clearStages();
                 Q.stageScene("level1");             
             });
@@ -327,7 +327,7 @@ window.addEventListener("load",function() {
 
         Q.state.set({lanzada: -1, level: 1, score : 0});
 
-        Q.stageScene("LivesLabel", 2);
+        Q.stageScene("HUD", 2);
 
 
 	});
@@ -352,13 +352,13 @@ window.addEventListener("load",function() {
 
         Q.state.set({lanzada: -1, level: 2});
 
-        Q.stageScene("LivesLabel", 2);
+        Q.stageScene("HUD", 2);
 
 	});
 
 
      var cannonMove = function(e) {
-        if(Q.stage(0) && Q.state.get("lanzada") == 0){
+        if(Q.stage(0) && Q.state.get("lanzada") === 0){
             var ball = Q.stage(0).ball,
             flecha = Q.stage(0).flecha,
             touch = e.changedTouches ?  
@@ -416,7 +416,7 @@ window.addEventListener("load",function() {
     });
 
 
-    Q.scene("LivesLabel",function(stage) {
+    Q.scene("HUD",function(stage) {
         var container = stage.insert(new Q.UI.Container({
             x: Q.width/2, y: 0, fill: "rgba(0,0,0,0.0)",
         }));
@@ -430,21 +430,28 @@ window.addEventListener("load",function() {
                     size: 18,
                     color: "white",
                 });
-
-                Q.state.on("change.live",this,"lives");
-            },
-
-            live: function(live) {
-                this.p.label = "Score: " + Q.state.get("score") + "Level: " + Q.state.get("level") + "  Lives: " + lives;
             }
         });
 
-        var label = container.insert(new Q.Live({label: "Score: " + Q.state.get("score") + "  Level: " + Q.state.get("level") + "  Lives: " + Q.state.get("lives")}));
+        var label = container.insert(new Q.Live({label: "Score: " + Q.state.get("score") + "  Level: " + Q.state.get("level")}));
+
+        if(Q.state.get("bomba")){
+            var button = stage.insert(new Q.UI.Button({asset: "bomb.png", scale: 0.8, x: Q.width - 55, y: 55}));
+
+            button.on("click",function() {
+                Q.state.set({lanzada: -1, bomba: false});
+                Q.stageScene("nextLevel", 1);             
+            });
+        }
+
+        for(var i = 0; i < Q.state.get("lives"); i++){
+            stage.insert(new Q.Sprite({asset:'vida.png',scale:1, x: -(Q.width/2) + 50 + (i*40), y: 30, cy:0}),container);
+        }        
 
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, bomb.png, vida.png", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.stageScene("mainTitle", 2);
