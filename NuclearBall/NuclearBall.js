@@ -282,7 +282,7 @@ window.addEventListener("load",function() {
         stage.container.button.on("click",function() {
             Q.state.dec("lives",1);  
             Q.clearStages();                            
-            Q.stageScene("level1"); 
+            Q.stageScene("level" + Q.state.get("level")); 
         });
 
         stage.container.fit(20);
