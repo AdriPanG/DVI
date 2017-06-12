@@ -13,7 +13,7 @@ window.addEventListener("load",function() {
 
         init: function(p) {
             this._super(p, {
-                sheet: "Ball",
+                asset: "ball.png",
                 scale: 2,
                 shape: 'circle',
                 r: 76,
@@ -329,9 +329,29 @@ window.addEventListener("load",function() {
             }));   
                                      
             var button = stage.insert(new Q.UI.Button({asset: "ball.png", x: Q.width/2 - 180, y: Q.height/2 + 60}));
-
             button.on("click",function() {
-                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true});
+                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
+                Q.clearStages();
+                Q.stageScene("level1");             
+            });
+
+            var button = stage.insert(new Q.UI.Button({asset: "ball2.png", x: Q.width/2 - 60, y: Q.height/2 + 60}));
+            button.on("click",function() {
+                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball2.png"});
+                Q.clearStages();
+                Q.stageScene("level1");             
+            });
+
+            var button = stage.insert(new Q.UI.Button({asset: "ball3.png", x: Q.width/2 + 60, y: Q.height/2 + 60}));
+            button.on("click",function() {
+                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball3.png"});
+                Q.clearStages();
+                Q.stageScene("level1");             
+            });
+
+            var button = stage.insert(new Q.UI.Button({asset: "ball4.png", x: Q.width/2 + 180, y: Q.height/2 + 60}));
+            button.on("click",function() {
+                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball4.png"});
                 Q.clearStages();
                 Q.stageScene("level1");             
             });
@@ -347,7 +367,7 @@ window.addEventListener("load",function() {
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
         stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
-        stage.ball = stage.insert(new Q.Ball());        
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall")}));        
         stage.insert(new Q.Barrel());
         stage.insert(new Q.Box());
         stage.insert(new Q.Box({y:1100}));
@@ -373,7 +393,7 @@ window.addEventListener("load",function() {
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
         stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
-        stage.ball = stage.insert(new Q.Ball({maxAltura: 1030,
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), maxAltura: 1030,
                 alturaAnterior: 900}));
         stage.insert(new Q.Barrel({x:2840, y: 1024}));
         stage.insert(new Q.Box({x:2040, y:650}));
@@ -397,7 +417,7 @@ window.addEventListener("load",function() {
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
         stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
-        stage.ball = stage.insert(new Q.Ball({x: 2840, maxAltura: 1030,
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 2840, maxAltura: 1030,
                 alturaAnterior: 900}));
         stage.insert(new Q.Barrel({x:1520}));
         //stage.insert(new Q.Box({x:2040, y:650}));
@@ -421,7 +441,7 @@ window.addEventListener("load",function() {
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
         stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
-        stage.ball = stage.insert(new Q.Ball({x: 2840, maxAltura: 1030,
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 2840, maxAltura: 1030,
                 alturaAnterior: 900}));
         stage.insert(new Q.Barrel({x:280}));
         //stage.insert(new Q.Box({x:581, y:862}));
@@ -536,7 +556,7 @@ window.addEventListener("load",function() {
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, bomb.png, vida.png, Spike.png", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.stageScene("mainTitle", 2);
