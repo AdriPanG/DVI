@@ -479,7 +479,6 @@ window.addEventListener("load",function() {
         stage.add("world");
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
-        stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall")}));        
         stage.insert(new Q.Barrel());
         stage.insert(new Q.Box());
@@ -496,6 +495,8 @@ window.addEventListener("load",function() {
 
         Q.state.set({lanzada: -1, level: 1, score : 0, completed: false});
 
+        stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
+
         Q.stageScene("HUD", 2);
 
 
@@ -506,7 +507,6 @@ window.addEventListener("load",function() {
         stage.add("world");
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
-        stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), maxAltura: 1030,
                 alturaAnterior: 900}));
         stage.insert(new Q.Barrel({x:2840, y: 1024}));
@@ -521,6 +521,8 @@ window.addEventListener("load",function() {
 
         Q.state.set({lanzada: -1, level: 2, completed: false});
 
+        stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
+
         Q.stageScene("HUD", 2);
 
 	});
@@ -530,11 +532,9 @@ window.addEventListener("load",function() {
         stage.add("world");
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
-        stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 2840, maxAltura: 1030,
                 alturaAnterior: 900}));
         stage.insert(new Q.Barrel({x:1520}));
-        //stage.insert(new Q.Box({x:2040, y:650}));
         stage.insert(new Q.Box({x:2121, y:862}));
         stage.insert(new Q.Box({x:2021, y:1108})); 
         stage.insert(new Q.Box({x:1921, y: 1354}));
@@ -545,6 +545,8 @@ window.addEventListener("load",function() {
 
         Q.state.set({lanzada: -1, level: 3, completed: false});
 
+        stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
+
         Q.stageScene("HUD", 2);
 
     });
@@ -554,11 +556,9 @@ window.addEventListener("load",function() {
         stage.add("world");
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
-        stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 2840, maxAltura: 1030,
                 alturaAnterior: 900}));
         stage.insert(new Q.Barrel({x:280}));
-        //stage.insert(new Q.Box({x:581, y:862}));
         stage.insert(new Q.Box({x:600, y:1108})); 
         stage.insert(new Q.Box({x:600, y: 1354}));
         stage.insert(new Q.Box({x:600, y: 1600})); 
@@ -570,6 +570,8 @@ window.addEventListener("load",function() {
         Q.stage().viewport.scale = 0.261;  
 
         Q.state.set({lanzada: -1, level: 4, completed: false});
+
+        stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
 
         Q.stageScene("HUD", 2);
 
@@ -611,7 +613,6 @@ window.addEventListener("load",function() {
                 scale = 4.5;
             flecha.p.scale = scale;
             ball.p.ratioVelocidad = scale;
-            //e.preventDefault();  
         }
     };  
 
@@ -626,7 +627,6 @@ window.addEventListener("load",function() {
             Q.state.set({lanzada: 1});
             Q.stage(0).flecha.destroy();
             Q.stage(0).ball.fire();
-            //e.preventDefault();
         } 
     }
 
@@ -665,7 +665,8 @@ window.addEventListener("load",function() {
 
             button.on("click",function() {
                 if(!Q.state.get("completed")){
-                    Q.state.set({lanzada: -1, bomba: false});
+                    Q.stage(0).flecha.destroy();
+                    Q.state.set({lanzada: 1, bomba: false});
                     Q.stageScene("nextLevel", 1);             
                 }
             });
