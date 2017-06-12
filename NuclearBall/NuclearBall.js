@@ -143,6 +143,45 @@ window.addEventListener("load",function() {
 
     });
 
+    Q.Sprite.extend("Saw",{
+
+        init: function(p) {
+            this._super(p, {
+                asset: "saw.png",
+                type:'static',
+                shape: 'circle',
+                r: 178,
+                x: 1200,
+                y: 500,
+                angle: 0,
+                explode: true
+            });         
+
+            this.add('physics');
+            this.on('contact',this,'bump');
+        },
+
+        bump: function(obj) {
+            if(obj.isA("Ball")) {
+                var x = obj.p.x,
+                y = obj.p.y;
+                obj.destroy();
+                if(this.p.explode){
+                    this.p.explode = false;
+                    Q.stage(0).insert(new Q.ExplosionBall({x: x, y: y}));                            
+                }
+            }
+        },
+
+        step: function(dt){
+            this.y = this.p.y;
+            this.x = this.p.x;
+            this.p.angle = (this.p.angle + dt * 100) % 360;
+            this.physics.angle(this.p.angle);
+        }
+
+    });
+
     Q.Sprite.extend("Spike",{
 
         init: function(p) {
@@ -158,6 +197,7 @@ window.addEventListener("load",function() {
                 gravity: 0,
                 density: 1,
                 restitution: 0,
+                explode: true
             });         
 
             this.add('physics, 2d');
@@ -166,8 +206,13 @@ window.addEventListener("load",function() {
 
         bottom: function(collision) {
             if(collision.obj.isA("Ball")) {
+                var x = collision.obj.p.x,
+                y = collision.obj.p.y;
                 collision.obj.destroy();
-                Q.stageScene("tryAgain", 1);                    
+                if(this.p.explode){
+                    this.p.explode = false;
+                    Q.stage(0).insert(new Q.ExplosionBall({x: x, y: y}));                            
+                }        
             }
         },
 
@@ -296,6 +341,42 @@ window.addEventListener("load",function() {
 
     });
 
+    Q.animations("explosionBall anim", {
+                    "explota":{frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,21], rate: 1/5, loop: false, trigger: "fin"}
+    });
+
+    Q.Sprite.extend("ExplosionBall",{
+
+        init: function(p) {
+            this._super(p, {
+                sprite: "explosionBall anim",
+                sheet: "explosionBall",
+                x: 2795,
+                y: 1150,
+                scale: 1.65,
+                rand: 0
+            });          
+
+            this.add('animation');
+            this.on("fin", this, "fin");
+            this.play("explota");
+        },
+
+        fin: function(){ 
+            if (Q.state.get("lives") === 0) {
+                Q.stageScene("loseGame", 1);
+            } else {
+                Q.stageScene("tryAgain", 1);
+            }  
+        },
+
+        step: function(dt){
+            this.p.y = this.p.y;
+            this.p.x = this.p.x;
+        }
+
+    });
+
     Q.scene("nextLevel",function(stage) {
         stage.container = stage.insert(new Q.UI.Container({
             x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
@@ -404,6 +485,7 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Box({y:1100}));
         stage.insert(new Q.Box({y:1350}));
         stage.insert(new Q.Box({y:1600}));        
+        stage.insert(new Q.Saw());    
 
         var boxGirada = new Q.Box({x: 500, y:500, angle: 45, dx: 10, dy: 10});
         stage.insert(boxGirada);
@@ -593,10 +675,11 @@ window.addEventListener("load",function() {
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, explosion.png, explosion.json", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
+        Q.compileSheets("explosionBall.png", "explosionBall.json");
         Q.stageScene("mainTitle", 2);
     });   
 });
