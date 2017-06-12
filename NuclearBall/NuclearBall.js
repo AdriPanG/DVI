@@ -333,7 +333,7 @@ window.addEventListener("load",function() {
             button.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true});
                 Q.clearStages();
-                Q.stageScene("level4");             
+                Q.stageScene("level1");             
             });
 
             container.fit(20);
