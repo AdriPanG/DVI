@@ -106,9 +106,8 @@ window.addEventListener("load",function() {
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
                 collision.obj.destroy();
-                Q.state.inc("score",100);
-                Q.stageScene("nextLevel", 1);
-                                
+                Q.stage(0).insert(new Q.Explosion({x: this.p.x + 15 , y: this.p.y - 377}));
+                Q.state.inc("score",100);                                
             }
         },
 
@@ -256,6 +255,38 @@ window.addEventListener("load",function() {
         gana: function(){
             Q.state.set({moneda: false});
             Q.stageScene("tryAgain", 1);
+        },
+
+        step: function(dt){
+            this.y = this.p.y;
+            this.x = this.p.x;
+        }
+
+    });
+
+    Q.animations("explosion anim", {
+                    "explota":{frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], rate: 1/5, loop: false, trigger: "fin"}
+    });
+
+    Q.Sprite.extend("Explosion",{
+
+        init: function(p) {
+            this._super(p, {
+                sprite: "explosion anim",
+                sheet: "explosion",
+                x: 2795,
+                y: 1150,
+                scale: 7,
+                rand: 0
+            });          
+
+            this.add('animation');
+            this.on("fin", this, "fin");
+            this.play("explota");
+        },
+
+        fin: function(){            
+            Q.stageScene("nextLevel", 1);
         },
 
         step: function(dt){
@@ -535,10 +566,16 @@ window.addEventListener("load",function() {
                     size: 18,
                     color: "white",
                 });
+
+                Q.state.on("change.score",this,"score");
+            },
+
+            score: function(score) {
+                this.p.label = "Level: " + Q.state.get("level") + "  Score: " + Q.state.get("score");
             }
         });
 
-        var label = container.insert(new Q.Live({label: "Score: " + Q.state.get("score") + "  Level: " + Q.state.get("level")}));
+        var label = container.insert(new Q.Live({label: "Level: " + Q.state.get("level") + "  Score: " + Q.state.get("score")}));
 
         if(Q.state.get("bomba")){
             var button = stage.insert(new Q.UI.Button({asset: "bomb.png", scale: 0.8, x: Q.width - 55, y: 55}));
@@ -556,9 +593,10 @@ window.addEventListener("load",function() {
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, explosion.png, explosion.json", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
+        Q.compileSheets("explosion.png", "explosion.json");
         Q.stageScene("mainTitle", 2);
     });   
 });
