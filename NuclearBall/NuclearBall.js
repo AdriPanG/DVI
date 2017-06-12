@@ -105,6 +105,7 @@ window.addEventListener("load",function() {
 
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
+                Q.state.set({completed: true});
                 collision.obj.destroy();
                 Q.stage(0).insert(new Q.Explosion({x: this.p.x + 15 , y: this.p.y - 377}));
                 Q.state.inc("score",100);                                
@@ -162,7 +163,7 @@ window.addEventListener("load",function() {
         },
 
         bump: function(obj) {
-            if(obj.isA("Ball")) {
+            if(obj.isA("Ball") && !Q.state.get("completed")) {
                 var x = obj.p.x,
                 y = obj.p.y;
                 obj.destroy();
@@ -493,7 +494,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 1, score : 0});
+        Q.state.set({lanzada: -1, level: 1, score : 0, completed: false});
 
         Q.stageScene("HUD", 2);
 
@@ -518,7 +519,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 2});
+        Q.state.set({lanzada: -1, level: 2, completed: false});
 
         Q.stageScene("HUD", 2);
 
@@ -542,7 +543,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 3});
+        Q.state.set({lanzada: -1, level: 3, completed: false});
 
         Q.stageScene("HUD", 2);
 
@@ -568,7 +569,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 4});
+        Q.state.set({lanzada: -1, level: 4, completed: false});
 
         Q.stageScene("HUD", 2);
 
@@ -663,8 +664,10 @@ window.addEventListener("load",function() {
             var button = stage.insert(new Q.UI.Button({asset: "bomb.png", scale: 0.8, x: Q.width - 55, y: 55}));
 
             button.on("click",function() {
-                Q.state.set({lanzada: -1, bomba: false});
-                Q.stageScene("nextLevel", 1);             
+                if(!Q.state.get("completed")){
+                    Q.state.set({lanzada: -1, bomba: false});
+                    Q.stageScene("nextLevel", 1);             
+                }
             });
         }
 
