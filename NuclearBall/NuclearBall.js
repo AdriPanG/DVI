@@ -144,6 +144,41 @@ window.addEventListener("load",function() {
 
     });
 
+    Q.Sprite.extend("Spike",{
+
+        init: function(p) {
+            this._super(p, {
+                sheet: "Spike",
+                type:'static',
+                shape: 'polygon',
+                scale: 1.5,
+                x: 500,
+                y: 200,
+                h: 170,
+                w: 256,
+                gravity: 0,
+                density: 1,
+                restitution: 0,
+            });         
+
+            this.add('physics, 2d');
+            this.on('bump.bottom',this,'bottom');
+        },
+
+        bottom: function(collision) {
+            if(collision.obj.isA("Ball")) {
+                collision.obj.destroy();
+                Q.stageScene("tryAgain", 1);                    
+            }
+        },
+
+        step: function(dt){
+            this.y = this.p.y;
+            this.x = this.p.x;
+        }
+
+    });
+
     Q.Sprite.extend("WallsTopBot",{
 
         init: function(p) {
@@ -298,7 +333,7 @@ window.addEventListener("load",function() {
             button.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true});
                 Q.clearStages();
-                Q.stageScene("level1");             
+                Q.stageScene("level4");             
             });
 
             container.fit(20);
@@ -355,6 +390,56 @@ window.addEventListener("load",function() {
         Q.stageScene("HUD", 2);
 
 	});
+
+    Q.scene("level3",function(stage) {
+
+        stage.add("world");
+        Q.stageTMX("level1.tmx",stage);   
+        stage.add("viewport");
+        stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
+        stage.ball = stage.insert(new Q.Ball({x: 2840, maxAltura: 1030,
+                alturaAnterior: 900}));
+        stage.insert(new Q.Barrel({x:1520}));
+        //stage.insert(new Q.Box({x:2040, y:650}));
+        stage.insert(new Q.Box({x:2121, y:862}));
+        stage.insert(new Q.Box({x:2021, y:1108})); 
+        stage.insert(new Q.Box({x:1921, y: 1354}));
+        stage.insert(new Q.Box({x:1821, y: 1600}));   
+
+             
+        Q.stage().viewport.scale = 0.261;  
+
+        Q.state.set({lanzada: -1, level: 3});
+
+        Q.stageScene("HUD", 2);
+
+    });
+
+    Q.scene("level4",function(stage) {
+
+        stage.add("world");
+        Q.stageTMX("level1.tmx",stage);   
+        stage.add("viewport");
+        stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
+        stage.ball = stage.insert(new Q.Ball({x: 2840, maxAltura: 1030,
+                alturaAnterior: 900}));
+        stage.insert(new Q.Barrel({x:280}));
+        //stage.insert(new Q.Box({x:581, y:862}));
+        stage.insert(new Q.Box({x:600, y:1108})); 
+        stage.insert(new Q.Box({x:600, y: 1354}));
+        stage.insert(new Q.Box({x:600, y: 1600})); 
+
+        var spikeGirado = new Q.Spike();
+        stage.insert(spikeGirado);
+        spikeGirado.physics.angle(180); 
+             
+        Q.stage().viewport.scale = 0.261;  
+
+        Q.state.set({lanzada: -1, level: 4});
+
+        Q.stageScene("HUD", 2);
+
+    });
 
 
      var cannonMove = function(e) {
@@ -451,7 +536,7 @@ window.addEventListener("load",function() {
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, bomb.png, vida.png", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, bomb.png, vida.png, Spike.png", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.stageScene("mainTitle", 2);

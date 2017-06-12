@@ -2,6 +2,11 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="12" height="7" tilewidth="256" tileheight="256" nextobjectid="95">
  <tileset firstgid="1" name="Tiles" tilewidth="256" tileheight="256" tilecount="40" columns="8">
   <image source="../images/Tiles.png" width="2048" height="1280"/>
+  <tile id="18">
+   <properties>
+    <property name="Class" value="Spike"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="41" name="Ball" tilewidth="76" tileheight="76" tilecount="1" columns="1">
   <image source="../images/ball.png" width="76" height="76"/>
@@ -72,6 +77,12 @@
     <property name="Class" value="Box"/>
    </properties>
   </tile>
+ </tileset>
+ <tileset firstgid="52" name="Spike" tilewidth="256" tileheight="174" tilecount="1" columns="1">
+  <properties>
+   <property name="Class" value="Spike"/>
+  </properties>
+  <image source="../images/Spike.png" width="256" height="174"/>
  </tileset>
  <imagelayer name="Background">
   <image source="../images/background.png" width="3048" height="1778"/>
