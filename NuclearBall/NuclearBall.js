@@ -441,33 +441,40 @@ window.addEventListener("load",function() {
                 x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
             }));   
                                      
-            var button = stage.insert(new Q.UI.Button({asset: "ball.png", x: Q.width/2 - 180, y: Q.height/2 + 60}));
-            button.on("click",function() {
+            var buttonB1 = stage.insert(new Q.UI.Button({asset: "ball.png", x: Q.width/2 - 180, y: Q.height/2 + 60}));
+            buttonB1.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
                 Q.stageScene("level1");             
             });
 
-            var button = stage.insert(new Q.UI.Button({asset: "ball2.png", x: Q.width/2 - 60, y: Q.height/2 + 60}));
-            button.on("click",function() {
+            var buttonB2 = stage.insert(new Q.UI.Button({asset: "ball2.png", x: Q.width/2 - 60, y: Q.height/2 + 60}));
+            buttonB2.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball2.png"});
                 Q.clearStages();
                 Q.stageScene("level1");             
             });
 
-            var button = stage.insert(new Q.UI.Button({asset: "ball3.png", x: Q.width/2 + 60, y: Q.height/2 + 60}));
-            button.on("click",function() {
+            var buttonB3 = stage.insert(new Q.UI.Button({asset: "ball3.png", x: Q.width/2 + 60, y: Q.height/2 + 60}));
+            buttonB3.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball3.png"});
                 Q.clearStages();
                 Q.stageScene("level1");             
             });
 
-            var button = stage.insert(new Q.UI.Button({asset: "ball4.png", x: Q.width/2 + 180, y: Q.height/2 + 60}));
-            button.on("click",function() {
+            var buttonB4 = stage.insert(new Q.UI.Button({asset: "ball4.png", x: Q.width/2 + 180, y: Q.height/2 + 60}));
+            buttonB4.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball4.png"});
                 Q.clearStages();
                 Q.stageScene("level1");             
             });
+
+            var buttonCredits = stage.insert(new Q.UI.Button({asset: "creditsButton.png", x: Q.width - 120, y: Q.height - 60}));
+            buttonCredits.on("click",function() {
+                Q.clearStages();
+                Q.stageScene("creditos1");             
+            });
+
 
             container.fit(20);
 
@@ -679,7 +686,45 @@ window.addEventListener("load",function() {
         container.fit(20);  
     });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json", function() {
+    Q.scene("creditos1",function(stage) {
+            var container = container = stage.insert(new Q.UI.Container({
+                x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
+            }));   
+                                     
+            var buttonSiguiente = stage.insert(new Q.UI.Button({asset: "siguiente.png", x: Q.width - 60, y: Q.height - 50}));
+            buttonSiguiente.on("click",function() {
+                Q.clearStages();
+                Q.stageScene("creditos2");             
+            });
+
+            var buttonCancelar = stage.insert(new Q.UI.Button({asset: "cancel.png", x: Q.width - 60, y: 60}));
+            buttonCancelar.on("click",function() {
+                Q.clearStages();
+                Q.stageScene("mainTitle");             
+            });
+
+            container.fit(20);
+
+            stage.insert(new Q.Sprite({asset:'Creditos.png',scale:1,x:0,y:0, cy:0}),container);
+        });
+
+     Q.scene("creditos2",function(stage) {
+            var container = container = stage.insert(new Q.UI.Container({
+                x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
+            }));   
+                                     
+            var buttonCancelar = stage.insert(new Q.UI.Button({asset: "cancel.png", x: Q.width - 60, y: 60}));
+            buttonCancelar.on("click",function() {
+                Q.clearStages();
+                Q.stageScene("mainTitle");             
+            });
+
+            container.fit(20);
+
+            stage.insert(new Q.Sprite({asset:'Creditos2.png',scale:1,x:0,y:0, cy:0}),container);
+        });
+
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
