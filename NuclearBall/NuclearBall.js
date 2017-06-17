@@ -183,10 +183,10 @@ window.addEventListener("load",function() {
             });         
 
             this.add('physics, 2d');
-            this.on('bump.bottom',this,'bottom');
+            this.on('bump.bottom,bump.top',this,'topbottom');
         },
 
-        bottom: function(collision) {
+        topbottom: function(collision) {
             if(collision.obj.isA("Ball")) {
                 var x = collision.obj.p.x,
                 y = collision.obj.p.y;
@@ -434,13 +434,13 @@ window.addEventListener("load",function() {
             buttonB1.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 6, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
-                Q.stageScene("level6");    
-                Q.audio.play('music.mp3',{ loop: true })          
+                Q.stageScene("level8");    
+                Q.audio.play('music.mp3',{ loop: true });       
             });
 
             var buttonB2 = stage.insert(new Q.UI.Button({asset: "ball2.png", x: Q.width/2 - 60, y: Q.height/2 + 60}));
             buttonB2.on("click",function() {
-                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball2.png"});
+                Q.state.set({score: 0, lives: 5, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball2.png"});
                 Q.clearStages();
                 Q.stageScene("level1");
                 Q.audio.play('music.mp3',{ loop: true })             
@@ -656,6 +656,96 @@ window.addEventListener("load",function() {
         Q.state.set({lanzada: -1, level: 6, completed: false, retry : false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 700, y: 1650}));
+
+        Q.stageScene("HUD", 2);
+
+    });
+
+    Q.scene("level7",function(stage) {
+
+        stage.add("world");
+        Q.stageTMX("level1.tmx",stage);   
+        stage.add("viewport");
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 1700, maxAltura: 1030,
+                alturaAnterior: 900}));
+        stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 380}));
+
+        stage.insert(new Q.Saw({x: 400, y: 700}));
+
+        var spikeGirado1 = new Q.Spike({x: 245});
+        stage.insert(spikeGirado1);
+        spikeGirado1.physics.angle(180);
+        var spikeGirado2 = new Q.Spike({x: 615});
+        stage.insert(spikeGirado2);
+        spikeGirado2.physics.angle(180);
+        var spikeGirado3 = new Q.Spike({x: 985});
+        stage.insert(spikeGirado3);
+        spikeGirado3.physics.angle(180);
+        var spikeGirado4 = new Q.Spike({x: 1355});
+        stage.insert(spikeGirado4);
+        spikeGirado4.physics.angle(180);
+        var spikeGirado5 = new Q.Spike({x: 1725});
+        stage.insert(spikeGirado5);
+        spikeGirado5.physics.angle(180);
+        var spikeGirado6 = new Q.Spike({x: 2085});
+        stage.insert(spikeGirado6);
+        spikeGirado6.physics.angle(180);
+        var spikeGirado7 = new Q.Spike({x: 2465});
+        stage.insert(spikeGirado7);
+        spikeGirado7.physics.angle(180);
+        var spikeGirado8 = new Q.Spike({x: 2825});
+        stage.insert(spikeGirado8);
+        spikeGirado8.physics.angle(180);
+
+        stage.insert(new Q.Box({x:1950, y:1600, density: 0, type:'dynamic'}));
+        stage.insert(new Q.Box({x:1950, y:1349, density: 0, type:'dynamic'}));
+        stage.insert(new Q.Box({x:1950, y:1093, density: 0, type:'dynamic'}));
+        stage.insert(new Q.Box({x:1950, y:849, density: 0, type:'dynamic'}));
+
+        stage.insert(new Q.Box({x:1250, y:1600, density: 0, type:'dynamic'}));
+        stage.insert(new Q.Box({x:1250, y:1349, density: 0, type:'dynamic'}));
+        stage.insert(new Q.Box({x:1250, y:1093, density: 0, type:'dynamic'}));
+             
+        Q.stage().viewport.scale = 0.261;  
+
+        Q.state.set({lanzada: -1, level: 7, completed: false, retry : false});
+
+        stage.flecha = stage.insert(new Q.Flecha({x: 1700, y: 1650}));
+
+        Q.stageScene("HUD", 2);
+
+    });
+
+
+    Q.scene("level8",function(stage) {
+
+        stage.add("world");
+        Q.stageTMX("level1.tmx",stage);   
+        stage.add("viewport");
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 200, y: 300, maxAltura: 1030,
+                alturaAnterior: 900}));
+        stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 1720}));
+
+        stage.insert(new Q.Saw({x: 1100, y: 900}));
+        stage.insert(new Q.Saw({x: 2000, y: 900}));
+
+        stage.insert(new Q.Spike({x: 245, y: 1600}));
+        stage.insert(new Q.Spike({x: 615, y: 1600}));
+        stage.insert(new Q.Spike({x: 985, y: 1600}));
+        stage.insert(new Q.Spike({x: 1355, y: 1600}));
+        //stage.insert(new Q.Spike({x: 1725, y: 1600}));
+        stage.insert(new Q.Spike({x: 2085, y: 1600}));
+        stage.insert(new Q.Spike({x: 2465, y: 1600}));
+        stage.insert(new Q.Spike({x: 2825, y: 1600}));
+
+        stage.insert(new Q.Box({x:195, y:500}));
+        stage.insert(new Q.Box({x:451, y:500}));
+             
+        Q.stage().viewport.scale = 0.261;  
+
+        Q.state.set({lanzada: -1, level: 8, completed: false, retry : false});
+
+        stage.flecha = stage.insert(new Q.Flecha({x: 200, y: 300}));
 
         Q.stageScene("HUD", 2);
 
