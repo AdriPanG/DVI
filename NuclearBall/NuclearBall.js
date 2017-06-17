@@ -1,6 +1,6 @@
 window.addEventListener("load",function() {
 
-	var Q = Quintus({audioSupported: [ 'wav', 'mp3' ]})
+	var Q = Quintus({audioSupported: [ 'ogg', 'mp3' ]})
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio, SVG, Physics")
         .setup('NuclearBall', {
             width: 800,
@@ -37,7 +37,7 @@ window.addEventListener("load",function() {
             this.p.dx = Math.cos(this.p.angle / 180 * Math.PI),
             this.p.dy = Math.sin(this.p.angle / 180 * Math.PI),
             this.physics.velocity(this.p.dx*888*this.p.ratioVelocidad,this.p.dy*888*this.p.ratioVelocidad);
-            Q.audio.play("throw.wav");
+            Q.audio.play("throw.mp3");
         },
 
         step: function(dt){
@@ -312,7 +312,7 @@ window.addEventListener("load",function() {
             this.add('animation');
             this.on("fin", this, "fin");
             this.play("explota");
-            Q.audio.play("explosion.wav");
+            Q.audio.play("explosion.mp3");
         },
 
         fin: function(){            
@@ -345,7 +345,7 @@ window.addEventListener("load",function() {
             this.add('animation');
             this.on("fin", this, "fin");
             this.play("explota");
-            Q.audio.play("lose.wav")
+            Q.audio.play("lose.mp3")
         },
 
         fin: function(){ 
@@ -435,7 +435,7 @@ window.addEventListener("load",function() {
                 Q.state.set({score: 0, lives: 3, level: 6, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
                 Q.stageScene("level6");    
-                Q.audio.play('music.wav',{ loop: true })          
+                Q.audio.play('music.mp3',{ loop: true })          
             });
 
             var buttonB2 = stage.insert(new Q.UI.Button({asset: "ball2.png", x: Q.width/2 - 60, y: Q.height/2 + 60}));
@@ -443,7 +443,7 @@ window.addEventListener("load",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball2.png"});
                 Q.clearStages();
                 Q.stageScene("level1");
-                Q.audio.play('music.wav',{ loop: true })             
+                Q.audio.play('music.mp3',{ loop: true })             
             });
 
             var buttonB3 = stage.insert(new Q.UI.Button({asset: "ball3.png", x: Q.width/2 + 60, y: Q.height/2 + 60}));
@@ -451,7 +451,7 @@ window.addEventListener("load",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball3.png"});
                 Q.clearStages();
                 Q.stageScene("level1");   
-                Q.audio.play('music.wav',{ loop: true })           
+                Q.audio.play('music.mp3',{ loop: true })           
             });
 
             var buttonB4 = stage.insert(new Q.UI.Button({asset: "ball4.png", x: Q.width/2 + 180, y: Q.height/2 + 60}));
@@ -459,7 +459,7 @@ window.addEventListener("load",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball4.png"});
                 Q.clearStages();
                 Q.stageScene("level1");  
-                Q.audio.play('music.wav',{ loop: true })            
+                Q.audio.play('music.mp3',{ loop: true })            
             });
 
             var buttonCredits = stage.insert(new Q.UI.Button({asset: "creditsButton.png", x: Q.width - 120, y: Q.height - 60}));
@@ -807,7 +807,7 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Sprite({asset:'Creditos2.png',scale:1,x:0,y:0, cy:0}),container);
         });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, bounce.wav, music.wav, explosion.wav, lose.wav, throw.wav", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, lose.ogg, throw.ogg", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
