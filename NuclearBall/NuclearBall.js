@@ -62,6 +62,27 @@ window.addEventListener("load",function() {
         }
     });
 
+    Q.Sprite.extend("Bomba",{
+        init: function(p) {
+            this._super(p, {
+                asset: "bomb.png",
+                scale: 3                 
+            });            
+
+            this.add('tween');            
+            this.on('callFinish', this, 'callFinish');
+            this.animate({ x: this.p.x, y: this.p.y + 500, angle: 0},1,{callback: function(){
+                Q.state.set({lanzada: 1, bomba: false});
+                this.destroy();
+                Q.stage(0).insert(new Q.Explosion({x: this.p.x + 15 , y: this.p.y - 77}));
+            }}); 
+        },
+
+        step: function(dt){
+            
+        }
+    });
+
     Q.Sprite.extend("Barrel",{
         init: function(p) {
             this._super(p, {
@@ -480,7 +501,7 @@ window.addEventListener("load",function() {
         Q.stageTMX("level1.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall")}));        
-        stage.insert(new Q.Barrel());
+        stage.barrel = stage.insert(new Q.Barrel());
         stage.insert(new Q.Box());
         stage.insert(new Q.Box({y:1100}));
         stage.insert(new Q.Box({y:1350}));
@@ -508,7 +529,7 @@ window.addEventListener("load",function() {
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), maxAltura: 1030,
                 alturaAnterior: 900}));
-        stage.insert(new Q.Barrel({x:2840, y: 1024}));
+        stage.barrel = stage.insert(new Q.Barrel({x:2840, y: 1024}));
         stage.insert(new Q.Box({x:2040, y:650}));
         stage.insert(new Q.Box({x:2296, y:800}));
         stage.insert(new Q.Box({x:2552, y:950})); 
@@ -533,7 +554,7 @@ window.addEventListener("load",function() {
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 2840, maxAltura: 1030,
                 alturaAnterior: 900}));
-        stage.insert(new Q.Barrel({x:1520}));
+        stage.barrel = stage.insert(new Q.Barrel({x:1520}));
         stage.insert(new Q.Box({x:2121, y:862}));
         stage.insert(new Q.Box({x:2021, y:1108})); 
         stage.insert(new Q.Box({x:1921, y: 1354}));
@@ -557,7 +578,7 @@ window.addEventListener("load",function() {
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 2840, maxAltura: 1030,
                 alturaAnterior: 900}));
-        stage.insert(new Q.Barrel({x:280}));
+        stage.barrel = stage.insert(new Q.Barrel({x:280}));
         stage.insert(new Q.Box({x:600, y:1108})); 
         stage.insert(new Q.Box({x:600, y: 1354}));
         stage.insert(new Q.Box({x:600, y: 1600})); 
@@ -584,7 +605,7 @@ window.addEventListener("load",function() {
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 1540, maxAltura: 1030,
                 alturaAnterior: 900}));
-        stage.insert(new Q.Barrel({x: 2780}));
+        stage.barrel = stage.insert(new Q.Barrel({x: 2780}));
 
         //Techo
         var boxGirada1 = new Q.Box({x: 1400, y: 210, angle: 45, dx: 10, dy: 10});
@@ -644,7 +665,7 @@ window.addEventListener("load",function() {
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 700, maxAltura: 1030,
                 alturaAnterior: 900}));
-        stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 2580}));
+        stage.barrel = stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 2580}));
 
         stage.insert(new Q.Saw());
         stage.insert(new Q.Saw({x: 1300, y: 700}));
@@ -668,7 +689,7 @@ window.addEventListener("load",function() {
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 1700, maxAltura: 1030,
                 alturaAnterior: 900}));
-        stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 380}));
+        stage.barrel = stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 380}));
 
         stage.insert(new Q.Saw({x: 400, y: 700}));
 
@@ -724,7 +745,7 @@ window.addEventListener("load",function() {
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 200, y: 300, maxAltura: 1030,
                 alturaAnterior: 900}));
-        stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 1720}));
+        stage.barrel = stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 1720}));
 
         stage.insert(new Q.Saw({x: 1100, y: 900}));
         stage.insert(new Q.Saw({x: 2000, y: 900}));
@@ -840,8 +861,11 @@ window.addEventListener("load",function() {
             bomba.on("click",function() {
                 if(!Q.state.get("completed")){
                     Q.stage(0).flecha.destroy();
-                    Q.state.set({lanzada: 1, bomba: false});
-                    Q.stageScene("nextLevel", 1);             
+                    Q.stage(0).ball.destroy();
+                    Q.stage(0).ball.physics.velocity(0,0);
+                    Q.stage(0).ball.physics.removed();
+                    Q.stage(0).insert(new Q.Bomba({x: Q.stage(0).barrel.p.x, y: Q.stage(0).barrel.p.y - 800}));
+                    bomba.destroy();                                 
                 }
             });            
         }
