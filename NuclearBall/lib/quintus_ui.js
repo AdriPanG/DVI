@@ -398,7 +398,7 @@ Quintus.UI = function(Q) {
       ctx.fillStyle = this.p.color || "black";
       ctx.textAlign = this.p.align || "left";
       ctx.strokeStyle = this.p.outlineColor || "black";
-      ctx.lineWidth = this.p.outlineWidth || 0;
+      ctx.lineWidth = this.p.outlineWidth || 10;
     },
 
     font: function() {
@@ -406,7 +406,7 @@ Quintus.UI = function(Q) {
 
       this.fontString = (this.p.weight || "800") + " " +
                         (this.p.size || 24) + "px " +
-                        (this.p.family || "Arial");
+                        (this.p.family || "Fantasía");
 
       return this.fontString;
     }

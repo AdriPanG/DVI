@@ -455,7 +455,7 @@ window.addEventListener("load",function() {
             buttonB1.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 6, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
-                Q.stageScene("level8");    
+                Q.stageScene("level7");    
                 Q.audio.play('music.mp3',{ loop: true });       
             });
 
@@ -841,8 +841,10 @@ window.addEventListener("load",function() {
                     label: p.label,
                     x: 0,
                     y: 30,
-                    size: 18,
+                    size: 24,
                     color: "white",
+                    family: "Fantasia",
+                    outlineWidth: 8
                 });
 
                 Q.state.on("change.score",this,"score");
