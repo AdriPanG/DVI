@@ -27,11 +27,7 @@ window.addEventListener("load",function() {
                 vx: 0,
                 vy: 0,
                 angle: 0,
-                seconds: 10,
-                maxAltura: 1527,
-                alturaAnterior: 1650,
-                ratioVelocidad: 0,
-                retry: true
+                ratioVelocidad: 0
             });
 
             this.add('physics');
@@ -44,25 +40,7 @@ window.addEventListener("load",function() {
         },
 
         step: function(dt){
-            this.p.seconds -= dt;
-            if(this.p.y > this.p.alturaAnterior)
-                this.p.maxAltura = this.p.alturaAnterior;
-            if(this.p.seconds < 0 && this.p.maxAltura > 1527){
-                if(Q.state.get("lives") === 0 && Q.state.get("moneda")){                    
-                    if(this.p.retry){
-                        this.p.retry = false;
-                        var randNum = Math.floor((Math.random() * 2) + 1);
-                        Q.stage(0).insert(new Q.Coin({rand: randNum}));
-                    }
-                } else if (Q.state.get("lives") === 0 && this.p.retry) {
-                    this.destroy();
-                    Q.stageScene("loseGame", 1);
-                } else {
-                    this.destroy();
-                    Q.stageScene("tryAgain", 1);
-                }
-            }
-            this.p.alturaAnterior = this.p.y;
+
         }
 
     });
