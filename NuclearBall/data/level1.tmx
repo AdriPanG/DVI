@@ -84,6 +84,14 @@
   </properties>
   <image source="../images/Spike.png" width="256" height="174"/>
  </tileset>
+ <tileset firstgid="53" name="BarrelGreen" tilewidth="301" tileheight="405" tilecount="1" columns="1">
+  <image source="../images/BarrelGreen.png" width="301" height="405"/>
+  <tile id="0">
+   <properties>
+    <property name="Class" value="Barrel"/>
+   </properties>
+  </tile>
+ </tileset>
  <imagelayer name="Background">
   <image source="../images/background.png" width="3048" height="1778"/>
  </imagelayer>

@@ -86,7 +86,7 @@ window.addEventListener("load",function() {
     Q.Sprite.extend("Barrel",{
         init: function(p) {
             this._super(p, {
-                sheet: "BarrelRed",
+                asset: "BarrelRed.png",
                 scale: 1,
                 type: 'static',
                 shape: 'polygon',
@@ -492,7 +492,7 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Box({y:1100}));
         stage.insert(new Q.Box({y:1350}));
         stage.insert(new Q.Box({y:1600}));        
-        stage.insert(new Q.Saw());    
+        //stage.insert(new Q.Saw());    
 
         var boxGirada = new Q.Box({x: 500, y:500, angle: 45, dx: 10, dy: 10});
         stage.insert(boxGirada);
@@ -579,6 +579,67 @@ window.addEventListener("load",function() {
         Q.state.set({lanzada: -1, level: 4, completed: false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
+
+        Q.stageScene("HUD", 2);
+
+    });
+
+
+    Q.scene("level5",function(stage) {
+
+        stage.add("world");
+        Q.stageTMX("level1.tmx",stage);   
+        stage.add("viewport");
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 1540, maxAltura: 1030,
+                alturaAnterior: 900}));
+        stage.insert(new Q.Barrel({x: 2780}));
+
+        //Techo
+        var boxGirada1 = new Q.Box({x: 1400, y: 210, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada1);
+        boxGirada1.physics.angle(-10);
+        var boxGirada2 = new Q.Box({x: 1445, y: 450, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada2);
+        boxGirada2.physics.angle(-10);
+        var boxGirada3 = new Q.Box({x: 1490, y: 690, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada3);
+        boxGirada3.physics.angle(-10);
+        var boxGirada4 = new Q.Box({x: 1535, y: 930, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada4);
+        boxGirada4.physics.angle(-10);
+
+        //Suelo
+        var boxGirada5 = new Q.Box({x: 2420, y: 1585, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada5);
+        boxGirada5.physics.angle(-10);
+        var boxGirada6 = new Q.Box({x: 2375, y: 1345, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada6);
+        boxGirada6.physics.angle(-10);
+        var boxGirada7 = new Q.Box({x: 2330, y: 1105, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada7);
+        boxGirada7.physics.angle(-10);
+        var boxGirada8 = new Q.Box({x: 2285, y: 865, angle: 45, dx: 10, dy: 10});
+        stage.insert(boxGirada8);
+        boxGirada8.physics.angle(-10);
+
+        var spikeGirado1 = new Q.Spike({x: 1700});
+        stage.insert(spikeGirado1);
+        spikeGirado1.physics.angle(180);
+        var spikeGirado2 = new Q.Spike({x: 2050});
+        stage.insert(spikeGirado2);
+        spikeGirado2.physics.angle(180);
+        var spikeGirado3 = new Q.Spike({x: 2400});
+        stage.insert(spikeGirado3);
+        spikeGirado3.physics.angle(180);
+        var spikeGirado4 = new Q.Spike({x: 2750});
+        stage.insert(spikeGirado4);
+        spikeGirado4.physics.angle(180);
+             
+        Q.stage().viewport.scale = 0.261;  
+
+        Q.state.set({lanzada: -1, level: 5, completed: false});
+
+        stage.flecha = stage.insert(new Q.Flecha({x: 1540, y: 1650}));
 
         Q.stageScene("HUD", 2);
 
