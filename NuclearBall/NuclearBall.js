@@ -752,13 +752,22 @@ window.addEventListener("load",function() {
         var label = container.insert(new Q.Live({label: "Level: " + Q.state.get("level") + "  Score: " + Q.state.get("score")}));
 
         if(Q.state.get("bomba")){
-            var button = stage.insert(new Q.UI.Button({asset: "bomb.png", scale: 0.8, x: Q.width - 55, y: 55}));
+            var bomba = stage.insert(new Q.UI.Button({asset: "bomb.png", scale: 0.8, x: Q.width - 130, y: 55}));
 
-            button.on("click",function() {
+            bomba.on("click",function() {
                 if(!Q.state.get("completed")){
                     Q.stage(0).flecha.destroy();
                     Q.state.set({lanzada: 1, bomba: false});
                     Q.stageScene("nextLevel", 1);             
+                }
+            });
+
+            var retry = stage.insert(new Q.UI.Button({asset: "retry.png", scale: 0.8, x: Q.width - 60, y: 60}));
+
+            retry.on("click",function() {
+                if(!Q.state.get("completed")){
+                    Q.stage(0).insert(new Q.ExplosionBall({x: Q.stage(0).ball.p.x, y: Q.stage(0).ball.p.y}));
+                    Q.stage(0).ball.destroy();
                 }
             });
         }
@@ -779,12 +788,6 @@ window.addEventListener("load",function() {
             buttonSiguiente.on("click",function() {
                 Q.clearStages();
                 Q.stageScene("creditos2");             
-            });
-
-            var buttonCancelar = stage.insert(new Q.UI.Button({asset: "cancel.png", x: Q.width - 60, y: 60}));
-            buttonCancelar.on("click",function() {
-                Q.clearStages();
-                Q.stageScene("mainTitle");             
             });
 
             container.fit(20);
