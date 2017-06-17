@@ -115,11 +115,6 @@ window.addEventListener("load",function() {
             });         
 
             this.add('physics'); 
-            this.on('contact',this,'bump');
-        },
-
-        bump: function(){
-            Q.audio.play('bounce.wav');            
         },
 
         step: function(dt){
@@ -224,11 +219,6 @@ window.addEventListener("load",function() {
             });            
 
             this.add('physics');
-            this.on('contact',this,'bump');
-        },
-
-        bump: function(){
-            Q.audio.play('bounce.wav');            
         },
 
         step: function(dt){
@@ -251,12 +241,7 @@ window.addEventListener("load",function() {
                 w: 68
             });         
 
-            this.add('physics');   
-            this.on('contact',this,'bump');
-        },
-
-        bump: function(){
-            Q.audio.play('bounce.wav');            
+            this.add('physics');               
         },
 
         step: function(dt){
@@ -359,6 +344,7 @@ window.addEventListener("load",function() {
             this.add('animation');
             this.on("fin", this, "fin");
             this.play("explota");
+            Q.audio.play("lose.wav")
         },
 
         fin: function(){ 
@@ -820,7 +806,7 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Sprite({asset:'Creditos2.png',scale:1,x:0,y:0, cy:0}),container);
         });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, bounce.wav, music.wav, explosion.wav", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, bounce.wav, music.wav, explosion.wav, lose.wav", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
