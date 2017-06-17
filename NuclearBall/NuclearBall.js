@@ -152,7 +152,7 @@ window.addEventListener("load",function() {
                 type:'static',
                 shape: 'circle',
                 r: 178,
-                x: 1200,
+                x: 1000,
                 y: 500,
                 angle: 0,
                 explode: true
@@ -445,7 +445,7 @@ window.addEventListener("load",function() {
             buttonB1.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
-                Q.stageScene("level1");             
+                Q.stageScene("level6");             
             });
 
             var buttonB2 = stage.insert(new Q.UI.Button({asset: "ball2.png", x: Q.width/2 - 60, y: Q.height/2 + 60}));
@@ -491,8 +491,7 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Box());
         stage.insert(new Q.Box({y:1100}));
         stage.insert(new Q.Box({y:1350}));
-        stage.insert(new Q.Box({y:1600}));        
-        //stage.insert(new Q.Saw());    
+        stage.insert(new Q.Box({y:1600}));           
 
         var boxGirada = new Q.Box({x: 500, y:500, angle: 45, dx: 10, dy: 10});
         stage.insert(boxGirada);
@@ -640,6 +639,29 @@ window.addEventListener("load",function() {
         Q.state.set({lanzada: -1, level: 5, completed: false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 1540, y: 1650}));
+
+        Q.stageScene("HUD", 2);
+
+    });
+
+    Q.scene("level6",function(stage) {
+
+        stage.add("world");
+        Q.stageTMX("level1.tmx",stage);   
+        stage.add("viewport");
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 700, maxAltura: 1030,
+                alturaAnterior: 900}));
+        stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 2580}));
+
+        stage.insert(new Q.Saw());
+        stage.insert(new Q.Saw({x: 1300, y: 700}));
+        stage.insert(new Q.Saw({x: 2000, y: 1300}));
+             
+        Q.stage().viewport.scale = 0.261;  
+
+        Q.state.set({lanzada: -1, level: 6, completed: false});
+
+        stage.flecha = stage.insert(new Q.Flecha({x: 700, y: 1650}));
 
         Q.stageScene("HUD", 2);
 
