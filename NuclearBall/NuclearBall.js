@@ -27,11 +27,7 @@ window.addEventListener("load",function() {
                 vx: 0,
                 vy: 0,
                 angle: 0,
-                seconds: 10,
-                maxAltura: 1527,
-                alturaAnterior: 1650,
-                ratioVelocidad: 0,
-                retry: true
+                ratioVelocidad: 0
             });
 
             this.add('physics');
@@ -44,25 +40,7 @@ window.addEventListener("load",function() {
         },
 
         step: function(dt){
-            this.p.seconds -= dt;
-            if(this.p.y > this.p.alturaAnterior)
-                this.p.maxAltura = this.p.alturaAnterior;
-            if(this.p.seconds < 0 && this.p.maxAltura > 1527){
-                if(Q.state.get("lives") === 0 && Q.state.get("moneda")){                    
-                    if(this.p.retry){
-                        this.p.retry = false;
-                        var randNum = Math.floor((Math.random() * 2) + 1);
-                        Q.stage(0).insert(new Q.Coin({rand: randNum}));
-                    }
-                } else if (Q.state.get("lives") === 0 && this.p.retry) {
-                    this.destroy();
-                    Q.stageScene("loseGame", 1);
-                } else {
-                    this.destroy();
-                    Q.stageScene("tryAgain", 1);
-                }
-            }
-            this.p.alturaAnterior = this.p.y;
+
         }
 
     });
@@ -154,8 +132,7 @@ window.addEventListener("load",function() {
                 r: 178,
                 x: 1000,
                 y: 500,
-                angle: 0,
-                explode: true
+                angle: 0
             });         
 
             this.add('physics');
@@ -169,8 +146,8 @@ window.addEventListener("load",function() {
                 obj.destroy();
                 obj.physics.velocity(0,0);
                 obj.physics.removed();
-                if(this.p.explode){
-                    this.p.explode = false;
+                if(!Q.state.get("retry")){
+                    Q.state.set({retry: true});
                     Q.stage(0).insert(new Q.ExplosionBall({x: x, y: y}));                            
                 }
             }
@@ -199,8 +176,7 @@ window.addEventListener("load",function() {
                 w: 256,
                 gravity: 0,
                 density: 1,
-                restitution: 0,
-                explode: true
+                restitution: 0
             });         
 
             this.add('physics, 2d');
@@ -213,9 +189,11 @@ window.addEventListener("load",function() {
                 y = collision.obj.p.y;
                 collision.obj.destroy();
                 collision.obj.physics.velocity(0,0);
+                obj.p.x = 0;
+                obj.p.y = 0;
                 collision.obj.physics.removed();
-                if(this.p.explode){
-                    this.p.explode = false;
+                if(!Q.state.get("retry")){
+                    Q.state.set({retry: true});
                     Q.stage(0).insert(new Q.ExplosionBall({x: x, y: y}));                            
                 }        
             }
