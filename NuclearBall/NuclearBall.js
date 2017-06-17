@@ -1,11 +1,11 @@
 window.addEventListener("load",function() {
 
-	var Q = Quintus()
+	var Q = Quintus({audioSupported: [ 'wav', 'mp3' ]})
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio, SVG, Physics")
         .setup('NuclearBall', {
             width: 800,
             height: 467,
-    }).touch();
+    }).touch().enableSound();
 
     var point;
 
@@ -83,8 +83,10 @@ window.addEventListener("load",function() {
 
         top: function(collision) {
             if(collision.obj.isA("Ball")) {
-                Q.state.set({completed: true});
                 collision.obj.destroy();
+                collision.obj.physics.velocity(0,0);
+                collision.obj.physics.removed();
+                Q.state.set({completed: true});
                 Q.stage(0).insert(new Q.Explosion({x: this.p.x + 15 , y: this.p.y - 377}));
                 Q.state.inc("score",100);                                
             }
@@ -112,7 +114,12 @@ window.addEventListener("load",function() {
                 w: 256,
             });         
 
-            this.add('physics');   
+            this.add('physics'); 
+            this.on('contact',this,'bump');
+        },
+
+        bump: function(){
+            Q.audio.play('bounce.wav');            
         },
 
         step: function(dt){
@@ -189,8 +196,6 @@ window.addEventListener("load",function() {
                 y = collision.obj.p.y;
                 collision.obj.destroy();
                 collision.obj.physics.velocity(0,0);
-                obj.p.x = 0;
-                obj.p.y = 0;
                 collision.obj.physics.removed();
                 if(!Q.state.get("retry")){
                     Q.state.set({retry: true});
@@ -219,6 +224,11 @@ window.addEventListener("load",function() {
             });            
 
             this.add('physics');
+            this.on('contact',this,'bump');
+        },
+
+        bump: function(){
+            Q.audio.play('bounce.wav');            
         },
 
         step: function(dt){
@@ -242,6 +252,11 @@ window.addEventListener("load",function() {
             });         
 
             this.add('physics');   
+            this.on('contact',this,'bump');
+        },
+
+        bump: function(){
+            Q.audio.play('bounce.wav');            
         },
 
         step: function(dt){
@@ -311,6 +326,7 @@ window.addEventListener("load",function() {
             this.add('animation');
             this.on("fin", this, "fin");
             this.play("explota");
+            Q.audio.play("explosion.wav");
         },
 
         fin: function(){            
@@ -422,6 +438,7 @@ window.addEventListener("load",function() {
     });
 
     Q.scene("mainTitle",function(stage) {
+            Q.audio.stop();
             var container = container = stage.insert(new Q.UI.Container({
                 x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
             }));   
@@ -430,34 +447,38 @@ window.addEventListener("load",function() {
             buttonB1.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 6, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
-                Q.stageScene("level6");             
+                Q.stageScene("level6");    
+                Q.audio.play('music.wav',{ loop: true })          
             });
 
             var buttonB2 = stage.insert(new Q.UI.Button({asset: "ball2.png", x: Q.width/2 - 60, y: Q.height/2 + 60}));
             buttonB2.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball2.png"});
                 Q.clearStages();
-                Q.stageScene("level1");             
+                Q.stageScene("level1");
+                Q.audio.play('music.wav',{ loop: true })             
             });
 
             var buttonB3 = stage.insert(new Q.UI.Button({asset: "ball3.png", x: Q.width/2 + 60, y: Q.height/2 + 60}));
             buttonB3.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball3.png"});
                 Q.clearStages();
-                Q.stageScene("level1");             
+                Q.stageScene("level1");   
+                Q.audio.play('music.wav',{ loop: true })           
             });
 
             var buttonB4 = stage.insert(new Q.UI.Button({asset: "ball4.png", x: Q.width/2 + 180, y: Q.height/2 + 60}));
             buttonB4.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball4.png"});
                 Q.clearStages();
-                Q.stageScene("level1");             
+                Q.stageScene("level1");  
+                Q.audio.play('music.wav',{ loop: true })            
             });
 
             var buttonCredits = stage.insert(new Q.UI.Button({asset: "creditsButton.png", x: Q.width - 120, y: Q.height - 60}));
             buttonCredits.on("click",function() {
                 Q.clearStages();
-                Q.stageScene("creditos1");             
+                Q.stageScene("creditos1",{ loop: true });             
             });
 
 
@@ -799,7 +820,7 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Sprite({asset:'Creditos2.png',scale:1,x:0,y:0, cy:0}),container);
         });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, bounce.wav, music.wav, explosion.wav", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
