@@ -656,6 +656,7 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Saw());
         stage.insert(new Q.Saw({x: 1300, y: 700}));
         stage.insert(new Q.Saw({x: 2000, y: 1300}));
+        stage.insert(new Q.Saw({x: 2100, y: 500}));
              
         Q.stage().viewport.scale = 0.261;  
 
