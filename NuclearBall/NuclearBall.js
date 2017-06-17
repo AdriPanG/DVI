@@ -167,6 +167,8 @@ window.addEventListener("load",function() {
                 var x = obj.p.x,
                 y = obj.p.y;
                 obj.destroy();
+                obj.physics.velocity(0,0);
+                obj.physics.removed();
                 if(this.p.explode){
                     this.p.explode = false;
                     Q.stage(0).insert(new Q.ExplosionBall({x: x, y: y}));                            
@@ -210,6 +212,8 @@ window.addEventListener("load",function() {
                 var x = collision.obj.p.x,
                 y = collision.obj.p.y;
                 collision.obj.destroy();
+                collision.obj.physics.velocity(0,0);
+                collision.obj.physics.removed();
                 if(this.p.explode){
                     this.p.explode = false;
                     Q.stage(0).insert(new Q.ExplosionBall({x: x, y: y}));                            
@@ -364,11 +368,14 @@ window.addEventListener("load",function() {
         },
 
         fin: function(){ 
-            if (Q.state.get("lives") === 0) {
+            if(Q.state.get("lives") === 0 && Q.state.get("moneda")){                    
+                   var randNum = Math.floor((Math.random() * 2) + 1);
+                    Q.stage(0).insert(new Q.Coin({rand: randNum}));
+            } else if (Q.state.get("lives") === 0) {
                 Q.stageScene("loseGame", 1);
             } else {
                 Q.stageScene("tryAgain", 1);
-            }  
+            }
         },
 
         step: function(dt){
@@ -443,7 +450,7 @@ window.addEventListener("load",function() {
                                      
             var buttonB1 = stage.insert(new Q.UI.Button({asset: "ball.png", x: Q.width/2 - 180, y: Q.height/2 + 60}));
             buttonB1.on("click",function() {
-                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
+                Q.state.set({score: 0, lives: 3, level: 6, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
                 Q.stageScene("level6");             
             });
@@ -499,7 +506,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 1, score : 0, completed: false});
+        Q.state.set({lanzada: -1, level: 1, score : 0, completed: false, retry : false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
 
@@ -525,7 +532,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 2, completed: false});
+        Q.state.set({lanzada: -1, level: 2, completed: false, retry : false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
 
@@ -549,7 +556,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 3, completed: false});
+        Q.state.set({lanzada: -1, level: 3, completed: false, retry : false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
 
@@ -575,7 +582,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 4, completed: false});
+        Q.state.set({lanzada: -1, level: 4, completed: false, retry : false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 2840, y: 1650}));
 
@@ -636,7 +643,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 5, completed: false});
+        Q.state.set({lanzada: -1, level: 5, completed: false, retry : false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 1540, y: 1650}));
 
@@ -660,7 +667,7 @@ window.addEventListener("load",function() {
              
         Q.stage().viewport.scale = 0.261;  
 
-        Q.state.set({lanzada: -1, level: 6, completed: false});
+        Q.state.set({lanzada: -1, level: 6, completed: false, retry : false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 700, y: 1650}));
 
@@ -760,17 +767,20 @@ window.addEventListener("load",function() {
                     Q.state.set({lanzada: 1, bomba: false});
                     Q.stageScene("nextLevel", 1);             
                 }
-            });
-
-            var retry = stage.insert(new Q.UI.Button({asset: "retry.png", scale: 0.8, x: Q.width - 60, y: 60}));
-
-            retry.on("click",function() {
-                if(!Q.state.get("completed")){
-                    Q.stage(0).insert(new Q.ExplosionBall({x: Q.stage(0).ball.p.x, y: Q.stage(0).ball.p.y}));
-                    Q.stage(0).ball.destroy();
-                }
-            });
+            });            
         }
+
+        var retry = stage.insert(new Q.UI.Button({asset: "retry.png", scale: 0.8, x: Q.width - 60, y: 60}));
+
+        retry.on("click",function() {
+            if(!Q.state.get("completed") && !Q.state.get("retry")){
+                Q.state.set({retry : true});
+                Q.stage(0).ball.destroy();
+                Q.stage(0).ball.physics.velocity(0,0);
+                Q.stage(0).insert(new Q.ExplosionBall({x: Q.stage(0).ball.p.x, y: Q.stage(0).ball.p.y}));
+                Q.stage(0).ball.physics.removed();
+            }
+        });
 
         for(var i = 0; i < Q.state.get("lives"); i++){
             stage.insert(new Q.Sprite({asset:'vida.png',scale:1, x: -(Q.width/2) + 50 + (i*40), y: 30, cy:0}),container);
