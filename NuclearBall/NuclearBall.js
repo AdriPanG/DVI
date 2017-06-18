@@ -456,8 +456,12 @@ window.addEventListener("load",function() {
         },
 
         fin: function(){   
-            Q.state.set({scoreLevel: Q.state.get("score")});         
-            Q.stageScene("nextLevel", 1);
+            Q.state.set({scoreLevel: Q.state.get("score")}); 
+            if(Q.state.get("level") === 10){
+                Q.stageScene("winGame", 1);
+            } else {
+                Q.stageScene("nextLevel", 1);
+            }                 
         },
 
         step: function(dt){
@@ -537,7 +541,7 @@ window.addEventListener("load",function() {
                                         Q.stageScene("level1");
                             }, { keyActionName: 'action' }));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
-                                                               label: "You lose", color: "white"}));
+                                                               label: "You lose with " + Q.state.get("score") + " points", color: "white"}));
 
         stage.container.button.on("click",function() {
             Q.clearStages();                            
@@ -553,14 +557,32 @@ window.addEventListener("load",function() {
         }));
 
         stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Try Again" } ));         
+                                                          label: "Try again" } ));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
                                                                label: "You failed", color: "white"}));
 
         stage.container.button.on("click",function() {
             Q.state.dec("lives",1);  
             Q.clearStages();                            
-            Q.stageScene("level" + Q.state.get("level")); 
+            Q.stageScene("level" + Q.state.get("level"));             
+        });
+
+        stage.container.fit(20);
+    });
+
+    Q.scene("winGame",function(stage) {
+        stage.container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+        }));
+
+        stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+                                                          label: "Finish Game" } ));         
+        var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
+                                                               label: "You win with " + Q.state.get("score") + " points", color: "white"}));
+
+        stage.container.button.on("click",function() {
+            Q.clearStages();                            
+            Q.stageScene("creditos1"); 
         });
 
         stage.container.fit(20);
@@ -1040,6 +1062,8 @@ window.addEventListener("load",function() {
 
             bomba.on("click",function() {
                 if(!Q.state.get("completed")){
+                    if(Q.stage(1))
+                        Q.stage(1).container.destroy();
                     Q.stage(0).flecha.destroy();
                     Q.stage(0).ball.destroy();
                     Q.stage(0).ball.physics.velocity(0,0);
@@ -1054,7 +1078,7 @@ window.addEventListener("load",function() {
 
         retry.on("click",function() {
             if(!Q.state.get("completed") && !Q.state.get("retry")){
-                Q.state.set({retry : true});
+                Q.state.set({retry : true});                
                 Q.stage(0).ball.destroy();
                 Q.stage(0).ball.physics.velocity(0,0);
                 Q.stage(0).insert(new Q.ExplosionBall({x: Q.stage(0).ball.p.x, y: Q.stage(0).ball.p.y}));
