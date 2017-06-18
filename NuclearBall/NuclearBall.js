@@ -72,7 +72,7 @@ window.addEventListener("load",function() {
             this.add('tween');            
             this.on('callFinish', this, 'callFinish');
             this.animate({ x: this.p.x, y: this.p.y + 500, angle: 0},1,{callback: function(){
-                Q.state.set({lanzada: 1, bomba: false});
+                Q.state.set({lanzada: 1, bomba: false, score: Q.state.get("scoreLevel")});
                 this.destroy();
                 Q.stage(0).insert(new Q.Explosion({x: this.p.x + 15 , y: this.p.y - 77}));
             }}); 
@@ -148,6 +148,13 @@ window.addEventListener("load",function() {
             });         
 
             this.add('physics'); 
+            this.on('contact',this,'contact');
+        },
+
+        contact: function(obj){
+            if(obj.isA("Ball") && !Q.state.get("completed")) {
+                Q.state.inc("score",10);
+            }            
         },
 
         step: function(dt){
@@ -335,12 +342,19 @@ window.addEventListener("load",function() {
                 shape: 'polygon',
                 gravity: 0,
                 h: 68,
-                w: 256                
+                w: 256,
+                firstContact: true                
             });            
 
             this.add('physics');
+            this.on('contact',this,'contact');
         },
 
+        contact: function(obj){
+            if(obj.isA("Ball") && !Q.state.get("completed") && Q.state.get("lanzada") === 1) {
+                Q.state.inc("score",10);              
+            }            
+        },
         step: function(dt){
             this.p.y = this.p.y;
             this.p.x = this.p.x;
@@ -362,6 +376,13 @@ window.addEventListener("load",function() {
             });         
 
             this.add('physics');               
+            this.on('contact',this,'contact');
+        },
+
+        contact: function(obj){
+            if(obj.isA("Ball") && !Q.state.get("completed")) {
+                Q.state.inc("score",10);
+            }            
         },
 
         step: function(dt){
@@ -401,7 +422,7 @@ window.addEventListener("load",function() {
         },
 
         gana: function(){
-            Q.state.set({moneda: false});
+            Q.state.set({moneda: false, score: Q.state.get("scoreLevel")});
             Q.stageScene("tryAgain", 1);
         },
 
@@ -434,7 +455,8 @@ window.addEventListener("load",function() {
             Q.audio.play("explosion.mp3");
         },
 
-        fin: function(){            
+        fin: function(){   
+            Q.state.set({scoreLevel: Q.state.get("score")});         
             Q.stageScene("nextLevel", 1);
         },
 
@@ -474,6 +496,7 @@ window.addEventListener("load",function() {
             } else if (Q.state.get("lives") === 0) {
                 Q.stageScene("loseGame", 1);
             } else {
+                Q.state.set({score: Q.state.get("scoreLevel")});
                 Q.stageScene("tryAgain", 1);
             }
         },
@@ -551,7 +574,7 @@ window.addEventListener("load",function() {
                                      
             var buttonB1 = stage.insert(new Q.UI.Button({asset: "ball.png", x: Q.width/2 - 180, y: Q.height/2 + 60}));
             buttonB1.on("click",function() {
-                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
+                Q.state.set({score: 0, scoreLevel: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
                 Q.stageScene("level9");    
                 Q.audio.play('music.mp3',{ loop: true });       
@@ -559,7 +582,7 @@ window.addEventListener("load",function() {
 
             var buttonB2 = stage.insert(new Q.UI.Button({asset: "ball2.png", x: Q.width/2 - 60, y: Q.height/2 + 60}));
             buttonB2.on("click",function() {
-                Q.state.set({score: 0, lives: 5, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball2.png"});
+                Q.state.set({score: 0, scoreLevel: 0, lives: 5, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball2.png"});
                 Q.clearStages();
                 Q.stageScene("level1");
                 Q.audio.play('music.mp3',{ loop: true })             
@@ -567,7 +590,7 @@ window.addEventListener("load",function() {
 
             var buttonB3 = stage.insert(new Q.UI.Button({asset: "ball3.png", x: Q.width/2 + 60, y: Q.height/2 + 60}));
             buttonB3.on("click",function() {
-                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball3.png"});
+                Q.state.set({score: 0, scoreLevel: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball3.png"});
                 Q.clearStages();
                 Q.stageScene("level1");   
                 Q.audio.play('music.mp3',{ loop: true })           
@@ -575,7 +598,7 @@ window.addEventListener("load",function() {
 
             var buttonB4 = stage.insert(new Q.UI.Button({asset: "ball4.png", x: Q.width/2 + 180, y: Q.height/2 + 60}));
             buttonB4.on("click",function() {
-                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball4.png"});
+                Q.state.set({score: 0, scoreLevel: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball4.png"});
                 Q.clearStages();
                 Q.stageScene("level1");  
                 Q.audio.play('music.mp3',{ loop: true })            
