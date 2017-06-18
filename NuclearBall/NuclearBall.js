@@ -562,7 +562,8 @@ window.addEventListener("load",function() {
                                                                label: "You failed", color: "white"}));
 
         stage.container.button.on("click",function() {
-            Q.state.dec("lives",1);  
+            if(Q.state.get("lives") !== 0)
+                Q.state.dec("lives",1);  
             Q.clearStages();                            
             Q.stageScene("level" + Q.state.get("level"));             
         });
@@ -1077,7 +1078,7 @@ window.addEventListener("load",function() {
         var retry = stage.insert(new Q.UI.Button({asset: "retry.png", scale: 0.8, x: Q.width - 60, y: 60}));
 
         retry.on("click",function() {
-            if(!Q.state.get("completed") && !Q.state.get("retry")){
+            if(!Q.state.get("completed") && !Q.state.get("retry") && Q.state.get("lanzada") === 1){
                 Q.state.set({retry : true});                
                 Q.stage(0).ball.destroy();
                 Q.stage(0).ball.physics.velocity(0,0);
