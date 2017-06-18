@@ -8,10 +8,12 @@ soporten), que consiste en introducir una pelota saltarina en un cuenco a travé
 niveles.
 
 El objetivo del jugador es introducir la pelota en un barril en cada uno de los 10 niveles al
-primer intento y pasar al siguiente nivel o, si fallas, perder una vida. Al empezar el juego podrás
-seleccionar la pelota que quieras de las disponibles. También tendrás una bomba para pasarte
+primer intento y pasar al siguiente nivel o, si fallas, perder una vida. Al empezar el juego puedes
+seleccionar la pelota que quieras de las disponibles. También tienes una bomba para pasarte
 un nivel si te quedas atascado, y una moneda especial que aparece después de gastar todas las
-vidas con un 50% de probabilidad de tener un lanzamiento extra o no.
+vidas, con un 50% de probabilidad de tener un lanzamiento extra o no.
+
+El juego finaliza cuando el jugador supera los diez niveles o cuando pierde todas las vidas.
 
 # Ambientación
 
@@ -46,7 +48,7 @@ dirección, y esta rebota por las paredes u obstáculos hasta introducirse en el
 pasar el nivel), detenerse por completo (y perder una vida) o destruirse con ciertos
 obstáculos (perdiendo también una vida).
 
-### Obstáculos
+#### Obstáculos
 
 Los niveles presentan una serie de obstáculos haciendo que cada vez sea
 más difícil superarlos. Hay obstáculos en los que rebota la pelota y otros que la
@@ -69,7 +71,22 @@ En cada nivel se obtiene una puntuación en concreto, que se va sumando a
 la puntuación total. Esta puntuación dependerá del número de rebotes que dé la pelota
 (cuantos más rebotes mayor puntuación se obtendrá).
 
+# Implementación
 
-# Puedes probar los juegos en:
+Para implementar el juego se han utilizado las librerias de Quintus y Box2D, utilizando los lenguajes de programación HTML5 y JavaScript. 
+
+Se han modificado partes de las librerias anteriormente mencionadas y se ha creado toda la lógica en el archivo "NuclearBall.js". En este ultimo se han utilizado una serie de componentes:
+
+#### Componentes gráficos
+
+En esta parte se incluyen los Sprites utilizados para crear la pelota, paredes, cajas, obstáculos y la moneda. Para ello se ha utilizado la librería Pyshics de Quintus que se apoya en la libreria Box2D, con la que se controlan todos los rebotes de la pelota y las físicas del juego.
+
+#### Escenas
+
+En esta parte se han creado las escenas para cada condición del juego: cuando se pierde una o todas las vidas y cuando se acaba el juego (ganando o perdiendo) .
+
+Tambien se han utilizado escenas para la pantalla de créditos.
+
+# Puedes probar el juegos y otros proyectos nuestros en:
 
  - [Nuestra web de GitHub](https://adripang.github.io/DVI/)
