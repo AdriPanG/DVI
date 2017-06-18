@@ -423,7 +423,7 @@ window.addEventListener("load",function() {
 
         gana: function(){
             Q.state.set({moneda: false, score: Q.state.get("scoreLevel")});
-            Q.stageScene("tryAgain", 1);
+            Q.stageScene("extraTry", 1);
         },
 
         step: function(dt){
@@ -514,11 +514,13 @@ window.addEventListener("load",function() {
 
     Q.scene("nextLevel",function(stage) {
         stage.container = stage.insert(new Q.UI.Container({
-            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+            x: Q.width/2, y: Q.height/2
         }));
 
+        stage.insert(new Q.Sprite({asset:'panelLC.png',scale:1,x:0,y:-12}),stage.container);
+
         stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Next Level" }));         
+                                                          asset: "ButtonNL.png"}));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
                                                                label: "Level completed", color: "white"}));
 
@@ -532,16 +534,18 @@ window.addEventListener("load",function() {
 
     Q.scene("loseGame",function(stage) {
         stage.container = stage.insert(new Q.UI.Container({
-            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+            x: Q.width/2, y: Q.height/2
         }));
 
+        stage.insert(new Q.Sprite({asset:'panelLG.png',scale:1,x:0,y:-12}),stage.container);
+
         stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Play Again" }, function() {
+                                                          asset: "ButtonPA.png"}, function() {
                                         Q.clearStages();
                                         Q.stageScene("level1");
                             }, { keyActionName: 'action' }));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
-                                                               label: "You lose with " + Q.state.get("score") + " points", color: "white"}));
+                                                               label: "You lose: " + Q.state.get("score") + " pts", color: "white"}));
 
         stage.container.button.on("click",function() {
             Q.clearStages();                            
@@ -553,13 +557,37 @@ window.addEventListener("load",function() {
 
     Q.scene("tryAgain",function(stage) {
         stage.container = stage.insert(new Q.UI.Container({
-            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+            x: Q.width/2, y: Q.height/2
         }));
 
+        stage.insert(new Q.Sprite({asset:'panelLL.png',scale:1,x:0,y:-12}),stage.container);
+
         stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Try again" } ));         
+                                                          asset: "ButtonTA.png"} ));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
-                                                               label: "You failed", color: "white"}));
+                                                               label: "You failed", color: "black"}));
+
+        stage.container.button.on("click",function() {
+            if(Q.state.get("lives") !== 0)
+                Q.state.dec("lives",1);  
+            Q.clearStages();                            
+            Q.stageScene("level" + Q.state.get("level"));             
+        });
+
+        stage.container.fit(20);        
+    });
+
+     Q.scene("extraTry",function(stage) {
+        stage.container = stage.insert(new Q.UI.Container({
+            x: Q.width/2, y: Q.height/2
+        }));
+
+        stage.insert(new Q.Sprite({asset:'panelLL.png',scale:1,x:0,y:-12}),stage.container);
+
+        stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+                                                          asset: "ButtonTA.png"} ));         
+        var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
+                                                               label: "Extra try!", color: "black"}));
 
         stage.container.button.on("click",function() {
             if(Q.state.get("lives") !== 0)
@@ -569,17 +597,21 @@ window.addEventListener("load",function() {
         });
 
         stage.container.fit(20);
+
+        
     });
 
     Q.scene("winGame",function(stage) {
         stage.container = stage.insert(new Q.UI.Container({
-            x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+            x: Q.width/2, y: Q.height/2
         }));
 
+        stage.insert(new Q.Sprite({asset:'panelWG.png',scale:1,x:0,y:-12}),stage.container);
+
         stage.container.button = stage.container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
-                                                          label: "Finish Game" } ));         
+                                                          asset: "ButtonFG.png"} ));         
         var label = stage.container.insert(new Q.UI.Text({x: 0, y: -10 - stage.container.button.p.h, 
-                                                               label: "You win with " + Q.state.get("score") + " points", color: "white"}));
+                                                               label: "You win: " + Q.state.get("score") + " pts", color: "white"}));
 
         stage.container.button.on("click",function() {
             Q.clearStages();                            
@@ -1126,7 +1158,7 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Sprite({asset:'Creditos2.png',scale:1,x:0,y:0, cy:0}),container);
         });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, lose.ogg, throw.ogg", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, panelLL.png, panelLC.png, panelLG.png, panelWG.png, ButtonTA.png, ButtonNL.png, ButtonFG.png, ButtonPA.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, lose.ogg, throw.ogg", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
