@@ -134,14 +134,65 @@ window.addEventListener("load",function() {
                 y: 857,
                 h: 256,
                 w: 256,
+                movil: false,
+                velMov: 0,
+                xIni: 0,
+                yIni: 0,
+                xFin: 0,
+                yFin: 0,
+                izq: false,
+                der: true,
+                arr: false,
+                abaj: true,
+                velRot: 0
             });         
 
             this.add('physics'); 
         },
 
         step: function(dt){
-            this.y = this.p.y;
-            this.x = this.p.x;
+            if(this.p.movil){
+                // Movimiento horizontal
+                if(this.p.x > this.p.xFin){
+                    this.p.der = false;
+                    this.p.izq = true;
+                } else if (this.p.x < this.p.xIni) {
+                    this.p.der = true;
+                    this.p.izq = false;
+                } else if (this.p.xIni === this.p.xFin){
+                    this.p.der = false;
+                    this.p.izq = false;
+                }
+                if(this.p.der){
+                    this.p.x += dt * this.p.velMov;
+                } else if (this.p.izq) {
+                    this.p.x -= dt * this.p.velMov;
+                }
+
+                // Movimiento vertical
+                 if(this.p.y > this.p.yFin){
+                    this.p.arr = false;
+                    this.p.abaj = true;
+                } else if (this.p.y < this.p.yIni) {
+                    this.p.arr = true;
+                    this.p.abaj = false;
+                } else if (this.p.yIni === this.p.yFin){
+                    this.p.arr = false;
+                    this.p.abaj = false;
+                }
+                if(this.p.arr){
+                    this.p.y += dt * this.p.velMov;
+                } else if (this.p.abaj) {
+                    this.p.y -= dt * this.p.velMov;
+                }
+
+                // Desplazar
+                this.physics.position(this.p.x, this.p.y)
+
+                //Rotación
+                this.p.angle = (this.p.angle + dt * this.p.velRot) % 360;
+                this.physics.angle(this.p.angle);       
+            }
         }
 
     });
@@ -156,7 +207,17 @@ window.addEventListener("load",function() {
                 r: 178,
                 x: 1000,
                 y: 500,
-                angle: 0
+                angle: 0,
+                movil: false,
+                velMov: 0,
+                xIni: 0,
+                yIni: 0,
+                xFin: 0,
+                yFin: 0,
+                izq: false,
+                der: true,
+                arr: false,
+                abaj: true
             });         
 
             this.add('physics');
@@ -178,8 +239,45 @@ window.addEventListener("load",function() {
         },
 
         step: function(dt){
-            this.y = this.p.y;
-            this.x = this.p.x;
+            if(this.p.movil){
+                // Movimiento horizontal
+                if(this.p.x > this.p.xFin){
+                    this.p.der = false;
+                    this.p.izq = true;
+                } else if (this.p.x < this.p.xIni) {
+                    this.p.der = true;
+                    this.p.izq = false;
+                } else if (this.p.xIni === this.p.xFin){
+                    this.p.der = false;
+                    this.p.izq = false;
+                }
+                if(this.p.der){
+                    this.p.x += dt * this.p.velMov;
+                } else if (this.p.izq) {
+                    this.p.x -= dt * this.p.velMov;
+                }
+
+                // Movimiento vertical
+                 if(this.p.y > this.p.yFin){
+                    this.p.arr = false;
+                    this.p.abaj = true;
+                } else if (this.p.y < this.p.yIni) {
+                    this.p.arr = true;
+                    this.p.abaj = false;
+                } else if (this.p.yIni === this.p.yFin){
+                    this.p.arr = false;
+                    this.p.abaj = false;
+                }
+                if(this.p.arr){
+                    this.p.y += dt * this.p.velMov;
+                } else if (this.p.abaj) {
+                    this.p.y -= dt * this.p.velMov;
+                }
+
+                // Desplazar
+                this.physics.position(this.p.x, this.p.y)
+
+            }
             this.p.angle = (this.p.angle + dt * 100) % 360;
             this.physics.angle(this.p.angle);
         }
@@ -455,7 +553,7 @@ window.addEventListener("load",function() {
             buttonB1.on("click",function() {
                 Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
-                Q.stageScene("level10");    
+                Q.stageScene("level9");    
                 Q.audio.play('music.mp3',{ loop: true });       
             });
 
@@ -786,9 +884,9 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Box({x:2580, y:1349}));
 
         //movimiento vertical
-        stage.insert(new Q.Box({x:2157, y:1140}));
+        stage.insert(new Q.Box({x:2157, y:1140, movil: true, xIni: 2157, xFin: 2157, yIni: 300, yFin: 1500, velMov: 300, velRot: 50}));
         //movimiento horizontal
-        stage.insert(new Q.Box({x:1520, y:630}));
+        stage.insert(new Q.Box({x:1520, y:630, movil: true, xIni: 800, xFin: 1800, yIni: 630, yFin: 630, velMov: 300, velRot: 150}));
              
         Q.stage().viewport.scale = 0.261;  
 
@@ -814,10 +912,10 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Box({x:2157, y:1600}));
         stage.insert(new Q.Box({x:2157, y:1349}));
 
-        stage.insert(new Q.Saw({x: 400, y: 250}));
-        stage.insert(new Q.Saw({x: 1500, y: 620}));
-        stage.insert(new Q.Saw({x: 400, y: 990}));
-        stage.insert(new Q.Saw({x: 1500, y: 1360}));
+        stage.insert(new Q.Saw({x: 400, y: 260, movil: true, xIni: 400, xFin: 1000, yIni: 260, yFin: 310, velMov: 300}));
+        stage.insert(new Q.Saw({x: 1500, y: 610, movil: true, xIni: 900, xFin: 1500, yIni: 610, yFin: 660, velMov: 300}));
+        stage.insert(new Q.Saw({x: 400, y: 960, movil: true, xIni: 400, xFin: 1000, yIni: 960, yFin: 1010, velMov: 300}));
+        stage.insert(new Q.Saw({x: 1500, y: 1310, movil: true, xIni: 900, xFin: 1500, yIni: 1310, yFin: 1360, velMov: 300}));
              
         Q.stage().viewport.scale = 0.261;  
 
