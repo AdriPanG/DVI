@@ -110,7 +110,7 @@ window.addEventListener("load",function() {
                 collision.obj.physics.removed();
                 Q.state.set({completed: true});
                 Q.stage(0).insert(new Q.Explosion({x: this.p.x + 15 , y: this.p.y - 377}));
-                Q.state.inc("score",100);                                
+               	Q.state.inc("score",100);                                
             }
         },
 
@@ -965,7 +965,17 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Box({x:2157, y:1140, movil: true, xIni: 2157, xFin: 2157, yIni: 300, yFin: 1500, velMov: 300, velRot: 50}));
         //movimiento horizontal
         stage.insert(new Q.Box({x:1520, y:630, movil: true, xIni: 800, xFin: 1800, yIni: 630, yFin: 630, velMov: 300, velRot: 150}));
-             
+        
+        var spikeGirado1 = new Q.Spike({x: 2085});
+        stage.insert(spikeGirado1);
+        spikeGirado1.physics.angle(180); 
+        var spikeGirado2 = new Q.Spike({x: 2465});
+        stage.insert(spikeGirado2);
+        spikeGirado2.physics.angle(180);
+        var spikeGirado3 = new Q.Spike({x: 2825});
+        stage.insert(spikeGirado3);
+        spikeGirado3.physics.angle(180);
+
         Q.stage().viewport.scale = 0.261;  
 
         Q.state.set({lanzada: -1, level: 9, completed: false, retry : false});
