@@ -453,9 +453,9 @@ window.addEventListener("load",function() {
                                      
             var buttonB1 = stage.insert(new Q.UI.Button({asset: "ball.png", x: Q.width/2 - 180, y: Q.height/2 + 60}));
             buttonB1.on("click",function() {
-                Q.state.set({score: 0, lives: 3, level: 6, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
+                Q.state.set({score: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
-                Q.stageScene("level7");    
+                Q.stageScene("level10");    
                 Q.audio.play('music.mp3',{ loop: true });       
             });
 
@@ -754,7 +754,6 @@ window.addEventListener("load",function() {
         stage.insert(new Q.Spike({x: 615, y: 1600}));
         stage.insert(new Q.Spike({x: 985, y: 1600}));
         stage.insert(new Q.Spike({x: 1355, y: 1600}));
-        //stage.insert(new Q.Spike({x: 1725, y: 1600}));
         stage.insert(new Q.Spike({x: 2085, y: 1600}));
         stage.insert(new Q.Spike({x: 2465, y: 1600}));
         stage.insert(new Q.Spike({x: 2825, y: 1600}));
@@ -767,6 +766,64 @@ window.addEventListener("load",function() {
         Q.state.set({lanzada: -1, level: 8, completed: false, retry : false});
 
         stage.flecha = stage.insert(new Q.Flecha({x: 200, y: 300}));
+
+        Q.stageScene("HUD", 2);
+
+    });
+
+    Q.scene("level9",function(stage) {
+
+        stage.add("world");
+        Q.stageTMX("level1.tmx",stage);   
+        stage.add("viewport");
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), maxAltura: 1020,
+                alturaAnterior: 900}));
+        stage.barrel = stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 2715, y: 1020}));
+
+        stage.insert(new Q.Box({x:2840, y:1600}));
+        stage.insert(new Q.Box({x:2840, y:1349}));
+        stage.insert(new Q.Box({x:2580, y:1600}));
+        stage.insert(new Q.Box({x:2580, y:1349}));
+
+        //movimiento vertical
+        stage.insert(new Q.Box({x:2157, y:1140}));
+        //movimiento horizontal
+        stage.insert(new Q.Box({x:1520, y:630}));
+             
+        Q.stage().viewport.scale = 0.261;  
+
+        Q.state.set({lanzada: -1, level: 9, completed: false, retry : false});
+
+        stage.flecha = stage.insert(new Q.Flecha({x: 280, y: 1650}));
+
+        Q.stageScene("HUD", 2);
+
+    });
+
+    Q.scene("level10",function(stage) {
+
+        stage.add("world");
+        Q.stageTMX("level1.tmx",stage);   
+        stage.add("viewport");
+        stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 500, maxAltura: 1020,
+                alturaAnterior: 900}));
+        stage.barrel = stage.insert(new Q.Barrel({asset: "BarrelGreen.png", x: 2500, y: 1520}));
+
+        stage.insert(new Q.Box({x:2840, y:1600}));
+        stage.insert(new Q.Box({x:2840, y:1349}));
+        stage.insert(new Q.Box({x:2157, y:1600}));
+        stage.insert(new Q.Box({x:2157, y:1349}));
+
+        stage.insert(new Q.Saw({x: 400, y: 250}));
+        stage.insert(new Q.Saw({x: 1500, y: 620}));
+        stage.insert(new Q.Saw({x: 400, y: 990}));
+        stage.insert(new Q.Saw({x: 1500, y: 1360}));
+             
+        Q.stage().viewport.scale = 0.261;  
+
+        Q.state.set({lanzada: -1, level: 10, completed: false, retry : false});
+
+        stage.flecha = stage.insert(new Q.Flecha({x: 500, y: 1650}));
 
         Q.stageScene("HUD", 2);
 
