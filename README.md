@@ -14,33 +14,33 @@ Donald Trump ha encontrado unos barriles de uranio y plutonio, con los cuales pr
 
 # Principales mecánicas
 
-#### Acción
+### Acción
 
 La pelota (jugador) se puede lanzar al inicio de cada nivel, eligiendo la fuerza y la dirección. Ésta rebota por las paredes u obstáculos hasta introducirse en el barril (y pasar el nivel), destruirse con ciertos obstáculos (perdiendo una vida) o hasta que se pulse el botón de reintentar (perdiendo también una vida).
 
 
-#### Escenario
+### Escenario
 
 El escenario donde transcurre el juego está formado por diez niveles de dificultad. Los niveles se recorren de manera secuencial: una vez se introduzca la pelota en el barril se pasa al siguiente nivel. Una vez superado el ultimo nivel se muestra la puntuación final.
 
-#### Niveles
+### Niveles
 
 Los niveles son bidimensionales a nivel lógico. Cada uno de ellos está construido por una sala cerrada, de tamaño y forma fija. Cada nivel pasa al siguiente una vez completado el mismo. Los 5 primeros niveles tendrán una ambientación, obstáculos y
 dificultad determinada, y los siguientes 5 otra distinta.
 
-#### Obstáculos
+### Obstáculos
 
 Los niveles presentan una serie de obstáculos haciendo que cada vez sea más difícil superarlos. Hay obstáculos en los que rebota la pelota y otros que la destruyen. Además, algunos obstáculos se mueven y/o rotan.
 
-#### Bomba
+### Bomba
 
 Existe una bomba disponible para todo el juego la cual, una vez seleccionada, permite pasar al siguiente nivel si el jugador se queda atascado.
 
-####  Moneda
+###  Moneda
 
 Cuando se pierden todas las vidas aparece una moneda con un 50% de probabilidad de tener un intento extra para completar el nivel y pasar al siguiente sin vidas y sin que vuelva a aparecer esta moneda.
 
-#### Puntuación
+### Puntuación
 
 En cada nivel se obtiene una puntuación en concreto, que se va sumando a la puntuación total. Esta puntuación dependerá del número de rebotes que dé la pelota (cuantos más rebotes mayor puntuación se obtendrá).
 
@@ -50,13 +50,13 @@ Para implementar el juego se han utilizado las librerias de [Quintus](http://www
 
 Se han modificado partes de las librerias anteriormente mencionadas y se ha creado toda la lógica en el archivo "NuclearBall.js". En este ultimo se han utilizado una serie de componentes:
 
-#### Sprites
+### Sprites
 
 En esta parte se incluyen los Sprites utilizados para crear la pelota, paredes, cajas, obstáculos y la moneda. Para ello se ha utilizado la librería Pyshics de Quintus que se apoya en la libreria Box2D, con la que se controlan todos los rebotes de la pelota y las físicas del juego.
 
 En esta parte también se han incluido animaciones para las explosiones, rotación de la moneda y uso de la bomba.
 
-#### Escenas
+### Escenas
 
 En esta parte se han creado las escenas (menus) para cada condición del juego: cuando se pierde una o todas las vidas y cuando se acaba el juego (ganando o perdiendo) .
 
@@ -64,17 +64,17 @@ Tambien se han utilizado escenas para el HUD, que muestra las vidas disponibles,
 
 Por ultimo se han creado escenas para los niveles y las pantallas de créditos.
 
-#### Input
+### Input
 
 Se han sobreescrito las entradas del ratón y el control táctil para controlar el lanzamiento de la pelota, utilizando la distancia euclídea para calcular la dirección y la potencia en función de la posición del ratón.
 
 #  Equipo de trabajo:
 
-#### Adrián Panadero Gonzalez
+### Adrián Panadero Gonzalez
 
 Se ha encargado de la implementación de los niveles, búsqueda de recursos y realización del vídeo del gameplay. (Carga de trabajo: -%)
 
-#### Juan José Prieto Escolar
+### Juan José Prieto Escolar
 
 Se ha encargado de la implementación de la lógica del juego, recursos gráficos, sonidos y animaciones. (Carga de trabajo: -%)
 
@@ -82,12 +82,12 @@ Se ha encargado de la implementación de la lógica del juego, recursos gráfico
 
 Para la realización del proyecto se han utilizado los siguientes recursos:
 
-#### Librerías
+### Librerías
 
 * [Quintus](http://www.html5quintus.com/)
 * [Box2D](http://box2d.org/)
 
-#### Recursos gráficos
+### Recursos gráficos
 
 * [Balls - por jousway](http://jousway.deviantart.com)
 * [Background, walls, boxes and obstacles - por Game Art 2d](http://www.gameart2d.com)
@@ -100,12 +100,12 @@ Para la realización del proyecto se han utilizado los siguientes recursos:
 * [Paneles UI - por Hawkadium](https://opengameart.org/users/hawkadium)
 * [Fondo botones UI - por Kenney](https://opengameart.org/users/kenney)
 
-#### Música y sonidos
+### Música y sonidos
 
 * [Música - por Tristan_Lohengrin](https://www.freesound.org/people/Tristan_Lohengrin/)
 * [Sonido lanzamiento - por orginaljun](https://www.freesound.org/people/orginaljun/)
-* [Explosión de pelota - porcabled_mess](https://www.freesound.org/people/cabled_mess/)
-* [Explosión de barril - cydon](https://www.freesound.org/people/cydon/)
+* [Explosión de pelota - por cabled_mess](https://www.freesound.org/people/cabled_mess/)
+* [Explosión de barril - por cydon](https://www.freesound.org/people/cydon/)
 * [Explosión verde de barril - por dragline777](https://www.freesound.org/people/dragline777/)
 
 # Puedes probar el juego y otros proyectos nuestros en:
