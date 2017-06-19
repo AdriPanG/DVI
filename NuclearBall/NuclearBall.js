@@ -1,6 +1,6 @@
 window.addEventListener("load",function() {
 
-	var Q = Quintus({audioSupported: [ 'ogg', 'mp3' ]})
+	var Q = Quintus({audioSupported: [ 'mp3', 'ogg' ]})
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio, SVG, Physics")
         .setup('NuclearBall', {
             width: 800,
