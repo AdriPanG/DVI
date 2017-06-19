@@ -2,7 +2,7 @@
 
 # Descripción
 
-NuclearBall es un juego basado en (Tigerball)[https://play.google.com/store/apps/details?id=com.Laxarus.TigerBall&hl=es], un juego creado para dispositivos móviles Android e Ios (aunque en nuestro caso esta programado en HTML5 y para todos aquellos dispositivos que lo soporten), que consiste en introducir una pelota saltarina en un cuenco a través de diferentes niveles.
+NuclearBall es un juego basado en [Tigerball](https://play.google.com/store/apps/details?id=com.Laxarus.TigerBall&hl=es), un juego creado para dispositivos móviles Android e Ios (aunque en nuestro caso esta programado en HTML5 y para todos aquellos dispositivos que lo soporten), que consiste en introducir una pelota saltarina en un cuenco a través de diferentes niveles.
 
 El **objetivo** del jugador es introducir la pelota en un barril en cada uno de los 10 niveles al primer intento y pasar al siguiente nivel o, si fallas, perder una vida. Al empezar el juego puedes seleccionar la pelota que quieras de las disponibles. También tienes una bomba para pasarte un nivel si te quedas atascado, y una moneda especial que aparece después de gastar todas las vidas, con un 50% de probabilidad de tener un lanzamiento extra o no.
 
