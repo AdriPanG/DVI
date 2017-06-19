@@ -1166,7 +1166,39 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Sprite({asset:'Creditos.png',scale:1,x:0,y:0, cy:0}),container);
         });
 
-     Q.scene("creditos2",function(stage) {
+    Q.scene("creditos2",function(stage) {
+            var container = container = stage.insert(new Q.UI.Container({
+                x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
+            }));   
+                                     
+            var buttonSiguiente = stage.insert(new Q.UI.Button({asset: "siguiente.png", x: Q.width - 60, y: Q.height - 50}));
+            buttonSiguiente.on("click",function() {
+                Q.clearStages();
+                Q.stageScene("creditos3");             
+            });
+
+            container.fit(20);
+
+            stage.insert(new Q.Sprite({asset:'Creditos2.png',scale:1,x:0,y:0, cy:0}),container);
+        });
+
+    Q.scene("creditos3",function(stage) {
+            var container = container = stage.insert(new Q.UI.Container({
+                x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
+            }));   
+                                     
+            var buttonSiguiente = stage.insert(new Q.UI.Button({asset: "siguiente.png", x: Q.width - 60, y: Q.height - 50}));
+            buttonSiguiente.on("click",function() {
+                Q.clearStages();
+                Q.stageScene("creditos4");             
+            });
+
+            container.fit(20);
+
+            stage.insert(new Q.Sprite({asset:'Creditos3.png',scale:1,x:0,y:0, cy:0}),container);
+        });
+
+     Q.scene("creditos4",function(stage) {
             var container = container = stage.insert(new Q.UI.Container({
                 x: Q.width/2, y: 5, fill: "rgba(0,0,0,0.0)"
             }));   
@@ -1179,10 +1211,10 @@ window.addEventListener("load",function() {
 
             container.fit(20);
 
-            stage.insert(new Q.Sprite({asset:'Creditos2.png',scale:1,x:0,y:0, cy:0}),container);
+            stage.insert(new Q.Sprite({asset:'Creditos4.png',scale:1,x:0,y:0, cy:0}),container);
         });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, poison.png, poison.json, explosionBall.png, explosionBall.json, creditsButton.png, panelLL.png, panelLC.png, panelLG.png, panelWG.png, ButtonTA.png, ButtonNL.png, ButtonFG.png, ButtonPA.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, poison.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, poison.ogg, lose.ogg, throw.ogg", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, poison.png, poison.json, explosionBall.png, explosionBall.json, creditsButton.png, panelLL.png, panelLC.png, panelLG.png, panelWG.png, ButtonTA.png, ButtonNL.png, ButtonFG.png, ButtonPA.png, Creditos.png, Creditos2.png, Creditos3.png, Creditos4.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, poison.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, poison.ogg, lose.ogg, throw.ogg", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
