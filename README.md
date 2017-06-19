@@ -2,11 +2,11 @@
 
 # Descripción
 
-NuclearBall es un juego basado en Tigerball, un juego creado para dispositivos móviles Android e Ios (aunque en nuestro caso esta programado en HTML5 y para todos aquellos dispositivos que lo soporten), que consiste en introducir una pelota saltarina en un cuenco a través de diferentes niveles.
+NuclearBall es un juego basado en (Tigerball)[https://play.google.com/store/apps/details?id=com.Laxarus.TigerBall&hl=es], un juego creado para dispositivos móviles Android e Ios (aunque en nuestro caso esta programado en HTML5 y para todos aquellos dispositivos que lo soporten), que consiste en introducir una pelota saltarina en un cuenco a través de diferentes niveles.
 
-El objetivo del jugador es introducir la pelota en un barril en cada uno de los 10 niveles al primer intento y pasar al siguiente nivel o, si fallas, perder una vida. Al empezar el juego puedes seleccionar la pelota que quieras de las disponibles. También tienes una bomba para pasarte un nivel si te quedas atascado, y una moneda especial que aparece después de gastar todas las vidas, con un 50% de probabilidad de tener un lanzamiento extra o no.
+El **objetivo** del jugador es introducir la pelota en un barril en cada uno de los 10 niveles al primer intento y pasar al siguiente nivel o, si fallas, perder una vida. Al empezar el juego puedes seleccionar la pelota que quieras de las disponibles. También tienes una bomba para pasarte un nivel si te quedas atascado, y una moneda especial que aparece después de gastar todas las vidas, con un 50% de probabilidad de tener un lanzamiento extra o no.
 
-El juego finaliza cuando el jugador supera los diez niveles o cuando pierde todas las vidas.
+**El juego finaliza** cuando el jugador supera los diez niveles o cuando pierde todas las vidas.
 
 # Ambientación
 
@@ -72,11 +72,11 @@ Se han sobreescrito las entradas del ratón y el control táctil para controlar 
 
 ### Adrián Panadero Gonzalez
 
-Se ha encargado de la implementación de los niveles, búsqueda de recursos y realización del vídeo del gameplay. (Carga de trabajo: -%)
+Se ha encargado de la implementación del jugador, puntuación, vidas, niveles, búsqueda de recursos y realización del vídeo del gameplay. (Carga de trabajo: 35%)
 
 ### Juan José Prieto Escolar
 
-Se ha encargado de la implementación de la lógica del juego, recursos gráficos, sonidos y animaciones. (Carga de trabajo: -%)
+Se ha encargado de la implementación del jugador, bomba, moneda, lógica del juego, recursos gráficos, animaciones y sonidos. (Carga de trabajo: 65%)
 
 # Referencias
 
