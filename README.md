@@ -46,7 +46,7 @@ En cada nivel se obtiene una puntuación en concreto, que se va sumando a la pun
 
 # Implementación
 
-Para implementar el juego se han utilizado las librerias de Quintus y Box2D, utilizando los lenguajes de programación HTML5 y JavaScript. 
+Para implementar el juego se han utilizado las librerias de [Quintus](http://www.html5quintus.com/) y [Box2D](http://box2d.org/), utilizando los lenguajes de programación HTML5 y JavaScript. 
 
 Se han modificado partes de las librerias anteriormente mencionadas y se ha creado toda la lógica en el archivo "NuclearBall.js". En este ultimo se han utilizado una serie de componentes:
 
@@ -94,9 +94,9 @@ Para la realización del proyecto se han utilizado los siguientes recursos:
 * [Direction arrow - por Nallebeorn](https://opengameart.org/users/nallebeorn)
 * [Bomba - por richtaur](https://opengameart.org/users/richtaur)
 * [Explosión en barril - por Cuzco](https://opengameart.org/users/cuzco)
-* [Explosión verde en barril - por Daniel Cook}(http://hasgraphics.com/8-bit-sinistar-clone-graphics/)
+* [Explosión verde en barril - por Daniel Cook](http://hasgraphics.com/8-bit-sinistar-clone-graphics/)
 * [Explosión de la pelota - por Osmic](https://opengameart.org/users/osmic)
-* [Botones UI (reintentar, cancelar y siguiente) - por GDquest]https://opengameart.org/users/gdquest)
+* [Botones UI (reintentar, cancelar y siguiente) - por GDquest](https://opengameart.org/users/gdquest)
 * [Paneles UI - por Hawkadium](https://opengameart.org/users/hawkadium)
 * [Fondo botones UI - por Kenney](https://opengameart.org/users/kenney)
 
