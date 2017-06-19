@@ -437,6 +437,10 @@ window.addEventListener("load",function() {
                     "explota":{frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], rate: 1/5, loop: false, trigger: "fin"}
     });
 
+    Q.animations("poison anim", {
+                    "explota":{frames: [9,10,11,12,13,14, 15], rate: 1/3, loop: false, trigger: "fin"}
+    });
+
     Q.Sprite.extend("Explosion",{
 
         init: function(p) {
@@ -451,6 +455,14 @@ window.addEventListener("load",function() {
 
             this.add('animation');
             this.on("fin", this, "fin");
+            if(Q.state.get("level") > 5){
+                this.p.sprite = "poison anim";
+                this.p.sheet = "poison";
+                this.p.scale = 3;
+                this.p.x = this.p.x - 140;
+                this.p.y = this.p.y - 65;
+                
+            }
             this.play("explota");
             Q.audio.play("explosion.mp3");
         },
@@ -631,7 +643,7 @@ window.addEventListener("load",function() {
             buttonB1.on("click",function() {
                 Q.state.set({score: 0, scoreLevel: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
-                Q.stageScene("level9");    
+                Q.stageScene("level6");    
                 Q.audio.play('music.mp3',{ loop: true });       
             });
 
@@ -1168,10 +1180,11 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Sprite({asset:'Creditos2.png',scale:1,x:0,y:0, cy:0}),container);
         });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, explosionBall.png, explosionBall.json, creditsButton.png, panelLL.png, panelLC.png, panelLG.png, panelWG.png, ButtonTA.png, ButtonNL.png, ButtonFG.png, ButtonPA.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, lose.ogg, throw.ogg", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, poison.png, poison.json, explosionBall.png, explosionBall.json, creditsButton.png, panelLL.png, panelLC.png, panelLG.png, panelWG.png, ButtonTA.png, ButtonNL.png, ButtonFG.png, ButtonPA.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, lose.ogg, throw.ogg", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
+        Q.compileSheets("poison.png", "poison.json");
         Q.compileSheets("explosionBall.png", "explosionBall.json");
         Q.stageScene("mainTitle", 2);
     });   
