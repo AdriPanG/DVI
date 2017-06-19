@@ -536,6 +536,7 @@ window.addEventListener("load",function() {
 
      var cannonMove = function(e) {
         if(Q.stage(0) && Q.state.get("lanzada") === 0){
+            // Variables
             var ball = Q.stage(0).ball,
             flecha = Q.stage(0).flecha,
             touch = e.changedTouches ?  
@@ -543,6 +544,7 @@ window.addEventListener("load",function() {
             canvas = document.getElementById("NuclearBall"),
             ClientRect = canvas.getBoundingClientRect();
             
+            // Coger coordenadas del ratón
             if(e.type === "mousemove"){
                 point = {
                     x: Math.round((e.clientX - ClientRect.left)  / 0.261),
@@ -556,12 +558,14 @@ window.addEventListener("load",function() {
                 };
             }
             
-       
+            // Ajustar ángulo
             var angle = Math.atan2(point.y - ball.p.y,
                                point.x - ball.p.x);
 
             ball.physics.angle(angle * 180 / Math.PI);
             flecha.p.angle = angle * 180 / Math.PI;
+
+            // Ajustar flecha indicadora y velocidad del lanzamiento
             var scale = Math.sqrt(Math.pow((point.x - ball.p.x), 2) + Math.pow((point.y - ball.p.y), 2)) / 250;
             if(scale < 0.6)
                 scale = 0.6;
@@ -736,7 +740,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level1",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall")}));        
         stage.barrel = stage.insert(new Q.Barrel());
@@ -755,7 +759,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level2",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), maxAltura: 1030,
                 alturaAnterior: 900}));
@@ -773,7 +777,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level3",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 2840, maxAltura: 1030,
                 alturaAnterior: 900}));
@@ -790,7 +794,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level4",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 2840, maxAltura: 1030,
                 alturaAnterior: 900}));
@@ -810,7 +814,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level5",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 1540, maxAltura: 1030,
                 alturaAnterior: 900}));
@@ -861,7 +865,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level6",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 700, maxAltura: 1030,
                 alturaAnterior: 900}));
@@ -878,7 +882,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level7",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 1700, maxAltura: 1030,
                 alturaAnterior: 900}));
@@ -924,7 +928,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level8",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 200, y: 300, maxAltura: 1030,
                 alturaAnterior: 900}));
@@ -948,7 +952,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level9",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), maxAltura: 1020,
                 alturaAnterior: 900}));
@@ -978,7 +982,7 @@ window.addEventListener("load",function() {
 
     Q.scene("level10",function(stage) {
         stage.add("world");
-        Q.stageTMX("level1.tmx",stage);   
+        Q.stageTMX("level.tmx",stage);   
         stage.add("viewport");
         stage.ball = stage.insert(new Q.Ball({asset: Q.state.get("assetBall"), x: 500, maxAltura: 1020,
                 alturaAnterior: 900}));
@@ -1121,7 +1125,7 @@ window.addEventListener("load",function() {
     //////////////////////* CARGA DE RECURSOS *//////////////////////
 
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, poison.png, poison.json, explosionBall.png, explosionBall.json, creditsButton.png, panelLL.png, panelLC.png, panelLG.png, panelWG.png, ButtonTA.png, ButtonNL.png, ButtonFG.png, ButtonPA.png, Creditos.png, Creditos2.png, Creditos3.png, Creditos4.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, poison.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, poison.ogg, lose.ogg, throw.ogg", function() {
+    Q.loadTMX("level.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, poison.png, poison.json, explosionBall.png, explosionBall.json, creditsButton.png, panelLL.png, panelLC.png, panelLG.png, panelWG.png, ButtonTA.png, ButtonNL.png, ButtonFG.png, ButtonPA.png, Creditos.png, Creditos2.png, Creditos3.png, Creditos4.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, poison.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, poison.ogg, lose.ogg, throw.ogg", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
