@@ -461,10 +461,12 @@ window.addEventListener("load",function() {
                 this.p.scale = 3;
                 this.p.x = this.p.x - 140;
                 this.p.y = this.p.y - 65;
-                
+                Q.audio.play("poison.mp3");
+            } else {
+                Q.audio.play("explosion.mp3");
             }
-            this.play("explota");
-            Q.audio.play("explosion.mp3");
+
+            this.play("explota");            
         },
 
         fin: function(){   
@@ -641,7 +643,7 @@ window.addEventListener("load",function() {
                                      
             var buttonB1 = stage.insert(new Q.UI.Button({asset: "ball.png", x: Q.width/2 - 180, y: Q.height/2 + 60}));
             buttonB1.on("click",function() {
-                Q.state.set({score: 0, scoreLevel: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
+                Q.state.set({score: 0, scoreLevel: 0, lives: 5, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
                 Q.stageScene("level6");    
                 Q.audio.play('music.mp3',{ loop: true });       
@@ -657,7 +659,7 @@ window.addEventListener("load",function() {
 
             var buttonB3 = stage.insert(new Q.UI.Button({asset: "ball3.png", x: Q.width/2 + 60, y: Q.height/2 + 60}));
             buttonB3.on("click",function() {
-                Q.state.set({score: 0, scoreLevel: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball3.png"});
+                Q.state.set({score: 0, scoreLevel: 0, lives: 5, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball3.png"});
                 Q.clearStages();
                 Q.stageScene("level1");   
                 Q.audio.play('music.mp3',{ loop: true })           
@@ -665,7 +667,7 @@ window.addEventListener("load",function() {
 
             var buttonB4 = stage.insert(new Q.UI.Button({asset: "ball4.png", x: Q.width/2 + 180, y: Q.height/2 + 60}));
             buttonB4.on("click",function() {
-                Q.state.set({score: 0, scoreLevel: 0, lives: 3, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball4.png"});
+                Q.state.set({score: 0, scoreLevel: 0, lives: 5, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball4.png"});
                 Q.clearStages();
                 Q.stageScene("level1");  
                 Q.audio.play('music.mp3',{ loop: true })            
@@ -1180,7 +1182,7 @@ window.addEventListener("load",function() {
             stage.insert(new Q.Sprite({asset:'Creditos2.png',scale:1,x:0,y:0, cy:0}),container);
         });
 
-    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, poison.png, poison.json, explosionBall.png, explosionBall.json, creditsButton.png, panelLL.png, panelLC.png, panelLG.png, panelWG.png, ButtonTA.png, ButtonNL.png, ButtonFG.png, ButtonPA.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, lose.ogg, throw.ogg", function() {
+    Q.loadTMX("level1.tmx, coin.png, coin.json, flecha.png, flecha.json, mainTitle.png, ball.png, ball2.png, ball3.png, ball4.png, bomb.png, vida.png, Spike.png, saw.png, explosion.png, explosion.json, poison.png, poison.json, explosionBall.png, explosionBall.json, creditsButton.png, panelLL.png, panelLC.png, panelLG.png, panelWG.png, ButtonTA.png, ButtonNL.png, ButtonFG.png, ButtonPA.png, Creditos.png, Creditos2.png, cancel.png, retry.png, siguiente.png, music.mp3, explosion.mp3, poison.mp3, lose.mp3, throw.mp3, music.ogg, explosion.ogg, poison.ogg, lose.ogg, throw.ogg", function() {
         Q.compileSheets("coin.png", "coin.json");
         Q.compileSheets("flecha.png", "flecha.json");
         Q.compileSheets("explosion.png", "explosion.json");
