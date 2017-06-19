@@ -438,7 +438,7 @@ window.addEventListener("load",function() {
     });
 
     Q.animations("poison anim", {
-                    "explota":{frames: [9,10,11,12,13,14, 15], rate: 1/3, loop: false, trigger: "fin"}
+                    "explota":{frames: [1,2,3,4,5,6,7], rate: 1/5, loop: false, trigger: "fin"}
     });
 
     Q.Sprite.extend("Explosion",{
@@ -458,9 +458,9 @@ window.addEventListener("load",function() {
             if(Q.state.get("level") > 5){
                 this.p.sprite = "poison anim";
                 this.p.sheet = "poison";
-                this.p.scale = 3;
-                this.p.x = this.p.x - 140;
-                this.p.y = this.p.y - 65;
+                this.p.scale = 7;
+                this.p.x = this.p.x + 35;
+                this.p.y = this.p.y + 90;
                 Q.audio.play("poison.mp3");
             } else {
                 Q.audio.play("explosion.mp3");
