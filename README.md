@@ -69,7 +69,7 @@ Se han sobreescrito las entradas del ratón y el control táctil para controlar 
 
 #  Equipo de trabajo:
 
-### Adrián Panadero Gonzalez
+### Adrián Panadero González
 
 Se ha encargado de la implementación del jugador, puntuación, vidas, niveles, búsqueda de recursos y realización del vídeo del gameplay. (Carga de trabajo: 40%)
 
