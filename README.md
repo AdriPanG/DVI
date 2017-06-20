@@ -2,7 +2,7 @@
 
 # Descripción
 
-NuclearBall es un juego basado en [Tigerball](https://play.google.com/store/apps/details?id=com.Laxarus.TigerBall&hl=es), un juego creado para dispositivos móviles Android e Ios (aunque en nuestro caso esta programado en HTML5 y para todos aquellos dispositivos que lo soporten), que consiste en introducir una pelota saltarina en un cuenco a través de diferentes niveles.
+NuclearBall es un juego basado en [Tigerball](https://play.google.com/store/apps/details?id=com.Laxarus.TigerBall&hl=es), un juego creado para dispositivos móviles Android e iOS (aunque en nuestro caso esta programado en HTML5 y para todos aquellos dispositivos que lo soporten), que consiste en introducir una pelota saltarina en un cuenco a través de diferentes niveles.
 
 El **objetivo** del jugador es introducir la pelota en un barril en cada uno de los 10 niveles al primer intento y pasar al siguiente nivel o, si fallas, perder una vida. Al empezar el juego puedes seleccionar la pelota que quieras de las disponibles. También tienes una bomba para pasarte un nivel si te quedas atascado, y una moneda especial que aparece después de gastar todas las vidas, con un 50% de probabilidad de tener un lanzamiento extra o no.
 
@@ -21,12 +21,11 @@ La pelota (jugador) se puede lanzar al inicio de cada nivel, eligiendo la fuerza
 
 ### Escenario
 
-El escenario donde transcurre el juego está formado por diez niveles de dificultad. Los niveles se recorren de manera secuencial: una vez se introduzca la pelota en el barril se pasa al siguiente nivel. Una vez superado el ultimo nivel se muestra la puntuación final.
+El escenario donde transcurre el juego está formado por diez niveles de dificultad. Los niveles se recorren de manera secuencial: una vez se introduzca la pelota en el barril se pasa al siguiente nivel. Una vez superado el último nivel se muestra la puntuación final.
 
 ### Niveles
 
-Los niveles son bidimensionales a nivel lógico. Cada uno de ellos está construido por una sala cerrada, de tamaño y forma fija. Cada nivel pasa al siguiente una vez completado el mismo. Los 5 primeros niveles tendrán una ambientación, obstáculos y
-dificultad determinada, y los siguientes 5 otra distinta.
+Los niveles son bidimensionales a nivel lógico. Cada uno de ellos está construido por una sala cerrada, de tamaño y forma fija. Cada nivel pasa al siguiente una vez completado el mismo. Los 5 primeros niveles tendrán una ambientación, obstáculos y dificultad determinada, y los siguientes 5 otra distinta.
 
 ### Obstáculos
 
@@ -48,21 +47,21 @@ En cada nivel se obtiene una puntuación en concreto, que se va sumando a la pun
 
 Para implementar el juego se han utilizado las librerias de [Quintus](http://www.html5quintus.com/) y [Box2D](http://box2d.org/), utilizando los lenguajes de programación HTML5 y JavaScript. 
 
-Se han modificado partes de las librerias anteriormente mencionadas y se ha creado toda la lógica en el archivo "NuclearBall.js". En este ultimo se han utilizado una serie de componentes:
+Se han modificado partes de las librerias anteriormente mencionadas y se ha creado toda la lógica en el archivo "NuclearBall.js". En este último se han utilizado una serie de componentes:
 
 ### Sprites
 
-En esta parte se incluyen los Sprites utilizados para crear la pelota, paredes, cajas, obstáculos y la moneda. Para ello se ha utilizado la librería Pyshics de Quintus que se apoya en la libreria Box2D, con la que se controlan todos los rebotes de la pelota y las físicas del juego.
+En esta parte se incluyen los Sprites utilizados para crear la pelota, paredes, cajas, obstáculos y la moneda. Para ello se ha utilizado la librería Physics de Quintus que se apoya en la libreria Box2D, con la que se controlan todos los rebotes de la pelota y las físicas del juego.
 
 En esta parte también se han incluido animaciones para las explosiones, rotación de la moneda y uso de la bomba.
 
 ### Escenas
 
-En esta parte se han creado las escenas (menus) para cada condición del juego: cuando se pierde una o todas las vidas y cuando se acaba el juego (ganando o perdiendo) .
+En esta parte se han creado las escenas (menús) para cada condición del juego: cuando se pierde una o todas las vidas y cuando se acaba el juego (ganando o perdiendo).
 
 Tambien se han utilizado escenas para el HUD, que muestra las vidas disponibles, el nivel actual, la puntuación, la bomba y la opcion de reintentar. 
 
-Por ultimo se han creado escenas para los niveles y las pantallas de créditos.
+Por último se han creado escenas para los niveles y las pantallas de créditos.
 
 ### Input
 
