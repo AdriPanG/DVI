@@ -72,11 +72,11 @@ Se han sobreescrito las entradas del ratón y el control táctil para controlar 
 
 ### Adrián Panadero Gonzalez
 
-Se ha encargado de la implementación del jugador, puntuación, vidas, niveles, búsqueda de recursos y realización del vídeo del gameplay. (Carga de trabajo: 35%)
+Se ha encargado de la implementación del jugador, puntuación, vidas, niveles, búsqueda de recursos y realización del vídeo del gameplay. (Carga de trabajo: 40%)
 
 ### Juan José Prieto Escolar
 
-Se ha encargado de la implementación del jugador, bomba, moneda, lógica del juego, recursos gráficos, animaciones y sonidos. (Carga de trabajo: 65%)
+Se ha encargado de la implementación del jugador, bomba, moneda, lógica del juego, recursos gráficos, animaciones y sonidos. (Carga de trabajo: 60%)
 
 # Referencias
 
@@ -107,6 +107,10 @@ Para la realización del proyecto se han utilizado los siguientes recursos:
 * [Explosión de pelota - por cabled_mess](https://www.freesound.org/people/cabled_mess/)
 * [Explosión de barril - por cydon](https://www.freesound.org/people/cydon/)
 * [Explosión verde de barril - por dragline777](https://www.freesound.org/people/dragline777/)
+
+# Gameplay
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/kRqdO5gZ2QE/0.jpg)](https://www.youtube.com/watch?v=kRqdO5gZ2QE)
 
 # Puedes probar el juego y otros proyectos nuestros en:
 
