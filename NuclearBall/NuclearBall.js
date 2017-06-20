@@ -699,7 +699,7 @@ window.addEventListener("load",function() {
             buttonB1.on("click",function() {
                 Q.state.set({score: 0, scoreLevel: 0, lives: 5, level: 1, lanzada: -1, moneda: true, bomba: true, assetBall: "ball.png"});
                 Q.clearStages();
-                Q.stageScene("level6");    
+                Q.stageScene("level1");    
                 Q.audio.play('music.mp3',{ loop: true });       
             });
             var buttonB2 = stage.insert(new Q.UI.Button({asset: "ball2.png", x: Q.width/2 - 60, y: Q.height/2 + 60}));
